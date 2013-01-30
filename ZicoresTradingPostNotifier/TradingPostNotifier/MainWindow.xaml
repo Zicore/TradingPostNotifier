@@ -1,0 +1,241 @@
+﻿<Window xmlns:my="clr-namespace:ZicoresTradingPostNotifier.View"
+        x:Class="ZicoresTradingPostNotifier.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Closing="Window_Closing"
+        xmlns:mdl="clr-namespace:ZicoresTradingPostNotifier.Model"
+        UseLayoutRounding="True"
+        Title="{Binding Title}" Height="600" Width="1000" Icon="/ZicoresTradingPostNotifier;component/icon.ico">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0" Background="Salmon" BorderBrush="Black" Visibility="{Binding ProcessBorderVisibility}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" FontSize="16" FontWeight="Bold" Margin="3" Text="{Binding GuildWars2StatusText}"></TextBlock>
+                <!--<Button Grid.Column="1" Margin="4" Background="WhiteSmoke" BorderBrush="Gray">Enter Key</Button>-->
+            </Grid>
+        </Border>
+
+        <TabControl Grid.Row="1">
+            <TabItem Header="Search" Background="SkyBlue" FontWeight="DemiBold" >
+                <my:SearchView DataContext="{Binding SearchViewModel}"></my:SearchView>
+            </TabItem>
+            <TabItem Header="Gems" Background="WhiteSmoke" FontWeight="DemiBold">
+                <!-- ### Transactions ### -->
+                <ScrollViewer>
+                    <my:GemView DataContext="{Binding GemViewModel}"></my:GemView>
+                </ScrollViewer>
+            </TabItem>
+            <TabItem Header="Transactions" Background="WhiteSmoke" FontWeight="DemiBold" Visibility="{Binding TransactionsVisibility}">
+                <!-- ### Transactions ### -->
+                <DockPanel VerticalAlignment="Top">
+                    <my:TransactionView Grid.Row="0" DockPanel.Dock="Top" Background="LightGreen" BorderBrush="Gray" BorderThickness="1" DataContext="{Binding BuyingViewModel}"></my:TransactionView>
+                    <my:TransactionView Grid.Row="1" DockPanel.Dock="Top" Background="LightSalmon" BorderBrush="Gray" BorderThickness="1" DataContext="{Binding SellingViewModel}"></my:TransactionView>
+                    <my:TransactionView Grid.Row="2" DockPanel.Dock="Top" Background="LightGreen" BorderBrush="Gray" BorderThickness="1" DataContext="{Binding BoughtViewModel}"></my:TransactionView>
+                    <my:TransactionView Grid.Row="3" DockPanel.Dock="Top" Background="LightSalmon" BorderBrush="Gray" BorderThickness="1" DataContext="{Binding SoldViewModel}"></my:TransactionView>
+                </DockPanel>
+            </TabItem>
+            <TabItem Header="Notifications" FontWeight="DemiBold" Background="WhiteSmoke">
+                <!-- ### Notifications ### -->
+                <my:NotificationView DataContext="{Binding}"></my:NotificationView>
+            </TabItem>
+            <TabItem Header="Watchlist" FontWeight="DemiBold" Background="WhiteSmoke">
+                <!-- ### Watchlist ### -->
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    
+                    <TextBox Grid.Column="0" Grid.Row="0" Margin="2" Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                    
+                    <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2">
+                        <Button Command="{Binding ClearWatchlistCommand}" HorizontalAlignment="Left" Margin="2" Width="100">Clear Watchlist</Button>
+                        <Button Command="{Binding ExportWatchlistCommand}" HorizontalAlignment="Left" Margin="2" Width="100">Export CSV</Button>
+                        <Button Command="{Binding ImportWatchlistCommand}" HorizontalAlignment="Left" Margin="2" Width="100">Import CSV</Button>
+                        <Button Command="{Binding ResetIndicesCommand}" HorizontalAlignment="Left" Margin="2" Width="100">Reset Indices</Button>
+                    </StackPanel>
+                    <my:WatchlistView DataContext="{Binding}" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"></my:WatchlistView>
+                </Grid>
+                    
+                    
+                
+            </TabItem>
+            <TabItem Header="Recipes" FontWeight="DemiBold" Background="WhiteSmoke">
+                <!-- ### Recipes ### -->
+                <ScrollViewer>
+                    <my:RecipeView DataContext="{Binding RecipeViewModel}"></my:RecipeView>
+                </ScrollViewer>
+            </TabItem>
+            <!--<TabItem Header="Chart" FontWeight="DemiBold" Background="WhiteSmoke">
+                
+                <ScrollViewer ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                    <my:ChartView DataContext="{Binding ChartViewModel}"></my:ChartView>
+                </ScrollViewer>
+            </TabItem>-->
+            <TabItem Header="Settings" FontWeight="DemiBold" Background="WhiteSmoke">
+                <!-- ### Settings ### -->
+                <my:SettingsView DataContext="{Binding SettingsViewModel}"></my:SettingsView>
+            </TabItem>
+            <TabItem Header="About" FontWeight="Normal" Background="{StaticResource DarkBrush}">
+                <!-- ### About ### -->
+                <Border BorderBrush="Gray" Background="WhiteSmoke" CornerRadius="4" Margin="2">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                            <ColumnDefinition Width="Auto"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"></RowDefinition>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                            <RowDefinition Height="*"></RowDefinition>
+                        </Grid.RowDefinitions>
+
+                        <Border BorderBrush="{StaticResource AboutBorderBrush}" BorderThickness="2" Background="{StaticResource AboutBrush}" CornerRadius="16" Grid.Column="1" Grid.Row="1">
+                            <StackPanel Orientation="Vertical" Margin="8">
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock FontWeight="Bold" FontSize="16" Text="Zicore's Trading Post Notifier - R13"></TextBlock>
+                                    <TextBlock></TextBlock>
+                                    <TextBlock FontWeight="SemiBold" Text="Developed 2012-2013 by Zicore / TehGear"></TextBlock>
+                                    <TextBlock Text="© 2011-2012 ArenaNet, Inc. All rights reserved."></TextBlock>
+                                    <TextBlock>
+                                    <Run Text="Items are linking to"></Run>
+                                    <Hyperlink FontWeight="SemiBold" Foreground="DarkBlue" NavigateUri="http://gw2spidy.com">gw2spidy.com</Hyperlink>
+                                    <Run Text="with friendly permission."></Run>
+                                    </TextBlock>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Information and the latest updates: "></TextBlock>
+                                    <TextBlock>
+                                    <Hyperlink Foreground="DarkBlue" FontWeight="Bold" NavigateUri="http://notifier.zicore.de" Click="Hyperlink_Click">http://notifier.zicore.de</Hyperlink>
+                                    </TextBlock>
+                                </StackPanel>
+                                <StackPanel Margin="2">
+                                    <Image Stretch="None" Source="Images/powered_gw2db_onLight.png" PreviewMouseUp="Image_PreviewMouseUp"></Image>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                </Border>
+            </TabItem>
+        </TabControl>
+
+        <!--
+        <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="1" Visibility="Collapsed">
+            <StackPanel Orientation="Vertical">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                ### Search ### 
+                <Expander Background="SkyBlue" Header="Search" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" FontWeight="DemiBold" IsExpanded="True">
+                    <my:SearchView DataContext="{Binding SearchViewModel}"></my:SearchView>
+                </Expander>
+
+                 ### Transactions ### 
+                <Expander Visibility="{Binding TransactionsVisibility}" Header="Transactions" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" FontWeight="DemiBold" Background="WhiteSmoke">
+                    <StackPanel Orientation="Vertical">
+
+                        <my:TransactionView Background="LightGreen" BorderBrush="Gray" BorderThickness="1" DataContext="{Binding BuyingViewModel}"></my:TransactionView>
+                        <my:TransactionView Background="LightSalmon" BorderBrush="Gray" BorderThickness="1" DataContext="{Binding SellingViewModel}"></my:TransactionView>
+                        <my:TransactionView Background="LightGreen" BorderBrush="Gray" BorderThickness="1" DataContext="{Binding BoughtViewModel}"></my:TransactionView>
+                        <my:TransactionView Background="LightSalmon" BorderBrush="Gray" BorderThickness="1" DataContext="{Binding SoldViewModel}"></my:TransactionView>
+
+                    </StackPanel>
+                </Expander>
+
+                ### Notifications ### 
+                <Expander Header="Notifications" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" FontWeight="DemiBold" Background="WhiteSmoke">
+                    <my:NotificationView DataContext="{Binding HotItemController}"></my:NotificationView>
+                </Expander>
+
+                ### Watchlist ### 
+                <Expander IsExpanded="True" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" FontWeight="DemiBold" Background="WhiteSmoke">
+                    <Expander.Header>
+                        <Grid>
+                            <StackPanel HorizontalAlignment="Left" Orientation="Horizontal">
+                                <TextBlock VerticalAlignment="Center">Watchlist</TextBlock>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                <Button Command="{Binding ClearWatchlistCommand}" HorizontalAlignment="Left" Margin="2" Width="100">Clear Watchlist</Button>
+                                <Button Command="{Binding ExportWatchlistCommand}" HorizontalAlignment="Left" Margin="2" Width="100">Export CSV</Button>
+                                <Button Command="{Binding ImportWatchlistCommand}" HorizontalAlignment="Left" Margin="2" Width="100">Import CSV</Button>
+                                <Button Command="{Binding ResetIndicesCommand}" HorizontalAlignment="Left" Margin="2" Width="100">Reset Indices</Button>
+                            </StackPanel>
+                        </Grid>
+                    </Expander.Header>
+                    <my:WatchlistView DataContext="{Binding}"></my:WatchlistView>
+                </Expander>
+
+                ### Recipes ### 
+                <Expander Visibility="Collapsed" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" IsExpanded="True" FontWeight="DemiBold" Background="WhiteSmoke">
+                    <Expander.Header>
+                        <Grid>
+                            <StackPanel HorizontalAlignment="Left" Orientation="Horizontal">
+                                <TextBlock VerticalAlignment="Center">Recipes</TextBlock>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                <Button HorizontalAlignment="Left" Margin="2" Width="100">Import</Button>
+                            </StackPanel>
+                        </Grid>
+                    </Expander.Header>
+                    <my:RecipeView DataContext="{Binding RecipeViewModel}"></my:RecipeView>
+                </Expander>
+
+                <Expander Header="Settings" IsExpanded="False" FontWeight="DemiBold" Background="WhiteSmoke" Visibility="{Binding MultiLanguageVisibility}">
+                    <my:SettingsView DataContext="{Binding SettingsViewModel}"></my:SettingsView>
+                </Expander>
+
+
+
+                <Expander Header="About" IsExpanded="False" FontWeight="DemiBold" Background="{StaticResource DarkBrush}">
+                    <Border BorderBrush="Gray" Background="WhiteSmoke" CornerRadius="4" Margin="2">
+                        <StackPanel Orientation="Vertical" Margin="4">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Copyright © 2012 by Zicore / TehGear"></TextBlock>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock>
+                                    <Run Text="Items are linking to "></Run>
+                                    <Hyperlink NavigateUri="http://gw2spidy.com">gw2spidy.com</Hyperlink>
+                                    <Run Text="with friendly permission."></Run>
+                                </TextBlock>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="You can find more information here: "></TextBlock>
+                                <TextBlock><Hyperlink NavigateUri="http://notifier.zicore.de" Click="Hyperlink_Click">http://notifier.zicore.de</Hyperlink></TextBlock>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                </Expander>
+            </StackPanel>
+        </ScrollViewer> -->
+
+        <!--<Expander Grid.Row="2" Header="Messages" IsExpanded="False" Visibility="Collapsed">
+            <Border>
+                <ScrollViewer ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                    <my:MessageView DataContext="{Binding MessageViewModel}"></my:MessageView>
+                </ScrollViewer>
+            </Border>
+        </Expander>-->
+    </Grid>
+</Window>
+

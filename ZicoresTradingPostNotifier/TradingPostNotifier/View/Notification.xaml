@@ -1,0 +1,413 @@
+﻿<Window x:Class="ZicoresTradingPostNotifier.View.Notification"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        xmlns:my="clr-namespace:ZicoresTradingPostNotifier.View"
+        xmlns:local="clr-namespace:LibraryBase.Wpf.Converter;assembly=LibraryBaseWpf"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:b="clr-namespace:LibraryBase.Wpf.Behaviour;assembly=LibraryBaseWpf"
+        xmlns:dp="clr-namespace:ZicoresTradingPostNotifier.Helper"
+        xmlns:c="clr-namespace:ZicoresTradingPostNotifier.Controls"
+        WindowStyle="None" Topmost="True"
+        Title="Notification" Height="600" Width="400" Icon="/ZicoresTradingPostNotifier;component/icon.ico">
+    <Window.Resources>
+        <Style x:Key="BorderedItem" TargetType="ListViewItem">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListViewItem">
+                        <Border Name="Border" BorderBrush="Gray" BorderThickness="0,1,0,1">
+                            <GridViewRowPresenter />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger
+                        Property="IsMouseOver"
+                        Value="True">
+                                <Setter
+                            TargetName="Border"
+                            Property="Background"
+                            Value="LightGray" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <!-- Group header style-->
+        <Style x:Key="GroupHeaderStyle" TargetType="{x:Type GroupItem}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type GroupItem}">
+
+                        <Expander x:Name="exp" IsExpanded="True" Width="310"
+                                   BorderBrush="CornflowerBlue">
+
+                            <Expander.Header>
+                                <DockPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                                        Background="CornflowerBlue" x:Name="expContent"
+                                        Width="{Binding RelativeSource={RelativeSource
+                                            Mode=FindAncestor, AncestorType={x:Type Expander}},
+                                            Path=Width}"
+                                        Height="{Binding RelativeSource={RelativeSource
+                                            Mode=FindAncestor, AncestorType={x:Type ToggleButton}},
+                                            Path=ActualHeight}">
+                                    <CheckBox IsChecked="False" DockPanel.Dock="Right"/>
+                                    <TextBlock Text="{Binding Path=Name}" Foreground="White"
+                                           FontWeight="Bold" HorizontalAlignment="Center" />
+                                </DockPanel>
+                            </Expander.Header>
+                            <ItemsPresenter />
+                        </Expander>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Border MouseMove="Border_MouseMove" Background="SkyBlue" Grid.ColumnSpan="2" Grid.Column="0" BorderThickness="0,0,0,1" BorderBrush="Black"></Border>
+            <TextBlock IsHitTestVisible="False" Margin="4" FontSize="16" FontWeight="Bold" Foreground="Black">Notifications</TextBlock>
+            <Button BorderBrush="Transparent" Background="Transparent" Grid.Column="1" Grid.Row="0" Width="24" Height="24" Margin="2" Click="Button_Click">X</Button>
+            <ScrollViewer ScrollViewer.VerticalScrollBarVisibility="Auto" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1">
+                <ListView c:GridViewSort.AutoSort="True" x:Name="list" Foreground="Black" DataContext="{Binding}" ItemsSource="{Binding BuyNotifications}" Grid.Column="0" Width="Auto" HorizontalContentAlignment="Stretch" ItemContainerStyle="{StaticResource BorderedItem}">
+
+                    <ListView.GroupStyle>
+                        <GroupStyle ContainerStyle="{StaticResource GroupHeaderStyle}" />
+                    </ListView.GroupStyle>
+
+                    <i:Interaction.Behaviors>
+                        <b:IgnoreMouseWheelBehavior></b:IgnoreMouseWheelBehavior>
+                    </i:Interaction.Behaviors>
+
+                    <ListView.View>
+                        <GridView>
+                            <c:GridViewColumnEx Header="" Identifier="1" Width="140">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel HorizontalAlignment="Stretch">
+                                            <Grid Width="48" Height="48" Margin="2,1,2,1" HorizontalAlignment="Center">
+                                                <Border CornerRadius="8,4,8,4" Background="White" BorderThickness="2" BorderBrush="Tomato" x:Name="opacityMask"></Border>
+                                                <Image Visibility="{Binding GemInVisibility}" Grid.Row="0" Margin="1" Source="{Binding Path=Item.Image}" Stretch="UniformToFill" SnapsToDevicePixels="True">
+                                                    <Image.OpacityMask>
+                                                        <VisualBrush Visual="{Binding ElementName=opacityMask}"></VisualBrush>
+                                                    </Image.OpacityMask>
+                                                </Image>
+                                                <Image Visibility="{Binding GemVisibility}" Grid.Row="0" Margin="1" Source="../Images/gem.png" Stretch="None" SnapsToDevicePixels="True">
+                                                    <Image.OpacityMask>
+                                                        <VisualBrush Visual="{Binding ElementName=opacityMask}"></VisualBrush>
+                                                    </Image.OpacityMask>
+                                                </Image>
+                                            </Grid>
+                                            <TextBlock FontSize="12" FontWeight="Bold" >
+                                                <Hyperlink Command="{Binding NavigateToUriCommand}"><TextBlock TextWrapping="Wrap" Text="{Binding Path=Item.Name}"/></Hyperlink>
+                                            </TextBlock>
+
+                                            <StackPanel Orientation="Horizontal" Visibility="{Binding MessageInVisibility}">
+                                                <TextBlock Margin="1" FontSize="12" FontWeight="Bold" Text="{Binding Path=Message}"></TextBlock>
+                                            </StackPanel>
+
+                                            <StackPanel Orientation="Horizontal" Visibility="{Binding MessageVisibility}">
+                                                <TextBlock Margin="1" FontSize="12" FontWeight="Bold" Text="{Binding Path=Message}"></TextBlock>
+                                                <TextBlock Margin="1" FontSize="12" FontWeight="Bold" Text=" x"></TextBlock>
+                                                <TextBlock Margin="1" FontSize="12" FontWeight="Bold" Text="{Binding Path=Item.Quantity}"></TextBlock>
+                                            </StackPanel>
+
+                                            <TextBlock Margin="1" FontSize="12" Text="{Binding Path=TimeStampString}"></TextBlock>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </c:GridViewColumnEx>
+                            
+                            <c:GridViewColumnEx Header="" Identifier="8" c:GridViewSort.PropertyName="BuyContext.Money.TotalCopper" Width="240">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel>
+                                            <Border Margin="2" BorderBrush="Red" BorderThickness="1" Visibility="{Binding MessageVisibility}">
+                                                <StackPanel>
+                                                    <Border Margin="1" Background="WhiteSmoke" CornerRadius="2" BorderThickness="1" BorderBrush="Gray">
+                                                        <Grid>
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                                            </Grid.ColumnDefinitions>
+
+                                                            <Grid.RowDefinitions>
+                                                                <RowDefinition Height="Auto"></RowDefinition>
+                                                                <RowDefinition Height="Auto"></RowDefinition>
+                                                            </Grid.RowDefinitions>
+
+                                                            <TextBlock Grid.Row="0" Grid.Column="0" Margin="2" FontWeight="SemiBold">Unit Price</TextBlock>
+                                                            <my:MoneyView Grid.Row="0" Grid.Column="2" DataContext="{Binding TransactionMoney}"></my:MoneyView>
+
+                                                            <TextBlock Grid.Row="1" Grid.Column="0" Margin="2" FontWeight="SemiBold">Result</TextBlock>
+                                                            <my:MoneyView Grid.Row="1" Grid.Column="2" DataContext="{Binding TransactionMoneyResult}"></my:MoneyView>
+                                                        </Grid>
+                                                    </Border>
+                                                </StackPanel>
+                                            </Border>
+                                            <Border Margin="2" BorderBrush="Green" BorderThickness="1">
+                                                <StackPanel>
+                                                    <Border Margin="1" Background="WhiteSmoke" CornerRadius="2" BorderThickness="1" BorderBrush="Gray">
+                                                        <Grid>
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                                            </Grid.ColumnDefinitions>
+
+                                                            <TextBlock Margin="2" FontWeight="SemiBold" Grid.Column="0" Text="{Binding Path=BuyMoney.Name}"></TextBlock>
+                                                            <my:MoneyView Grid.Column="2" DataContext="{Binding Path=BuyMoney}"></my:MoneyView>
+                                                        </Grid>
+                                                    </Border>
+                                                    <Border Visibility="{Binding BuyVisibility}" Margin="1" Background="#FFB7FF89" CornerRadius="2" BorderThickness="1" BorderBrush="Gray">
+                                                        <Grid>
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                                            </Grid.ColumnDefinitions>
+
+                                                            <TextBlock Margin="2" FontWeight="SemiBold" Grid.Column="0" Text="{Binding Path=RuleBuy.Money.Name}"></TextBlock>
+                                                            <my:MoneyView Grid.Column="2" DataContext="{Binding Path=RuleBuy.Money}"></my:MoneyView>
+                                                        </Grid>
+                                                    </Border>
+                                                </StackPanel>
+                                            </Border>
+                                            <Border Margin="2" BorderBrush="Blue" BorderThickness="1">
+                                                <StackPanel>
+                                                    <Border Margin="1" Background="WhiteSmoke" CornerRadius="2" BorderThickness="1" BorderBrush="Gray">
+                                                        <Grid>
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                                            </Grid.ColumnDefinitions>
+
+                                                            <TextBlock Margin="2" FontWeight="SemiBold" Grid.Column="0" Text="{Binding Path=SellMoney.Name}"></TextBlock>
+                                                            <my:MoneyView Grid.Column="2" DataContext="{Binding Path=SellMoney}"></my:MoneyView>
+                                                        </Grid>
+                                                    </Border>
+                                                    <Border Visibility="{Binding SellVisibility}" Margin="1" Background="#FFB7FF89" CornerRadius="2" BorderThickness="1" BorderBrush="Gray">
+                                                        <Grid>
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                                            </Grid.ColumnDefinitions>
+
+                                                            <TextBlock Margin="2" FontWeight="SemiBold" Grid.Column="0" Text="{Binding Path=RuleSell.Money.Name}"></TextBlock>
+                                                            <my:MoneyView Grid.Column="2" DataContext="{Binding Path=RuleSell.Money}"></my:MoneyView>
+                                                        </Grid>
+                                                    </Border>
+                                                </StackPanel>
+                                            </Border>
+
+                                            <Grid Visibility="{Binding MessageInVisibility}">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                                    <ColumnDefinition Width="60"></ColumnDefinition>
+                                                    <ColumnDefinition Width="*"></ColumnDefinition>
+                                                    <ColumnDefinition Width="60"></ColumnDefinition>
+                                                </Grid.ColumnDefinitions>
+
+                                                <TextBlock Grid.Column="0" VerticalAlignment="Center" Margin="4" Text="Minutes:"></TextBlock>
+                                                <TextBox Grid.Column="1" TextAlignment="Center" Width="32" VerticalAlignment="Center" Margin="4" Text="{Binding TimeoutMinutes}"></TextBox>
+
+                                                <Button Grid.Column="2" Margin="4" Background="WhiteSmoke" BorderBrush="Gray" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ItemsControl}}, Path=DataContext.TimeoutRuleCommand}" CommandParameter="{Binding}">Wait</Button>
+                                                <Button Grid.Column="4" Margin="4" Background="WhiteSmoke" BorderBrush="Gray" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ItemsControl}}, Path=DataContext.ClearRuleCommand}" CommandParameter="{Binding}">OK</Button>
+                                            </Grid>
+
+                                            <Grid Visibility="{Binding MessageVisibility}">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="60"></ColumnDefinition>
+                                                </Grid.ColumnDefinitions>
+                                                <Button Grid.Column="0" Margin="4" Background="WhiteSmoke" BorderBrush="Gray" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ItemsControl}}, Path=DataContext.ClearRuleCommand}" CommandParameter="{Binding}">OK</Button>
+                                            </Grid>
+                                        </StackPanel>
+                                    </DataTemplate>
+
+                                </GridViewColumn.CellTemplate>
+                            </c:GridViewColumnEx>
+
+                            <!--<c:GridViewColumnEx Header="Buy Fluctuation" Identifier="13_1">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid x:Name="grid" DataContext="{Binding}">
+                                    <Border Grid.Row="0" CornerRadius="4" DataContext="{Binding Path=BuyContext.Fluctuation}" Style="{StaticResource BorderHighlight}"></Border>
+                                    <TextBlock Grid.Row="0" MinWidth="40" TextAlignment="Center" Margin="2" FontSize="12" FontWeight="Bold" Text="{Binding Path=BuyContext.FluctuationFormat}"></TextBlock>
+                                </Grid>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </c:GridViewColumnEx>
+
+                    <c:GridViewColumnEx Header="Sell Fluctuation" Identifier="13_2">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid x:Name="grid" DataContext="{Binding}">
+                                    <Border Grid.Row="0" CornerRadius="4" DataContext="{Binding Path=SellContext.Fluctuation}" Style="{StaticResource BorderHighlight}"></Border>
+                                    <TextBlock Grid.Row="0" MinWidth="40" TextAlignment="Center" Margin="2" FontSize="12" FontWeight="Bold" Text="{Binding Path=SellContext.FluctuationFormat}"></TextBlock>
+                                </Grid>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </c:GridViewColumnEx>-->
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+                <!--<ItemsControl ItemsSource="{Binding BuyNotifications}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Margin="4" Background="LightGray" x:Name="border" BorderThickness="1" BorderBrush="DimGray">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                        <ColumnDefinition Width="*"></ColumnDefinition>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid Margin="5" Width="42" Height="42" Grid.Column="0">
+                                        <Border CornerRadius="12,4,12,4" Background="White" BorderThickness="2" BorderBrush="Tomato" x:Name="opacityMask"></Border>
+                                        <Image Margin="1" Source="{Binding Path=Item.Image}"  Stretch="UniformToFill" SnapsToDevicePixels="True">
+                                            <Image.OpacityMask>
+                                                <VisualBrush Visual="{Binding ElementName=opacityMask}"></VisualBrush>
+                                            </Image.OpacityMask>
+                                        </Image>
+                                    </Grid>
+                                    <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" Grid.Column="1">
+                                        <TextBlock Text="{Binding Path=Item.Name}" FontSize="12" FontWeight="SemiBold"></TextBlock>
+                                        <StackPanel Orientation="Vertical" Margin="1" HorizontalAlignment="Stretch">
+                                            <Border Margin="2" BorderBrush="Red" BorderThickness="1" Visibility="{Binding MessageVisibility}">                                                
+                                                <StackPanel>
+                                                    <Border Margin="1" Background="WhiteSmoke" CornerRadius="2" BorderThickness="1" BorderBrush="Gray">
+                                                        <TextBlock Margin="1" FontSize="12" FontWeight="Bold" Text="{Binding Message}"></TextBlock>
+                                                    </Border>                                                    
+                                                    <Border Margin="1" Background="WhiteSmoke" CornerRadius="2" BorderThickness="1" BorderBrush="Gray">
+                                                        <Grid>
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                                            </Grid.ColumnDefinitions>
+
+                                                            <Grid.RowDefinitions>
+                                                                <RowDefinition Height="Auto"></RowDefinition>
+                                                                <RowDefinition Height="Auto"></RowDefinition>
+                                                                <RowDefinition Height="Auto"></RowDefinition>
+                                                            </Grid.RowDefinitions>
+
+                                                            <TextBlock Grid.Row="0" Grid.Column="0" Margin="2" FontWeight="SemiBold">Quantity</TextBlock>
+                                                            <TextBlock Grid.Row="0" Grid.Column="2" Margin="2,2,4,2" FontWeight="SemiBold" Text="{Binding Path=Item.Quantity}" HorizontalAlignment="Right"></TextBlock>
+
+                                                            <TextBlock Grid.Row="1" Grid.Column="0" Margin="2" FontWeight="SemiBold">Unit Price</TextBlock>
+                                                            <my:MoneyView Grid.Row="1" Grid.Column="2" DataContext="{Binding TransactionMoney}"></my:MoneyView>
+
+                                                            <TextBlock Grid.Row="2" Grid.Column="0" Margin="2" FontWeight="SemiBold">Result</TextBlock>
+                                                            <my:MoneyView Grid.Row="2" Grid.Column="2" DataContext="{Binding TransactionMoneyResult}"></my:MoneyView>
+                                                        </Grid>
+                                                    </Border>
+                                                </StackPanel>
+                                            </Border>
+                                            <Border Margin="2" BorderBrush="Green" BorderThickness="1">
+                                                <StackPanel>
+                                                    <Border Margin="1" Background="WhiteSmoke" CornerRadius="2" BorderThickness="1" BorderBrush="Gray">
+                                                        <Grid>
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                                            </Grid.ColumnDefinitions>
+
+                                                            <TextBlock Margin="2" FontWeight="SemiBold" Grid.Column="0" Text="{Binding Path=Item.BuyMoney.Name}"></TextBlock>
+                                                            <my:MoneyView Grid.Column="2" DataContext="{Binding Path=Item.BuyMoney}"></my:MoneyView>
+                                                        </Grid>
+                                                    </Border>
+                                                    <Border Visibility="{Binding BuyVisibility}" Margin="1" Background="#FFB7FF89" CornerRadius="2" BorderThickness="1" BorderBrush="Gray">
+                                                        <Grid>
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                                            </Grid.ColumnDefinitions>
+
+                                                            <TextBlock Margin="2" FontWeight="SemiBold" Grid.Column="0" Text="{Binding Path=RuleBuy.Money.Name}"></TextBlock>
+                                                            <my:MoneyView Grid.Column="2" DataContext="{Binding Path=RuleBuy.Money}"></my:MoneyView>
+                                                        </Grid>
+                                                    </Border>
+                                                </StackPanel>
+                                            </Border>
+                                            <Border Margin="2" BorderBrush="Blue" BorderThickness="1">
+                                                <StackPanel>
+                                                    <Border Margin="1" Background="WhiteSmoke" CornerRadius="2" BorderThickness="1" BorderBrush="Gray">
+                                                        <Grid>
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                                            </Grid.ColumnDefinitions>
+
+                                                            <TextBlock Margin="2" FontWeight="SemiBold" Grid.Column="0" Text="{Binding Path=Item.SellMoney.Name}"></TextBlock>
+                                                            <my:MoneyView Grid.Column="2" DataContext="{Binding Path=Item.SellMoney}"></my:MoneyView>
+                                                        </Grid>
+                                                    </Border>
+                                                    <Border Visibility="{Binding SellVisibility}" Margin="1" Background="#FFB7FF89" CornerRadius="2" BorderThickness="1" BorderBrush="Gray">
+                                                        <Grid>
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                                            </Grid.ColumnDefinitions>
+
+                                                            <TextBlock Margin="2" FontWeight="SemiBold" Grid.Column="0" Text="{Binding Path=RuleSell.Money.Name}"></TextBlock>
+                                                            <my:MoneyView Grid.Column="2" DataContext="{Binding Path=RuleSell.Money}"></my:MoneyView>
+                                                        </Grid>
+                                                    </Border>
+                                                </StackPanel>
+                                            </Border>
+
+                                            <Grid Visibility="{Binding MessageInVisibility}">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                                    <ColumnDefinition Width="60"></ColumnDefinition>
+                                                    <ColumnDefinition Width="*"></ColumnDefinition>
+                                                    <ColumnDefinition Width="60"></ColumnDefinition>
+                                                </Grid.ColumnDefinitions>
+
+                                                <TextBlock Grid.Column="0" VerticalAlignment="Center" Margin="4" Text="Minutes:"></TextBlock>
+                                                <TextBox Grid.Column="1" TextAlignment="Center" Width="32" VerticalAlignment="Center" Margin="4" Text="{Binding TimeoutMinutes}"></TextBox>
+
+                                                <Button Grid.Column="2" Margin="4" Background="WhiteSmoke" BorderBrush="Gray" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ItemsControl}}, Path=DataContext.TimeoutRuleCommand}" CommandParameter="{Binding}">Wait</Button>
+                                                <Button Grid.Column="4" Margin="4" Background="WhiteSmoke" BorderBrush="Gray" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ItemsControl}}, Path=DataContext.ClearRuleCommand}" CommandParameter="{Binding}">OK</Button>
+                                            </Grid>
+
+                                            <Grid Visibility="{Binding MessageVisibility}">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="60"></ColumnDefinition>
+                                                </Grid.ColumnDefinitions>
+                                                <Button Grid.Column="0" Margin="4" Background="WhiteSmoke" BorderBrush="Gray" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ItemsControl}}, Path=DataContext.ClearRuleCommand}" CommandParameter="{Binding}">OK</Button>
+                                            </Grid>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                            <DataTemplate.Triggers>
+                                <DataTrigger Binding="{Binding Path=Acknowledged}">
+                                    <DataTrigger.Value>true</DataTrigger.Value>
+                                    <Setter TargetName="border" Property="Background" Value="LightBlue"/>
+                                </DataTrigger>
+                            </DataTemplate.Triggers>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>-->
+            </ScrollViewer>
+        </Grid>
+    </Grid>
+</Window>

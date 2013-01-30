@@ -1,0 +1,104 @@
+﻿<UserControl x:Class="ZicoresTradingPostNotifier.View.GemView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:my="clr-namespace:ZicoresTradingPostNotifier.View"
+             mc:Ignorable="d" 
+             d:DesignHeight="400" d:DesignWidth="700">
+    <Grid DataContext="{Binding GemManager, Mode=OneWay}" Margin="8" VerticalAlignment="Center">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <GroupBox Header="Gems for Gold" Width="420" Margin="8" Grid.Row="0">
+            <StackPanel>
+                <Grid>
+                    <Grid.RowDefinitions>
+
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <TextBox Grid.Column="0" Width="36" Height="20" HorizontalAlignment="Left" Text="{Binding BuyGemPriceQuantity, UpdateSourceTrigger=PropertyChanged}" Margin="3"></TextBox>
+                    <Image Grid.Column="1" Source="..\Images\gem.png" Stretch="Uniform" Width="20" Height="24" Margin="1"></Image>
+                    <my:MoneyView Grid.Column="3" DataContext="{Binding BuyGemPriceMoney}"></my:MoneyView>
+                </Grid>
+                <Grid>
+                    <Grid.RowDefinitions>
+
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+
+                    <my:MoneyInputView Grid.Column="0" DataContext="{Binding BuyGemGemMoneyInput}"></my:MoneyInputView>
+                    <TextBlock Grid.Column="2" Text="{Binding BuyGemGemValueFormat}" HorizontalAlignment="Right" Margin="4"></TextBlock>
+                    <Image Grid.Column="3" Source="..\Images\gem.png" Stretch="Uniform" Width="20" Height="24" Margin="1"></Image>
+                </Grid>
+                <my:RuleListView DataContext="{Binding BuyGemsRules}"></my:RuleListView>
+            </StackPanel>
+        </GroupBox>
+
+        <GroupBox Header="Gold for Gems" Width="420" Margin="8" Grid.Row="1">
+            <StackPanel>
+                <Grid>
+                    <Grid.RowDefinitions>
+
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <TextBox Grid.Column="0" Width="36" Height="20" HorizontalAlignment="Left" Text="{Binding BuyGoldPriceQuantity, UpdateSourceTrigger=PropertyChanged}" Margin="3"></TextBox>
+                    <Image Grid.Column="1" Source="..\Images\gem.png" Stretch="Uniform" Width="20" Height="24" Margin="1"></Image>
+                    <my:MoneyView Grid.Column="3" DataContext="{Binding BuyGoldPriceMoney}"></my:MoneyView>
+                </Grid>
+                <Grid>
+                    <Grid.RowDefinitions>
+
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <my:MoneyInputView Grid.Column="0" DataContext="{Binding BuyGoldGemMoneyInput}"></my:MoneyInputView>
+                    <TextBlock Grid.Column="2" Text="{Binding BuyGoldGemValueFormat}" HorizontalAlignment="Right" Margin="4"></TextBlock>
+                    <Image Grid.Column="3" Source="..\Images\gem.png" Stretch="Uniform" Width="20" Height="24" Margin="1"></Image>
+                </Grid>
+                <my:RuleListView DataContext="{Binding BuyGoldRules}"></my:RuleListView>
+            </StackPanel>
+        </GroupBox>
+
+        <GroupBox Header="Margin" Width="420" Margin="4" Grid.Row="2">
+            <StackPanel>
+                <Grid>
+                    <Grid.RowDefinitions>
+
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <TextBox Grid.Column="0" Width="36" Height="20" HorizontalAlignment="Left" Text="{Binding MarginQuantity, UpdateSourceTrigger=PropertyChanged}" Margin="4"></TextBox>
+                    <Image Grid.Column="1" Source="..\Images\gem.png" Stretch="Uniform" Width="20" Height="24" Margin="1"></Image>
+                    <my:MoneyView Grid.Column="3" DataContext="{Binding Margin}"></my:MoneyView>
+                </Grid>
+            </StackPanel>
+        </GroupBox>
+    </Grid>
+</UserControl>

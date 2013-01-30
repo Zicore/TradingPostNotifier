@@ -1,0 +1,316 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{C42B54F9-1370-4C76-B819-9D11D504BBAA}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ZicoresTradingPostNotifier</RootNamespace>
+    <AssemblyName>ZicoresTradingPostNotifier</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <ExpressionBlendVersion>4.0.20621.0</ExpressionBlendVersion>
+    <Utf8Output>true</Utf8Output>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\ZicoresTradingPostNotifier\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>icon.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DynamicDataDisplay, Version=0.3.0.0, Culture=neutral, PublicKeyToken=5b7d744a7263923f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Chart\DynamicDataDisplay.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.0.8.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Scraper\JsonNet\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationFramework.Aero" />
+    <Reference Include="PresentationFramework.Classic" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="Chart\TradingLabelProvider.cs" />
+    <Compile Include="Controls\GridViewColumnEx.cs" />
+    <Compile Include="Controls\GridViewSort.cs" />
+    <Compile Include="Controls\LevelToIndentConverter.cs" />
+    <Compile Include="Controls\TreeListView.cs" />
+    <Compile Include="Event\FinishedEventArgs.cs" />
+    <Compile Include="Event\RequestCloseEventArgs.cs" />
+    <Compile Include="Helper\ColumnHelper.cs" />
+    <Compile Include="Helper\DependencyProperties.cs" />
+    <Compile Include="Model\Category.cs" />
+    <Compile Include="Model\ImageAsyncHelper.cs" />
+    <Compile Include="Model\LanguageModel.cs" />
+    <Compile Include="Model\Message.cs" />
+    <Compile Include="Model\NotificationModel.cs" />
+    <Compile Include="ViewModel\ChartViewModel.cs" />
+    <Compile Include="ViewModel\FileSaveViewModel.cs" />
+    <Compile Include="ViewModel\FileOpenViewModel.cs" />
+    <Compile Include="ViewModel\GemViewModel.cs" />
+    <Compile Include="ViewModel\MainWindowViewModel.cs" />
+    <Compile Include="ViewModel\MessageViewModel.cs" />
+    <Compile Include="ViewModel\NotificationViewModel.cs" />
+    <Compile Include="ViewModel\Page.cs" />
+    <Compile Include="ViewModel\PagerViewModel.cs" />
+    <Compile Include="ViewModel\RecipeViewModel.cs" />
+    <Compile Include="ViewModel\SearchViewModel.cs" />
+    <Compile Include="ViewModel\SettingsViewModel.cs" />
+    <Compile Include="ViewModel\TransactionViewModel.cs" />
+    <Compile Include="ViewModel\WatchlistViewModel.cs" />
+    <Compile Include="View\ChartView.xaml.cs">
+      <DependentUpon>ChartView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\GemView.xaml.cs">
+      <DependentUpon>GemView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MessageView.xaml.cs">
+      <DependentUpon>MessageView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MoneyInputView.xaml.cs">
+      <DependentUpon>MoneyInputView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\RecipeView.xaml.cs">
+      <DependentUpon>RecipeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\PagerView.xaml.cs">
+      <DependentUpon>PagerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\SearchView.xaml.cs">
+      <DependentUpon>SearchView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\SplashView.xaml.cs">
+      <DependentUpon>SplashView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\WatchlistView.xaml.cs">
+      <DependentUpon>WatchlistView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MoneyView.xaml.cs">
+      <DependentUpon>MoneyView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Notification.xaml.cs">
+      <DependentUpon>Notification.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\NotificationView.xaml.cs">
+      <DependentUpon>NotificationView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\RuleListView.xaml.cs">
+      <DependentUpon>RuleListView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\SettingsView.xaml.cs">
+      <DependentUpon>SettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\TransactionView.xaml.cs">
+      <DependentUpon>TransactionView.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Resources\Brushes.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\Button.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\ColumnDatatemplates.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\Expander.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Page Include="View\ChartView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\GemView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\MessageView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\MoneyInputView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\RecipeView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\PagerView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\SearchView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\SplashView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\WatchlistView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\MoneyView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Notification.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\NotificationView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\RuleListView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\SettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\TransactionView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="app.config" />
+    <None Include="DB\items.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="DB\recipes.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <AppDesigner Include="Properties\" />
+    <Page Include="Resources\TreeListView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\LibraryBaseWpf\LibraryBaseWpf.csproj">
+      <Project>{6970fa5a-5aca-46f9-8ee3-b1e256fbb463}</Project>
+      <Name>LibraryBaseWpf</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\NotifierCore\NotifierCore.csproj">
+      <Project>{874187a5-8b44-4988-9dde-d0a9a38d7e88}</Project>
+      <Name>NotifierCore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ZicoresUtils\ZicoresUtils.csproj">
+      <Project>{a54e2798-ee37-4418-89c7-8b2a1b85d73c}</Project>
+      <Name>ZicoresUtils</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\copper.png" />
+    <Resource Include="Images\gold.png" />
+    <Resource Include="Images\silver.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\powered_gw2db_onDark.png" />
+    <Resource Include="Images\powered_gw2db_onLight.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Chart\DynamicDataDisplay.dll" />
+    <None Include="Chart\DynamicDataDisplay.XML" />
+    <None Include="Chart\ru-ru\DynamicDataDisplay.resources.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\gem.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,53 @@
+﻿<UserControl x:Class="ZicoresTradingPostNotifier.View.MoneyView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d"
+             d:DesignHeight="24" d:DesignWidth="150">
+    <Grid HorizontalAlignment="Right">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"></ColumnDefinition>
+            <ColumnDefinition Width="Auto"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        
+        <Grid Grid.Row="0" Grid.Column="1" Margin="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="40"></ColumnDefinition>
+                <ColumnDefinition Width="40"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" MinWidth="40"></ColumnDefinition>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <TextBlock Margin="1,0,4,0" TextAlignment="Right" Grid.Column="0" Height="20" FontWeight="Bold" FontSize="12" Foreground="DarkGoldenrod" Text="{Binding Path=Gold}"></TextBlock>
+                <Image Width="15" Height="15" Stretch="UniformToFill" Grid.Column="1" Source="/ZicoresTradingPostNotifier;component/Images/gold.png"></Image>
+            </Grid>
+            <Grid Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <TextBlock Margin="1,0,4,0" TextAlignment="Right" Grid.Column="0" Height="20" FontWeight="Bold" FontSize="12" Foreground="Gray" Text="{Binding Path=Silver}"></TextBlock>
+                <Image  Width="15" Height="15" Stretch="UniformToFill" Grid.Column="1" Source="/ZicoresTradingPostNotifier;component/Images/silver.png"></Image>
+            </Grid>
+            <Grid Grid.Column="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <TextBlock Margin="1,0,4,0" TextAlignment="Right" Grid.Column="0" Height="20" FontWeight="Bold" FontSize="12" Foreground="Brown" Text="{Binding Path=Copper}"></TextBlock>
+                <Image  Width="15" Height="15" Stretch="UniformToFill" Grid.Column="1" Source="/ZicoresTradingPostNotifier;component/Images/copper.png"></Image>
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>

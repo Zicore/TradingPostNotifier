@@ -1,0 +1,37 @@
+﻿<UserControl x:Class="ZicoresTradingPostNotifier.View.MessageView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <ItemsControl ItemsSource="{Binding Messages}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Border Margin="2" Background="WhiteSmoke" Padding="4" BorderBrush="LightGray" BorderThickness="0,0,0,1">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                            <RowDefinition Height="*"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                            <ColumnDefinition Width="Auto"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Orientation="Vertical">
+                            <TextBlock Text="{Binding Title}" FontSize="12" FontWeight="Bold"></TextBlock>
+                            <TextBlock Text="{Binding Text}"></TextBlock>                            
+                        </StackPanel>
+                        <Button Grid.Row="0" Grid.RowSpan="2" Grid.Column="1"
+                                Margin="2"
+                                Width="24"
+                                Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ItemsControl}}, Path=DataContext.AcknowledgeCommand}"
+                                CommandParameter="{Binding}">X</Button>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </Grid>
+</UserControl>

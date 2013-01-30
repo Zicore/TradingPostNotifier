@@ -1,0 +1,404 @@
+﻿<UserControl x:Class="ZicoresTradingPostNotifier.View.RecipeView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:my="clr-namespace:ZicoresTradingPostNotifier.View"
+             xmlns:c="clr-namespace:ZicoresTradingPostNotifier.Controls"
+             xmlns:local="clr-namespace:LibraryBase.Wpf.Converter;assembly=LibraryBaseWpf"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:b="clr-namespace:LibraryBase.Wpf.Behaviour;assembly=LibraryBaseWpf"
+             xmlns:l="clr-namespace:ZicoresTradingPostNotifier.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="800">
+
+    <UserControl.Resources>
+
+        <local:IsNegativeValueConverter x:Key="isNegativeConverter" />
+
+        <Style x:Key="BorderedItem" TargetType="TreeViewItem">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TreeViewItem">
+                        <Border Name="Border" BorderBrush="Gray" BorderThickness="0,1,0,1">
+                            <GridViewRowPresenter />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger
+                        Property="IsMouseOver"
+                        Value="True">
+                                <Setter
+                            TargetName="Border"
+                            Property="Background"
+                            Value="LightGray" />
+                            </Trigger>
+                            <Trigger
+                        Property="IsSelected"
+                        Value="True">
+                                <Setter
+                            TargetName="Border"
+                            Property="Background"
+                            Value="SkyBlue" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Explorer-style layout-->
+        <DataTemplate x:Key="ExplorerView">
+            <StackPanel Orientation="Horizontal" Height="Auto" Width="150">
+
+                <StackPanel VerticalAlignment="Center" Width="90">
+                    <TextBlock Text="{Binding Path=Value.AppConfig.Appli.AppName}" 
+                     FontSize="13" HorizontalAlignment="Left" TextWrapping="WrapWithOverflow"
+                     Margin="0,0,0,1" />
+                    <TextBlock Text="{Binding Path=Value.AppConfig.Appli.AppType}" FontSize="9" 
+                     HorizontalAlignment="Left" Margin="0,0,0,1" />
+                </StackPanel>
+            </StackPanel>
+        </DataTemplate>
+
+        <!-- Group header style-->
+        <Style x:Key="GroupHeaderStyle" TargetType="{x:Type GroupItem}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type GroupItem}">
+
+                        <Expander x:Name="exp" IsExpanded="True" Width="310"
+                                   BorderBrush="CornflowerBlue">
+
+                            <Expander.Header>
+                                <DockPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                                        Background="CornflowerBlue" x:Name="expContent"
+                                        Width="{Binding RelativeSource={RelativeSource
+                                            Mode=FindAncestor, AncestorType={x:Type Expander}},
+                                            Path=Width}"
+                                        Height="{Binding RelativeSource={RelativeSource
+                                            Mode=FindAncestor, AncestorType={x:Type ToggleButton}},
+                                            Path=ActualHeight}">
+                                    <CheckBox IsChecked="False" DockPanel.Dock="Right"/>
+                                    <TextBlock Text="{Binding Path=Name}" Foreground="White"
+                                           FontWeight="Bold" HorizontalAlignment="Center" />
+                                </DockPanel>
+                            </Expander.Header>
+                            <ItemsPresenter />
+                        </Expander>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <SolidColorBrush x:Key="RedHighlight" Color="#FFFFC7CE"></SolidColorBrush>
+        <SolidColorBrush x:Key="GreenHighlight" Color="LightGreen"></SolidColorBrush>
+
+        <Style TargetType="{x:Type Border}" x:Key="BorderHighlight">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Converter={StaticResource isNegativeConverter}}" Value="True">
+                    <Setter Property="Background" Value="{StaticResource RedHighlight}"></Setter>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Converter={StaticResource isNegativeConverter}}" Value="False">
+                    <Setter Property="Background" Value="{StaticResource GreenHighlight}"></Setter>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="{x:Type Border}" x:Key="BorderHighlightMoney">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Path=TotalCopper, Converter={StaticResource isNegativeConverter}}" Value="True">
+                    <Setter Property="Background" Value="{StaticResource RedHighlight}"></Setter>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Path=TotalCopper, Converter={StaticResource isNegativeConverter}}" Value="False">
+                    <Setter Property="Background" Value="{StaticResource GreenHighlight}"></Setter>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="{x:Type Border}" x:Key="WayHighlight">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Path=IsCraftBestWay}" Value="True">
+                    <Setter Property="Background" Value="{StaticResource GreenHighlight}"></Setter>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Path=IsCraftBestWay}" Value="False">
+                    <Setter Property="Background" Value="{StaticResource RedHighlight}"></Setter>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="{x:Type Border}" x:Key="WayHighlightReverse">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Path=IsCraftBestWay}" Value="False">
+                    <Setter Property="Background" Value="{StaticResource GreenHighlight}"></Setter>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Path=IsCraftBestWay}" Value="True">
+                    <Setter Property="Background" Value="{StaticResource RedHighlight}"></Setter>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+    </UserControl.Resources>
+
+    <Grid x:Name="outerGrid" DataContext="{Binding}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
+        
+        <StackPanel>
+            <TextBlock Margin="2" FontWeight="Bold">Recipes - Use the search to find recipes</TextBlock>
+            
+            <l:TreeListView SelectedItemChanged="list_SelectedItemChanged" x:Name="treeList" Foreground="Black" DataContext="{Binding}" ItemsSource="{Binding Recipes}" Grid.Column="0" Grid.Row="1" Width="Auto" HorizontalContentAlignment="Stretch" ItemContainerStyle="{Binding BorderedItem}">
+
+                <i:Interaction.Behaviors>
+                    <b:IgnoreMouseWheelBehavior></b:IgnoreMouseWheelBehavior>
+                </i:Interaction.Behaviors>
+
+
+                <l:TreeListView.ItemTemplate>
+                    <HierarchicalDataTemplate ItemsSource="{Binding RecipeItems}" ></HierarchicalDataTemplate>
+                </l:TreeListView.ItemTemplate>
+
+                <l:TreeListView.Columns>
+                    <c:GridViewColumnEx Header="Image" CellTemplate="{StaticResource TreeCellTemplate}" Identifier="1"></c:GridViewColumnEx>
+
+                    <c:GridViewColumnEx Header="Name" Identifier="2">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock FontSize="12" FontWeight="Bold" Height="20">
+                                <TextBlock FontSize="12" FontWeight="Bold" Height="20" Text="{Binding QuantityFormat}"></TextBlock>
+                                <Hyperlink Command="{Binding NavigateToUriCommand}"><TextBlock Text="{Binding Name}"/></Hyperlink>
+                            </TextBlock>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </c:GridViewColumnEx>
+
+                    <c:GridViewColumnEx Header="Craft" Identifier="4">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid x:Name="grid" DataContext="{Binding}" Height="20">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Border CornerRadius="4" Style="{StaticResource WayHighlight}">
+                                        <my:MoneyView Grid.Column="0" DataContext="{Binding Path=CraftPriceCostsMoney}" Height="20">
+                                        </my:MoneyView>
+                                    </Border>
+                                    <CheckBox Grid.Column="1" IsChecked="{Binding IsCraftBestWay}"></CheckBox>
+                                </Grid>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </c:GridViewColumnEx>
+
+                    <c:GridViewColumnEx Header="Trading Post" Identifier="5">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid x:Name="grid" DataContext="{Binding}" Height="20">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                    </Grid.ColumnDefinitions>
+                                    <Border Grid.Column="0" CornerRadius="4" Style="{StaticResource WayHighlightReverse}">
+                                        <my:MoneyView DataContext="{Binding Path=SellPriceCostsMoney}" Height="20">
+                                        </my:MoneyView>
+                                    </Border>
+                                    <CheckBox Grid.Column="1" IsChecked="{Binding IsBuyBestWay}"></CheckBox>
+                                </Grid>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </c:GridViewColumnEx>
+
+                    <c:GridViewColumnEx Header="Auto" Identifier="5_1">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox IsChecked="{Binding IsAutomated}" Height="20">Auto</CheckBox>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </c:GridViewColumnEx>
+
+                    <c:GridViewColumnEx Header="Sell" Identifier="6">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <my:MoneyView DataContext="{Binding Path=SellMoney}" Height="20">
+                                </my:MoneyView>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </c:GridViewColumnEx>
+
+                    <c:GridViewColumnEx Header="Buy" Identifier="8">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid x:Name="grid" DataContext="{Binding}" Height="20">
+                                    <my:MoneyView DataContext="{Binding Path=BuyMoney}">
+                                    </my:MoneyView>
+                                </Grid>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </c:GridViewColumnEx>
+
+                    <c:GridViewColumnEx Header="Profit" Identifier="8">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid x:Name="grid" DataContext="{Binding}">
+                                    <Border DataContext="{Binding Path=MarginMoney}" CornerRadius="4" Style="{StaticResource BorderHighlightMoney}" Height="20">
+                                        <my:MoneyView Height="20" DataContext="{Binding}" Background="Transparent">
+                                        </my:MoneyView>
+                                    </Border>
+                                </Grid>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </c:GridViewColumnEx>
+
+                    <c:GridViewColumnEx Header="%" Identifier="9">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid x:Name="grid" DataContext="{Binding}">
+                                    <Border CornerRadius="4" DataContext="{Binding Path=MarginMoney}" Style="{StaticResource BorderHighlightMoney}" Height="20">
+                                        <TextBlock Margin="2" DataContext="{Binding ElementName=grid, Path=DataContext}" TextAlignment="Center" Text="{Binding MarginPercent}" Background="Transparent" FontWeight="Bold"></TextBlock>
+                                    </Border>
+                                </Grid>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </c:GridViewColumnEx>
+
+                    <c:GridViewColumnEx Header="Link" Identifier="12">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Background="WhiteSmoke" Margin="4" Command="{Binding LinkIngameCommand}" Height="20">copy</Button>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </c:GridViewColumnEx>
+
+                    <c:GridViewColumnEx Header="Name" Identifier="13">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Background="WhiteSmoke" Margin="4" Command="{Binding CopyNameCommand}" Height="20">copy</Button>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </c:GridViewColumnEx>
+
+                </l:TreeListView.Columns>
+            </l:TreeListView>
+            
+            <TextBlock Margin="2" FontWeight="Bold">Shopping list - Click on an item from above</TextBlock>
+
+            <TextBlock Margin="4" FontWeight="Bold" FontSize="14" Text="{Binding Path=SelectedRecipe.Name}"></TextBlock>
+
+            <ListView x:Name="listShopping" Foreground="Black" ItemsSource="{Binding Path=SelectedRecipe.ShoppingList}" Grid.Row="0" HorizontalContentAlignment="Stretch">
+
+
+                <i:Interaction.Behaviors>
+                    <b:IgnoreMouseWheelBehavior></b:IgnoreMouseWheelBehavior>
+                </i:Interaction.Behaviors>
+
+                <ListView.View>
+                    <GridView>
+
+                        <c:GridViewColumnEx Header="Image" CellTemplate="{StaticResource ImageCellTemplate}" Identifier="1"></c:GridViewColumnEx>
+
+                        <c:GridViewColumnEx Header="Name" Identifier="2">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock FontSize="12" FontWeight="Bold" Height="20">
+                                <TextBlock FontSize="12" FontWeight="Bold" Height="20" Text="{Binding QuantityFormat}"></TextBlock>
+                                <Hyperlink Command="{Binding NavigateToUriCommand}"><TextBlock Text="{Binding Name}"/></Hyperlink>
+                            </TextBlock>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </c:GridViewColumnEx>
+
+                        <c:GridViewColumnEx Header="Trading Post" Identifier="5">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Grid x:Name="grid" DataContext="{Binding}" Height="20">
+                                        <Border CornerRadius="4" Style="{StaticResource WayHighlight}">
+                                            <my:MoneyView DataContext="{Binding Path=SellPriceCostsMoney}" Height="20">
+                                            </my:MoneyView>
+                                        </Border>
+                                    </Grid>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </c:GridViewColumnEx>
+
+                        <c:GridViewColumnEx Header="Sell" Identifier="6">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <my:MoneyView DataContext="{Binding Path=SellMoney}" Height="20">
+                                    </my:MoneyView>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </c:GridViewColumnEx>
+
+                        <c:GridViewColumnEx Header="Buy" Identifier="8">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Grid x:Name="grid" DataContext="{Binding}" Height="20">
+                                        <my:MoneyView DataContext="{Binding Path=BuyMoney}">
+                                        </my:MoneyView>
+                                    </Grid>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </c:GridViewColumnEx>
+
+                        <c:GridViewColumnEx Header="Link" Identifier="12">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Background="WhiteSmoke" Margin="4" Command="{Binding LinkIngameCommand}" Height="20">copy</Button>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </c:GridViewColumnEx>
+
+                        <c:GridViewColumnEx Header="Name" Identifier="13">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Background="WhiteSmoke" Margin="4" Command="{Binding CopyNameCommand}" Height="20">copy</Button>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </c:GridViewColumnEx>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+
+            <Grid Margin="4">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                    <ColumnDefinition Width="10"></ColumnDefinition>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock VerticalAlignment="Center" Grid.Column="0">Total crafting costs:</TextBlock>
+                <my:MoneyView Grid.Column="2" DataContext="{Binding Path=SelectedRecipe.CraftPriceCostsMoney}"></my:MoneyView>
+
+                <TextBlock VerticalAlignment="Center" Grid.Row="1" Grid.Column="0">Sell Price:</TextBlock>
+                <my:MoneyView Grid.Row="1" Grid.Column="2" DataContext="{Binding Path=SelectedRecipe.SellMoney}"></my:MoneyView>
+
+                <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center">Listing fee:</TextBlock>
+                <my:MoneyView Grid.Row="2" Grid.Column="2" DataContext="{Binding Path=SelectedRecipe.ListingFeeMoney}"></my:MoneyView>
+
+                <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center">Sale fee:</TextBlock>
+                <my:MoneyView Grid.Row="3" Grid.Column="2" DataContext="{Binding Path=SelectedRecipe.SaleFeeMoney}"></my:MoneyView>
+
+                <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center">Profit:</TextBlock>
+                <my:MoneyView Grid.Row="4" Grid.Column="2" DataContext="{Binding Path=SelectedRecipe.ProfitMoney}"></my:MoneyView>
+            </Grid>
+
+            <!--<Grid>
+                <CheckBox IsChecked="{Binding Path=SelectedRecipe.IsAutomated}" Content="Calculate best way automatically" Margin="4"></CheckBox>
+            </Grid>-->
+
+        </StackPanel>
+
+    </Grid>
+</UserControl>

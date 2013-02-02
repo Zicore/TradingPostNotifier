@@ -631,7 +631,14 @@ namespace Scraper.Notifier
                             });
 
                             //ItemStore.Store(Queue);
-                            Thread.Sleep(random.Next(125, 300));
+                            if (!CurrentApi.IsUnsafe)
+                            {
+                                Thread.Sleep(random.Next(250, 550));
+                            }
+                            else
+                            {
+                                Thread.Sleep(random.Next(125, 300));
+                            }
                         }
 
                         try
@@ -644,7 +651,14 @@ namespace Scraper.Notifier
                                     item.Value.Crawl();
                                     //item.Value.CompareToRules();
                                 });
-                                Thread.Sleep(random.Next(125, 300));
+                                if (!CurrentApi.IsUnsafe)
+                                {
+                                    Thread.Sleep(random.Next(250, 550));
+                                }
+                                else
+                                {
+                                    Thread.Sleep(random.Next(125, 300));
+                                }
                             }
                         }
                         catch

@@ -771,6 +771,8 @@ namespace Scraper.Notifier
                 SortingMode sortingMode = SortingMode.none;
                 switch (mode)
                 {
+                    case "Image": sortingMode = SortingMode.reset;
+                        break;
                     case "Supply": sortingMode = SortingMode.count;
                         break;
                     case "Sell": sortingMode = SortingMode.price;
@@ -789,17 +791,45 @@ namespace Scraper.Notifier
                 }
                 if (sortingMode != SortingMode.none)
                 {
-                    if (CurrentSearchFilters.SortingMode == sortingMode)
+                    if (sortingMode != SortingMode.reset)
                     {
-                        CurrentSearchFilters.DescendingSorting = !CurrentSearchFilters.DescendingSorting;
+                        if (CurrentSearchFilters.SortingMode == sortingMode)
+                        {
+                            switch (CurrentSearchFilters.SortDirection)
+                            {
+                                case SortDirection.Disabled:
+                                    CurrentSearchFilters.SortDirection = SortDirection.Ascending;
+                                    break;
+                                case SortDirection.Ascending:
+                                    CurrentSearchFilters.SortDirection = SortDirection.Descending;
+                                    break;
+                                case SortDirection.Descending:
+                                    CurrentSearchFilters.SortDirection = SortDirection.Disabled;
+                                    break;
+                                default:
+                                    CurrentSearchFilters.SortDirection = SortDirection.Disabled;
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            CurrentSearchFilters.SortDirection = SortDirection.Ascending;
+                            CurrentSearchFilters.SortingMode = sortingMode;
+                        }
                     }
                     else
                     {
-                        CurrentSearchFilters.SortingMode = sortingMode;
+                        CurrentSearchFilters.SortDirection = SortDirection.Disabled;
+                    }
+
+                    if (CurrentSearchFilters.SortDirection == SortDirection.Disabled)
+                    {
+                        CurrentSearchFilters.SortingMode = SortingMode.none;
                     }
 
                     Search(0, CurrentSearchFilters);
                 }
+
             }
         }
 

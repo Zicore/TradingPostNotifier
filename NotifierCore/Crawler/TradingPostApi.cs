@@ -296,7 +296,12 @@ namespace Scraper.Crawler
         }
 
 
-        public string UriSearch(string query, int offset, int count, String type = null, String subType = null, String rarity = null, String levelmin = null, String levelmax = null, String sortingMode = null, bool descending = false)
+        public string UriSearch(
+            string query, int offset, int count,
+            String type = null, String subType = null,
+            String rarity = null, String levelmin = null, String levelmax = null,
+            String sortingMode = null, bool descending = false
+            )
         {
             UriHelper uri = new UriHelper().UseSearchApi().Add("text", query).Add("offset", offset.ToString()).Add("count", count.ToString());
             if (!String.IsNullOrEmpty(type))
@@ -319,15 +324,18 @@ namespace Scraper.Crawler
             {
                 uri.Add("levelmax", levelmax);
             }
+
             if (!String.IsNullOrEmpty(sortingMode))
             {
                 uri.Add("orderby", sortingMode);
+                if (descending)
+                {
+                    uri.Add("sortdescending", "1");
+                }
             }
-            if (descending)
-            {
-                uri.Add("sortdescending", "1");
-            }
-            return uri.Generate();
+
+            var retUri = uri.Generate();
+            return retUri;
         }
 
         public string UriBuildItem(int dataId)

@@ -12,7 +12,15 @@ namespace Scraper.Notifier
         level,
         rarity,
         price,
-        count
+        count,
+        reset
+    }
+
+    public enum SortDirection
+    {
+        Disabled,
+        Ascending,
+        Descending
     }
 
     public class SearchFilters
@@ -28,11 +36,20 @@ namespace Scraper.Notifier
         private String levelMax = "";
         private String rarity = "";
 
-        private bool descendingSorting = true;
         public bool DescendingSorting
         {
-            get { return descendingSorting; }
-            set { descendingSorting = value; }
+            get { return sortDirection == SortDirection.Descending; }
+            set
+            {
+                sortDirection = value ? SortDirection.Descending : SortDirection.Ascending;
+            }
+        }
+
+        SortDirection sortDirection = SortDirection.Disabled;
+        public SortDirection SortDirection
+        {
+            get { return sortDirection; }
+            set { sortDirection = value; }
         }
 
         SortingMode sortingMode = SortingMode.none;

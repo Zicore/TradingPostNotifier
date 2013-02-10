@@ -1,11 +1,11 @@
 Zicores Trading Post Notifier
 =============================
 
-Current release R13: http://notifier.zicore.de/dl/r13/ZicoresTradingPostNotifier.zip
+Current release R14: http://notifier.zicore.de/dl/r14/ZicoresTradingPostNotifier.zip
 
 I've finally managed it to structurize my project and made it open source.
 
-To download the latest release visit the trading post notifiers website: [notifier.zicore.de](http://notifier.zicore.de).
+For the changelog and the latest releases visit the trading post notifiers website: [notifier.zicore.de](http://notifier.zicore.de).
 
 
 Features

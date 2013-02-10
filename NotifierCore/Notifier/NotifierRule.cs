@@ -8,6 +8,7 @@ using Scraper.Notifier.Event;
 using System.Windows.Input;
 using System.Xml.Serialization;
 using LibraryBase.Wpf.Commands;
+using ZicoresTradingPostNotifier.ViewModel;
 
 namespace Scraper.Notifier
 {
@@ -35,6 +36,28 @@ namespace Scraper.Notifier
         {
             get { return _acceptTime; }
             set { _acceptTime = value; }
+        }
+
+        private ContextType _contextType;
+        public ContextType ContextType
+        {
+            get { return _contextType; }
+            set { _contextType = value; }
+        }
+
+        public bool IsSellContext
+        {
+            get { return ContextType == ContextType.Sell; }
+        }
+
+        public bool IsBuyContext
+        {
+            get { return ContextType == ContextType.Buy; }
+        }
+
+        public bool IsMarginContext
+        {
+            get { return ContextType == ContextType.Margin; }
         }
 
         TimeSpan _timeOut;
@@ -86,7 +109,7 @@ namespace Scraper.Notifier
                     value = 0;
                 if (Item != null)
                 {
-                    int currentPrice = SellRule ? Item.SellPrice : Item.BuyPrice;
+                    int currentPrice = IsSellContext ? Item.SellPrice : Item.BuyPrice;
                     int copper = Convert.ToInt32(currentPrice * ((float)value / 100.0f));
                     Money = new Money(copper);
                 }
@@ -103,25 +126,18 @@ namespace Scraper.Notifier
             set { _item = value; }
         }
 
-        bool _sellRule = false;
-        public bool SellRule
-        {
-            get { return _sellRule; }
-            set { _sellRule = value; }
-        }
-
         public NotifierRule()
         {
             this.Money = new GuildWarsCalculator.Money(0, 0, 0) { Name = "Rule" };
             this.SelectedRuleType = RuleType.Disabled;
         }
 
-        public NotifierRule(HotItem item, RuleType type, int value, bool sellRule)
+        public NotifierRule(HotItem item, RuleType type, int value, ContextType contextType)
         {
             this.Money = new GuildWarsCalculator.Money(0, 0, value) { Name = "Rule" };
             this.Item = item;
             this.SelectedRuleType = type;
-            this._sellRule = sellRule;
+            this.ContextType = contextType;
         }
 
         public RuleType SelectedRuleType

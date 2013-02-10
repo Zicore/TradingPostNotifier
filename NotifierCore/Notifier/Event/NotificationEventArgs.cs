@@ -11,7 +11,8 @@ namespace Scraper.Notifier.Event
         Buy,
         Sell,
         BuyGems,
-        BuyGold
+        BuyGold,
+        Margin
     }
 
     public class NotificationEventArgs : EventArgs

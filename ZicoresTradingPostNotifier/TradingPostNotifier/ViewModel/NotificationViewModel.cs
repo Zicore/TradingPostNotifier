@@ -127,18 +127,18 @@ namespace ZicoresTradingPostNotifier.ViewModel
             }
             else
             {
-                if (item.RuleBuy != null)
+                if (item.Rule != null)
                 {
-                    item.RuleBuy.IsActive = false;
-                    item.RuleBuy.AcceptTime = DateTime.Now;
-                    item.RuleBuy.TimeOut = new TimeSpan(0, item.TimeoutMinutes, 0);
+                    item.Rule.IsActive = false;
+                    item.Rule.AcceptTime = DateTime.Now;
+                    item.Rule.TimeOut = new TimeSpan(0, item.TimeoutMinutes, 0);
                 }
-                if (item.RuleSell != null)
-                {
-                    item.RuleSell.IsActive = false;
-                    item.RuleSell.AcceptTime = DateTime.Now;
-                    item.RuleSell.TimeOut = new TimeSpan(0, item.TimeoutMinutes, 0);
-                }
+                //if (item.Rule != null)
+                //{
+                //    item.Rule.IsActive = false;
+                //    item.Rule.AcceptTime = DateTime.Now;
+                //    item.Rule.TimeOut = new TimeSpan(0, item.TimeoutMinutes, 0);
+                //}
             }
 
             BuyNotifications.Remove(item);
@@ -221,14 +221,14 @@ namespace ZicoresTradingPostNotifier.ViewModel
 
         private void Disable(NotificationModel model)
         {
-            if (model.RuleSell != null)
+            if (model.Rule != null)
             {
-                model.RuleSell.Disable();
+                model.Rule.Disable();
             }
-            if (model.RuleBuy != null)
-            {
-                model.RuleBuy.Disable();
-            }
+            //if (model.RuleBuy != null)
+            //{
+            //    model.RuleBuy.Disable();
+            //}
         }
 
         public void CloseRequest()

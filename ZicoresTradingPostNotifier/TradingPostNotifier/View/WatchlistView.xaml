@@ -153,6 +153,14 @@
                         </GridViewColumn.CellTemplate>
                     </c:GridViewColumnEx>
 
+                    <c:GridViewColumnEx Header="Level" Identifier="2_1">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Level}" FontSize="12" FontWeight="Bold" ></TextBlock>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </c:GridViewColumnEx>
+
                     <c:GridViewColumnEx Header="Rarity" Identifier="3" c:GridViewSort.PropertyName="Rarity">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>

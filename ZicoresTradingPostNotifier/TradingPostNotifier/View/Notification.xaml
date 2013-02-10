@@ -177,8 +177,8 @@
                                                                 <ColumnDefinition Width="Auto"></ColumnDefinition>
                                                             </Grid.ColumnDefinitions>
 
-                                                            <TextBlock Margin="2" FontWeight="SemiBold" Grid.Column="0" Text="{Binding Path=RuleBuy.Money.Name}"></TextBlock>
-                                                            <my:MoneyView Grid.Column="2" DataContext="{Binding Path=RuleBuy.Money}"></my:MoneyView>
+                                                            <TextBlock Margin="2" FontWeight="SemiBold" Grid.Column="0" Text="{Binding Path=Rule.Money.Name}"></TextBlock>
+                                                            <my:MoneyView Grid.Column="2" DataContext="{Binding Path=Rule.Money}"></my:MoneyView>
                                                         </Grid>
                                                     </Border>
                                                 </StackPanel>
@@ -205,13 +205,41 @@
                                                                 <ColumnDefinition Width="Auto"></ColumnDefinition>
                                                             </Grid.ColumnDefinitions>
 
-                                                            <TextBlock Margin="2" FontWeight="SemiBold" Grid.Column="0" Text="{Binding Path=RuleSell.Money.Name}"></TextBlock>
-                                                            <my:MoneyView Grid.Column="2" DataContext="{Binding Path=RuleSell.Money}"></my:MoneyView>
+                                                            <TextBlock Margin="2" FontWeight="SemiBold" Grid.Column="0" Text="{Binding Path=Rule.Money.Name}"></TextBlock>
+                                                            <my:MoneyView Grid.Column="2" DataContext="{Binding Path=Rule.Money}"></my:MoneyView>
                                                         </Grid>
                                                     </Border>
                                                 </StackPanel>
                                             </Border>
+                                            <Border Margin="2" BorderBrush="Orange" BorderThickness="1">
+                                                <StackPanel>
+                                                    <Border Margin="1" Background="WhiteSmoke" CornerRadius="2" BorderThickness="1" BorderBrush="Gray">
+                                                        <Grid>
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                                            </Grid.ColumnDefinitions>
 
+                                                            <TextBlock Margin="2" FontWeight="SemiBold" Grid.Column="0" Text="{Binding Path=MarginMoney.Name}"></TextBlock>
+                                                            <my:MoneyView Grid.Column="2" DataContext="{Binding Path=MarginMoney}"></my:MoneyView>
+                                                        </Grid>
+                                                    </Border>
+                                                    <Border Visibility="{Binding MarginVisibility}" Margin="1" Background="#FFB7FF89" CornerRadius="2" BorderThickness="1" BorderBrush="Gray">
+                                                        <Grid>
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                                            </Grid.ColumnDefinitions>
+
+                                                            <TextBlock Margin="2" FontWeight="SemiBold" Grid.Column="0" Text="{Binding Path=Rule.Money.Name}"></TextBlock>
+                                                            <my:MoneyView Grid.Column="2" DataContext="{Binding Path=Rule.Money}"></my:MoneyView>
+                                                        </Grid>
+                                                    </Border>
+                                                </StackPanel>
+                                            </Border>
+                                            
                                             <Grid Visibility="{Binding MessageInVisibility}">
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition Width="Auto"></ColumnDefinition>
@@ -337,8 +365,8 @@
                                                                 <ColumnDefinition Width="Auto"></ColumnDefinition>
                                                             </Grid.ColumnDefinitions>
 
-                                                            <TextBlock Margin="2" FontWeight="SemiBold" Grid.Column="0" Text="{Binding Path=RuleBuy.Money.Name}"></TextBlock>
-                                                            <my:MoneyView Grid.Column="2" DataContext="{Binding Path=RuleBuy.Money}"></my:MoneyView>
+                                                            <TextBlock Margin="2" FontWeight="SemiBold" Grid.Column="0" Text="{Binding Path=Rule.Money.Name}"></TextBlock>
+                                                            <my:MoneyView Grid.Column="2" DataContext="{Binding Path=Rule.Money}"></my:MoneyView>
                                                         </Grid>
                                                     </Border>
                                                 </StackPanel>
@@ -365,8 +393,8 @@
                                                                 <ColumnDefinition Width="Auto"></ColumnDefinition>
                                                             </Grid.ColumnDefinitions>
 
-                                                            <TextBlock Margin="2" FontWeight="SemiBold" Grid.Column="0" Text="{Binding Path=RuleSell.Money.Name}"></TextBlock>
-                                                            <my:MoneyView Grid.Column="2" DataContext="{Binding Path=RuleSell.Money}"></my:MoneyView>
+                                                            <TextBlock Margin="2" FontWeight="SemiBold" Grid.Column="0" Text="{Binding Path=Rule.Money.Name}"></TextBlock>
+                                                            <my:MoneyView Grid.Column="2" DataContext="{Binding Path=Rule.Money}"></my:MoneyView>
                                                         </Grid>
                                                     </Border>
                                                 </StackPanel>

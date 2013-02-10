@@ -18,6 +18,8 @@ namespace ZicoresTradingPostNotifier.Model
         private NotifierRule _ruleSell;
         private NotifierRule _ruleBuy;
 
+        public const double TradingFeePercentValue = 0.85;
+
         String message;
         public String Message
         {
@@ -129,34 +131,49 @@ namespace ZicoresTradingPostNotifier.Model
             }
         }
 
-        public NotifierRule RuleSell
+        public NotifierRule Rule
         {
             get { return _ruleSell; }
             set
             {
                 _ruleSell = value;
-                OnPropertyChanged("RuleSell");
+                OnPropertyChanged("Rule");
             }
         }
 
-        public NotifierRule RuleBuy
-        {
-            get { return _ruleBuy; }
-            set
-            {
-                _ruleBuy = value;
-                OnPropertyChanged("RuleBuy");
-            }
-        }
+        //public NotifierRule RuleBuy
+        //{
+        //    get { return _ruleBuy; }
+        //    set
+        //    {
+        //        _ruleBuy = value;
+        //        OnPropertyChanged("RuleBuy");
+        //    }
+        //}
+
+        //public NotifierRule RuleMargin
+        //{
+        //    get { return _ruleBuy; }
+        //    set
+        //    {
+        //        _ruleBuy = value;
+        //        OnPropertyChanged("RuleBuy");
+        //    }
+        //}
 
         public Visibility BuyVisibility
         {
-            get { return RuleBuy == null ? Visibility.Collapsed : Visibility.Visible; }
+            get { return NotificationType != NotificationType.Buy ? Visibility.Collapsed : Visibility.Visible; }
         }
 
         public Visibility SellVisibility
         {
-            get { return RuleSell == null ? Visibility.Collapsed : Visibility.Visible; }
+            get { return NotificationType != NotificationType.Sell ? Visibility.Collapsed : Visibility.Visible; }
+        }
+
+        public Visibility MarginVisibility
+        {
+            get { return NotificationType != NotificationType.Margin ? Visibility.Collapsed : Visibility.Visible; }
         }
 
         public HotItem Item
@@ -186,6 +203,24 @@ namespace ZicoresTradingPostNotifier.Model
             set { _sellMoney = value; }
         }
 
+        public virtual Money MarginMoney
+        {
+            get
+            {
+                int margin = 0;
+                if (NotificationType == NotificationType.BuyGems || NotificationType == NotificationType.BuyGold)
+                {
+                    margin = BuyMoney.TotalCopper - SellMoney.TotalCopper;
+                }
+                else
+                {
+                    margin = (int)(Math.Floor(SellMoney.TotalCopper * TradingFeePercentValue - BuyMoney.TotalCopper));
+                }
+
+                return new Money(0, 0, margin) { Name = "Margin" };
+            }
+        }
+
         private int _dataId = 0;
         public int DataId
         {
@@ -206,14 +241,7 @@ namespace ZicoresTradingPostNotifier.Model
                 this.SellMoney = item.SellMoney;
             }
 
-            if (NotificationType == NotificationType.Buy)
-            {
-                this.RuleBuy = rule;
-            }
-            else if (NotificationType == NotificationType.Sell)
-            {
-                this.RuleSell = rule;
-            }
+            this.Rule = rule;
         }
 
         public NotificationModel(GemManager gemManager, GemRuleViewModel item, NotifierRule rule, String message, DateTime timeStamp, NotificationType notificationType)
@@ -229,13 +257,14 @@ namespace ZicoresTradingPostNotifier.Model
                 this.SellMoney = gemManager.BuyGoldPriceMoney;
             }
 
+            this.Rule = rule;
+
             if (NotificationType == NotificationType.BuyGems)
             {
-                this.RuleBuy = rule;
+
             }
             else if (NotificationType == NotificationType.BuyGold)
             {
-                this.RuleSell = rule;
                 this.DataId = -1;
             }
         }

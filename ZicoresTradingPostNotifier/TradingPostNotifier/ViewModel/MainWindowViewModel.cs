@@ -407,7 +407,7 @@ namespace ZicoresTradingPostNotifier.ViewModel
                                 {
                                     var model =
                                         new NotificationModel(item,
-                                            new NotifierRule(item, RuleType.Higher, item.UnitPrice, false), "Higher", DateTime.Now, NotificationType.Buy);
+                                            new NotifierRule(item, RuleType.Higher, item.UnitPrice, ContextType.Other), "Higher", DateTime.Now, NotificationType.Buy);
 
                                     NotifiactionViewModel.AddBuyNotification(model);
                                     NotifiactionViewModel.ShowOnNotifiaction();
@@ -428,7 +428,7 @@ namespace ZicoresTradingPostNotifier.ViewModel
                                 {
                                     var model =
                                         new NotificationModel(item,
-                                            new NotifierRule(item, RuleType.Less, item.UnitPrice, true), "Less", DateTime.Now, NotificationType.Sell);
+                                            new NotifierRule(item, RuleType.Less, item.UnitPrice, ContextType.Other), "Less", DateTime.Now, NotificationType.Sell);
                                     NotifiactionViewModel.AddBuyNotification(model);
                                     NotifiactionViewModel.ShowOnNotifiaction();
                                 });

@@ -38,6 +38,7 @@ namespace Scraper.Notifier
         private int _sellPrice;
         private ObservableCollection<NotifierRule> _sellRules = new ObservableCollection<NotifierRule>();
         private ObservableCollection<NotifierRule> _buyRules = new ObservableCollection<NotifierRule>();
+        private ObservableCollection<NotifierRule> _marginRules = new ObservableCollection<NotifierRule>();
         private String _imgUri;
         private String _name = "loading...";
         private JObject _listingJson;
@@ -45,6 +46,18 @@ namespace Scraper.Notifier
         private String _image;
         private Money _buyMoney;
         private Money _sellMoney;
+
+        private ItemContext _marginContext;
+        public ItemContext MarginContext
+        {
+            get { return _marginContext; }
+            set
+            {
+                _marginContext = value;
+                OnPropertyChanged("MarginContext");
+            }
+        }
+
         private ItemContext _buyContext;
         private ItemContext _sellContext;
         private String _dateTimeStamp;
@@ -111,7 +124,12 @@ namespace Scraper.Notifier
         [XmlIgnore]
         public DateTime TransactionTimeLocal
         {
-            get { return TimeZoneInfo.ConvertTime(TransactionTime, TimeZoneInfo.Utc, TimeZoneInfo.Local); }
+
+            get
+            {
+
+                return TransactionTime.ToLocalTime();
+            }
         }
 
         [XmlIgnore]
@@ -214,8 +232,8 @@ namespace Scraper.Notifier
         }
 
         //public event EventHandler<PriceChangedEventArgs> ItemBuild;
-        public event EventHandler<NotificationEventArgs> BuyNotification;
-        public event EventHandler<NotificationEventArgs> SellNotification;
+        //public event EventHandler<NotificationEventArgs> BuyNotification;
+        //public event EventHandler<NotificationEventArgs> SellNotification;
         public event EventHandler<PriceChangedEventArgs> BuyPriceChanged;
         public event EventHandler<PriceChangedEventArgs> SellPriceChanged;
 
@@ -310,13 +328,9 @@ namespace Scraper.Notifier
         public HotItem()
             : this(false)
         {
-            BuyContext = new ItemContext(false, this);
-            BuyContext.Rules = BuyRules;
-            BuyContext.DisplayName = "Buy";
-            SellContext = new ItemContext(true, this);
-            SellContext.Rules = SellRules;
-            SellContext.DisplayName = "Sell";
-
+            BuyContext = new ItemContext(ContextType.Buy, this) { Rules = _buyRules, DisplayName = "Buy" };
+            SellContext = new ItemContext(ContextType.Sell, this) { Rules = _sellRules, DisplayName = "Sell" };
+            MarginContext = new ItemContext(ContextType.Margin, this) { Rules = _marginRules, DisplayName = "Margin" };
             UnitPriceMoney = new Money(0, 0, 0);
             //SellMoney = new Money();
             //BuyMoney = new Money();
@@ -338,6 +352,7 @@ namespace Scraper.Notifier
 
                 //CompareToBuyRules();
                 BuyContext.Money = new Money(0, 0, value);
+                MarginContext.Money = MarginMoney;
                 //BuyMoney = new Money(0, 0, BuyPrice) { Name = "Offer Price" };
                 OnPropertyChanged("BuyPrice");
                 OnPropertyChanged("BuyMoney");
@@ -351,6 +366,7 @@ namespace Scraper.Notifier
         {
             CompareToBuyRules();
             CompareToSellRules();
+            CompareToMarginRules();
         }
 
         public virtual void CompareToBuyRules()
@@ -359,10 +375,6 @@ namespace Scraper.Notifier
             {
                 if (r.Compare(BuyPrice))
                 {
-                    //if (BuyNotification != null)
-                    //{
-                    //    BuyNotification(this, new NotificationEventArgs(DataId, this, r));
-                    //}
                     HotItemController.Self.AddNotification(this, new NotificationEventArgs(DataId, this, r, NotificationType.Buy));
                 }
             }
@@ -374,11 +386,18 @@ namespace Scraper.Notifier
             {
                 if (r.Compare(SellPrice))
                 {
-                    //if (SellNotification != null)
-                    //{
-                    //    SellNotification(this, new NotificationEventArgs(DataId, this, r));
-                    //}
                     HotItemController.Self.AddNotification(this, new NotificationEventArgs(DataId, this, r, NotificationType.Sell));
+                }
+            }
+        }
+
+        public virtual void CompareToMarginRules()
+        {
+            foreach (NotifierRule r in MarginRules)
+            {
+                if (r.Compare(MarginMoney.TotalCopper))
+                {
+                    HotItemController.Self.AddNotification(this, new NotificationEventArgs(DataId, this, r, NotificationType.Margin));
                 }
             }
         }
@@ -417,7 +436,7 @@ namespace Scraper.Notifier
             get
             {
                 int margin = (int)(Math.Floor(SellMoney.TotalCopper * 0.85 - BuyMoney.TotalCopper));
-                return new Money(0, 0, margin);
+                return new Money(0, 0, margin) {Name = "Margin"};
             }
         }
 
@@ -485,6 +504,7 @@ namespace Scraper.Notifier
                     }
                 }
                 SellContext.Money = new Money(0, 0, value);
+                MarginContext.Money = MarginMoney;
                 //CompareToSellRules();
                 //SellMoney = new Money(0, 0, SellPrice) { Name = "Sale Price" };
                 OnPropertyChanged("SellPrice");
@@ -679,6 +699,16 @@ namespace Scraper.Notifier
             {
                 BuyContext.Rules = BuyRules;
                 OnPropertyChanged("BuyRules");
+            }
+        }
+
+        public virtual ObservableCollection<NotifierRule> MarginRules
+        {
+            get { return MarginContext.Rules; }
+            set
+            {
+                MarginContext.Rules = MarginRules;
+                OnPropertyChanged("MarginRules");
             }
         }
 
@@ -928,9 +958,19 @@ namespace Scraper.Notifier
 
             var result = items.Where(x => x.DataId == item.DataId).ToList();
 
-            foreach (var i in result)
+            //foreach (var i in result)
+            //{
+            //    groupItem.Items.Add(i);
+            //}
+
+            var list = result.GroupBy(x => x.TransactionTime.Day);
+
+            foreach (var group in list)
             {
-                groupItem.Items.Add(i);
+                //groupItem.Items.Add();
+                var g = new HotItem(item.DataId);
+                g.GroupItem(group.First(), group.ToList());
+                groupItem.Items.Add(g);
             }
 
             groupItem.GroupItem(item, result);

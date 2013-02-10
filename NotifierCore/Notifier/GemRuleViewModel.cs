@@ -9,6 +9,7 @@ using GuildWarsCalculator;
 using LibraryBase.Wpf.Commands;
 using LibraryBase.Wpf.ViewModel;
 using Scraper.Notifier.Event;
+using ZicoresTradingPostNotifier.ViewModel;
 
 namespace Scraper.Notifier
 {
@@ -35,7 +36,7 @@ namespace Scraper.Notifier
 
         private void AddRule()
         {
-            var rule = new NotifierRule(null, RuleType.Disabled, 0, false);
+            var rule = new NotifierRule(null, RuleType.Disabled, 0, ContextType.Buy);
             rule.RemoveRule += new EventHandler<Scraper.Notifier.Event.RemoveRuleEventArgs>(rule_RemoveRule);
             Rules.Add(rule);
         }

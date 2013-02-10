@@ -107,7 +107,7 @@
                         <Border BorderBrush="{StaticResource AboutBorderBrush}" BorderThickness="2" Background="{StaticResource AboutBrush}" CornerRadius="16" Grid.Column="1" Grid.Row="1">
                             <StackPanel Orientation="Vertical" Margin="8">
                                 <StackPanel Orientation="Vertical">
-                                    <TextBlock FontWeight="Bold" FontSize="16" Text="Zicore's Trading Post Notifier - R13"></TextBlock>
+                                    <TextBlock FontWeight="Bold" FontSize="16" Text="Zicore's Trading Post Notifier - R14"></TextBlock>
                                     <TextBlock></TextBlock>
                                     <TextBlock FontWeight="SemiBold" Text="Developed 2012-2013 by Zicore / TehGear"></TextBlock>
                                     <TextBlock Text="© 2011-2012 ArenaNet, Inc. All rights reserved."></TextBlock>

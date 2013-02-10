@@ -10,11 +10,21 @@ using System.Collections.ObjectModel;
 using LibraryBase.Wpf.Event;
 using LibraryBase.Wpf.Commands;
 using System.Xml.Serialization;
+using Scraper.Notifier.Event;
 
 namespace ZicoresTradingPostNotifier.ViewModel
 {
+    public enum ContextType
+    {
+        Other,
+        Sell,
+        Buy,
+        Margin
+    }
+
     public class ItemContext : BindableBase
     {
+
         RelayCommand _addRuleCommand;
 
         double _fluctuation = 0;
@@ -41,11 +51,26 @@ namespace ZicoresTradingPostNotifier.ViewModel
             set { _stampFirst = value; }
         }
 
-        private bool _isSellContext = true;
         public bool IsSellContext
         {
-            get { return _isSellContext; }
-            set { _isSellContext = value; }
+            get { return ContextType == ContextType.Sell; }
+        }
+
+        public bool IsBuyContext
+        {
+            get { return ContextType == ContextType.Buy; }
+        }
+
+        public bool IsMarginContext
+        {
+            get { return ContextType == ContextType.Margin; }
+        }
+
+        private ContextType _contextType = ContextType.Sell;
+        public ContextType ContextType
+        {
+            get { return _contextType; }
+            set { _contextType = value; }
         }
 
         private double _movementIndex = 0;
@@ -63,9 +88,9 @@ namespace ZicoresTradingPostNotifier.ViewModel
         private Money _money;
         private ObservableCollection<NotifierRule> _rules = new ObservableCollection<NotifierRule>();
 
-        public ItemContext(bool isSellContext, HotItem item)
+        public ItemContext(ContextType contextType, HotItem item)
         {
-            this.IsSellContext = isSellContext;
+            this.ContextType = contextType;
             this.Item = item;
         }
         public ItemContext()
@@ -95,7 +120,7 @@ namespace ZicoresTradingPostNotifier.ViewModel
 
         private void AddRule()
         {
-            var rule = new NotifierRule(Item, RuleType.Disabled, 0, IsSellContext);
+            var rule = new NotifierRule(Item, RuleType.Disabled, 0, ContextType);
             rule.RemoveRule += new EventHandler<Scraper.Notifier.Event.RemoveRuleEventArgs>(rule_RemoveRule);
             Rules.Add(rule);
         }

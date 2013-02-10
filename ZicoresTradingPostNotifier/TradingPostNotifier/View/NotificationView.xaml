@@ -201,12 +201,8 @@
                     <c:GridViewColumnEx Header="Margin" Identifier="8" c:GridViewSort.PropertyName="MarginMoney.TotalCopper">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <Grid x:Name="grid" DataContext="{Binding}">
-                                    <Border DataContext="{Binding Path=MarginMoney}" CornerRadius="4" Style="{StaticResource BorderHighlightMoney}">
-                                        <my:MoneyView MinWidth="140" DataContext="{Binding}" Background="Transparent">
-                                        </my:MoneyView>
-                                    </Border>
-                                </Grid>
+                                <my:RuleListView HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" DataContext="{Binding MarginContext}">
+                                </my:RuleListView>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </c:GridViewColumnEx>

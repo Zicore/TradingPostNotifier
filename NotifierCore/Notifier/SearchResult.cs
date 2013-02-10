@@ -165,8 +165,6 @@ namespace Scraper.Notifier
             this.Items = GroupItems(Items);
         }
 
-
-
         public static List<HotItem> GroupItems(List<HotItem> items)
         {
             List<HotItem> uniqueItems = new List<HotItem>();
@@ -180,17 +178,6 @@ namespace Scraper.Notifier
                         if (!uniqueItems.Exists(x => x.DataId == item.DataId))
                         {
                             HotItem groupItem = HotItem.CreateGroupItem(item, items);
-                            //HotItem groupItem = new HotItem(item.DataId);
-                            //item.Parent = groupItem;
-                            //groupItem.IsGroup = true;
-
-                            //var result = Items.Where(x => x.DataId == item.DataId).ToList();
-
-                            //foreach (var i in result)
-                            //{
-                            //    groupItem.Items.Add(i);
-                            //}
-                            //groupItem.GroupItem(item, result);
 
                             uniqueItems.Add(groupItem);
                         }

@@ -79,7 +79,7 @@
                                                     <ColumnDefinition Width="*"></ColumnDefinition>
                                                     <ColumnDefinition Width="Auto"></ColumnDefinition>
                                                 </Grid.ColumnDefinitions>
-                                                <TextBox Margin="1,1,4,1" TextAlignment="Right" Grid.Column="0" Height="22" MinWidth="40" FontWeight="Bold" FontSize="12" Foreground="DarkGoldenrod" Text="{Binding Path=Money.Gold, Mode=TwoWay}"></TextBox>
+                                                <TextBox Margin="1,1,4,1" TextAlignment="Right" Grid.Column="0" Height="22" MinWidth="40" FontWeight="Bold" FontSize="12" Foreground="DarkGoldenrod" Text="{Binding Path=Money.Gold, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
                                                 <Image Width="15" Height="15" Stretch="UniformToFill" Grid.Column="1" Source="/ZicoresTradingPostNotifier;component/Images/gold.png" SnapsToDevicePixels="True"></Image>
                                             </Grid>
                                             <Grid Grid.Column="4">
@@ -87,7 +87,7 @@
                                                     <ColumnDefinition Width="*"></ColumnDefinition>
                                                     <ColumnDefinition Width="Auto"></ColumnDefinition>
                                                 </Grid.ColumnDefinitions>
-                                                <TextBox Margin="1,1,4,1" TextAlignment="Right" Grid.Column="0" Height="22" FontWeight="Bold" FontSize="12" Foreground="Gray" DataContext="{Binding Money}" Text="{Binding Path=Silver, Mode=TwoWay}"></TextBox>
+                                                <TextBox Margin="1,1,4,1" TextAlignment="Right" Grid.Column="0" Height="22" FontWeight="Bold" FontSize="12" Foreground="Gray" DataContext="{Binding Money}" Text="{Binding Path=Silver, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
                                                 <Image  Width="15" Height="15" Stretch="UniformToFill" Grid.Column="1" Source="/ZicoresTradingPostNotifier;component/Images/silver.png" SnapsToDevicePixels="True"></Image>
                                             </Grid>
                                             <Grid Grid.Column="5">
@@ -95,7 +95,7 @@
                                                     <ColumnDefinition Width="*"></ColumnDefinition>
                                                     <ColumnDefinition Width="Auto"></ColumnDefinition>
                                                 </Grid.ColumnDefinitions>
-                                                <TextBox Margin="1,1,4,1" TextAlignment="Right" Grid.Column="0" Height="22" FontWeight="Bold" FontSize="12" Foreground="Brown" DataContext="{Binding Money}" Text="{Binding Path=Copper, Mode=TwoWay}"></TextBox>
+                                                <TextBox Margin="1,1,4,1" TextAlignment="Right" Grid.Column="0" Height="22" FontWeight="Bold" FontSize="12" Foreground="Brown" DataContext="{Binding Money}" Text="{Binding Path=Copper, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
                                                 <Image  Width="15" Height="15" Stretch="UniformToFill" Grid.Column="1" Source="/ZicoresTradingPostNotifier;component/Images/copper.png" SnapsToDevicePixels="True"></Image>
                                             </Grid>
                                             <Button Background="WhiteSmoke" Grid.Column="6" Width="22" Height="20" Command="{Binding RemoveRuleCommand}" Margin="4,1,2,1" BorderBrush="Gray">-</Button>

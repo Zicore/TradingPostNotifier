@@ -211,6 +211,18 @@ namespace Scraper.Crawler
 
                     }
 
+                    try
+                    {
+                        if (json["result"]["level"] != null)
+                        {
+                            item.Level = json["result"]["level"].ToObject<int>();
+                        }
+                    }
+                    catch
+                    {
+
+                    }
+
                 } // End item parsing
 
                 // ----------------------------------------------------------------------
@@ -256,6 +268,17 @@ namespace Scraper.Crawler
                         if (json["results"][0]["img"] != null)
                         {
                             item.ImgUri = json["results"][0]["img"].ToObject<String>();
+                        }
+                    }
+                    catch
+                    {
+
+                    }
+                    try
+                    {
+                        if (json["results"][0]["level"] != null)
+                        {
+                            item.Level = json["results"][0]["level"].ToObject<int>();
                         }
                     }
                     catch
@@ -411,7 +434,7 @@ namespace Scraper.Crawler
 
         public int WorkerTimeOut
         {
-            get { return 8500; }
+            get { return 12500; }
         }
 
         public int WorkerTransactionTimeOut

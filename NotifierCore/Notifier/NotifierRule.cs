@@ -9,6 +9,7 @@ using System.Windows.Input;
 using System.Xml.Serialization;
 using LibraryBase.Wpf.Commands;
 using ZicoresTradingPostNotifier.ViewModel;
+using NotifierCore.Notifier;
 
 namespace Scraper.Notifier
 {
@@ -113,6 +114,15 @@ namespace Scraper.Notifier
                     int copper = Convert.ToInt32(currentPrice * ((float)value / 100.0f));
                     Money = new Money(copper);
                 }
+                else
+                {
+                    if (Host != null)
+                    {
+                        int currentPrice = Host.Money.TotalCopper;
+                        int copper = Convert.ToInt32(currentPrice * ((float)value / 100.0f));
+                        Money = new Money(copper);
+                    }
+                }
                 _percentage = value;
             }
         }
@@ -132,8 +142,18 @@ namespace Scraper.Notifier
             this.SelectedRuleType = RuleType.Disabled;
         }
 
-        public NotifierRule(HotItem item, RuleType type, int value, ContextType contextType)
+        private INotificationHost _host;
+
+        [XmlIgnore]
+        public INotificationHost Host
         {
+            get { return _host; }
+            set { _host = value; }
+        }
+
+        public NotifierRule(HotItem item, RuleType type, int value, ContextType contextType, INotificationHost host)
+        {
+            this.Host = host;
             this.Money = new GuildWarsCalculator.Money(0, 0, value) { Name = "Rule" };
             this.Item = item;
             this.SelectedRuleType = type;

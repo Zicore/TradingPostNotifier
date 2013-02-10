@@ -163,12 +163,12 @@ namespace ZicoresTradingPostNotifier.Model
 
         public Visibility BuyVisibility
         {
-            get { return NotificationType != NotificationType.Buy ? Visibility.Collapsed : Visibility.Visible; }
+            get { return NotificationType != NotificationType.Buy && NotificationType != NotificationType.BuyGems ? Visibility.Collapsed : Visibility.Visible; }
         }
 
         public Visibility SellVisibility
         {
-            get { return NotificationType != NotificationType.Sell ? Visibility.Collapsed : Visibility.Visible; }
+            get { return NotificationType != NotificationType.Sell && NotificationType != NotificationType.BuyGold ? Visibility.Collapsed : Visibility.Visible; }
         }
 
         public Visibility MarginVisibility

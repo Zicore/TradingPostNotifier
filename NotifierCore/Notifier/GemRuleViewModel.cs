@@ -8,12 +8,13 @@ using System.Xml.Serialization;
 using GuildWarsCalculator;
 using LibraryBase.Wpf.Commands;
 using LibraryBase.Wpf.ViewModel;
+using NotifierCore.Notifier;
 using Scraper.Notifier.Event;
 using ZicoresTradingPostNotifier.ViewModel;
 
 namespace Scraper.Notifier
 {
-    public class GemRuleViewModel : BindableBase
+    public class GemRuleViewModel : BindableBase, INotificationHost
     {
         RelayCommand _addRuleCommand;
         private Money _money = new Money();
@@ -31,12 +32,13 @@ namespace Scraper.Notifier
             foreach (var notifierRule in Rules)
             {
                 notifierRule.RemoveRule += new EventHandler<Scraper.Notifier.Event.RemoveRuleEventArgs>(rule_RemoveRule);
+                notifierRule.Host = this;
             }
         }
 
         private void AddRule()
         {
-            var rule = new NotifierRule(null, RuleType.Disabled, 0, ContextType.Buy);
+            var rule = new NotifierRule(null, RuleType.Disabled, 0, ContextType.Buy, this);
             rule.RemoveRule += new EventHandler<Scraper.Notifier.Event.RemoveRuleEventArgs>(rule_RemoveRule);
             Rules.Add(rule);
         }

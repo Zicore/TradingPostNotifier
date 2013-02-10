@@ -11,6 +11,7 @@ using LibraryBase.Wpf.Event;
 using LibraryBase.Wpf.Commands;
 using System.Xml.Serialization;
 using Scraper.Notifier.Event;
+using NotifierCore.Notifier;
 
 namespace ZicoresTradingPostNotifier.ViewModel
 {
@@ -19,10 +20,12 @@ namespace ZicoresTradingPostNotifier.ViewModel
         Other,
         Sell,
         Buy,
-        Margin
+        Margin,
+        BuyGems,
+        BuyGold
     }
 
-    public class ItemContext : BindableBase
+    public class ItemContext : BindableBase, INotificationHost
     {
 
         RelayCommand _addRuleCommand;
@@ -120,7 +123,7 @@ namespace ZicoresTradingPostNotifier.ViewModel
 
         private void AddRule()
         {
-            var rule = new NotifierRule(Item, RuleType.Disabled, 0, ContextType);
+            var rule = new NotifierRule(Item, RuleType.Disabled, 0, ContextType, this);
             rule.RemoveRule += new EventHandler<Scraper.Notifier.Event.RemoveRuleEventArgs>(rule_RemoveRule);
             Rules.Add(rule);
         }

@@ -85,9 +85,8 @@
     <Compile Include="Notifier\GemRuleViewModel.cs" />
     <Compile Include="Notifier\HotItem.cs" />
     <Compile Include="Notifier\HotItemController.cs" />
-    <Compile Include="Notifier\INotificationModel.cs" />
+    <Compile Include="Notifier\INotificationHost.cs" />
     <Compile Include="Notifier\ItemContext.cs" />
-    <Compile Include="Notifier\ICommand.cs" />
     <Compile Include="Notifier\ImageCache.cs" />
     <Compile Include="Notifier\Language.cs" />
     <Compile Include="Notifier\NotifierRule.cs" />

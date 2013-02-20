@@ -55,6 +55,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\ZicoresTradingPostNotifier\SharedAssemblyInfo.cs">
+      <Link>Properties\SharedAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Crawler\BuyResult.cs" />
     <Compile Include="Crawler\Event\ScrapeFinishedEventArgs.cs" />
     <Compile Include="Crawler\Gw2SpidyApi.cs" />

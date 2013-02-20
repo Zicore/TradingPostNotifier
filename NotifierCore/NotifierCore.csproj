@@ -55,6 +55,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\ZicoresTradingPostNotifier\SharedAssemblyInfo.cs">
+      <Link>Properties\SharedAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Crawler\BuyResult.cs" />
     <Compile Include="Crawler\Event\ScrapeFinishedEventArgs.cs" />
     <Compile Include="Crawler\Gw2SpidyApi.cs" />
@@ -118,11 +121,11 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\LibraryBaseWpf\LibraryBaseWpf.csproj">
+    <ProjectReference Include="..\LibraryBaseWpf\LibraryBaseWpf.csproj">
       <Project>{6970fa5a-5aca-46f9-8ee3-b1e256fbb463}</Project>
       <Name>LibraryBaseWpf</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\ZicoresUtils\ZicoresUtils.csproj">
+    <ProjectReference Include="..\ZicoresUtils\ZicoresUtils.csproj">
       <Project>{a54e2798-ee37-4418-89c7-8b2a1b85d73c}</Project>
       <Name>ZicoresUtils</Name>
     </ProjectReference>

@@ -50,6 +50,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\ZicoresTradingPostNotifier\SharedAssemblyInfo.cs">
+      <Link>Properties\SharedAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="KeyHelper.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>

@@ -45,6 +45,9 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\ZicoresTradingPostNotifier\SharedAssemblyInfo.cs">
+      <Link>Properties\SharedAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Behaviour\BindableSelectedItemBehavior.cs" />
     <Compile Include="Behaviour\IgnoreMouseWheelBehavior.cs" />
     <Compile Include="Commands\RelayCommand.cs" />

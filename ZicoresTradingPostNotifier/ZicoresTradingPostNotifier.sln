@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TradingPostNotifier", "TradingPostNotifier\TradingPostNotifier.csproj", "{C42B54F9-1370-4C76-B819-9D11D504BBAA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibraryBaseWpf", "..\LibraryBaseWpf\LibraryBaseWpf.csproj", "{6970FA5A-5ACA-46F9-8EE3-B1E256FBB463}"
@@ -12,6 +12,11 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SessionKeyReader", "..\SessionKeyReader\SessionKeyReader.csproj", "{1616B27B-1A29-49CC-A812-160F82E448E5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotifierCore", "..\NotifierCore\NotifierCore.csproj", "{874187A5-8B44-4988-9DDE-D0A9A38D7E88}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{67154198-24E0-4F74-876C-A071CBEA85A1}"
+	ProjectSection(SolutionItems) = preProject
+		SharedAssemblyInfo.cs = SharedAssemblyInfo.cs
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

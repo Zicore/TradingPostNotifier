@@ -129,6 +129,9 @@
     <Compile Include="View\SplashView.xaml.cs">
       <DependentUpon>SplashView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\TrendView.xaml.cs">
+      <DependentUpon>TrendView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\WatchlistView.xaml.cs">
       <DependentUpon>WatchlistView.xaml</DependentUpon>
     </Compile>
@@ -211,6 +214,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\SplashView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\TrendView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

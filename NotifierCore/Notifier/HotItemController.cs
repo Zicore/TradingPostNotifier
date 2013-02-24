@@ -40,6 +40,29 @@ namespace NotifierCore.Notifier
             set { _self = value; }
         }
 
+        private ObservableCollection<HotItem> _trendsBuy = new ObservableCollection<HotItem>();
+        private ObservableCollection<HotItem> _trendsSell = new ObservableCollection<HotItem>();
+
+        public ObservableCollection<HotItem> TrendsBuy
+        {
+            get { return _trendsBuy; }
+            set
+            {
+                _trendsBuy = value;
+                OnPropertyChanged("TrendsBuy");
+            }
+        }
+
+        public ObservableCollection<HotItem> TrendsSell
+        {
+            get { return _trendsSell; }
+            set
+            {
+                _trendsSell = value;
+                OnPropertyChanged("TrendsSell");
+            }
+        }
+
         public event EventHandler<PriceChangedEventArgs> ItemBuild;
         public event EventHandler<NotificationEventArgs> BuyNotification;
         public event EventHandler<NotificationEventArgs> SellNotification;
@@ -99,6 +122,13 @@ namespace NotifierCore.Notifier
         {
             get { return _currentApi; }
             set { _currentApi = value; }
+        }
+
+        private static ITrendApi _currendTrendApi;
+        public static ITrendApi CurrendTrendApi
+        {
+            get { return _currendTrendApi; }
+            set { _currendTrendApi = value; }
         }
 
         private static Config _config;
@@ -271,6 +301,8 @@ namespace NotifierCore.Notifier
             Self = this;
             String[] args = Environment.GetCommandLineArgs();
             IsUnsafe = (args.Length > 1 && (args[1] == "/unsafe" || args[1] == "/unsecure")) || isTradingPostDataProvider;
+
+            CurrendTrendApi = new ZicoreApi();
 
             if (IsUnsafe) // declaring search for SessionKey as 'unsafe'
             {
@@ -604,11 +636,40 @@ namespace NotifierCore.Notifier
         // ************************************************************************* //
         // ------------------------------------------------------------------------- //
 
+        void TrendActionSell(PostResult rs)
+        {
+            TrendsSell = new ObservableCollection<HotItem>(CurrendTrendApi.ParseTrendSell(JToken.Parse(rs.Result)));
+            OnPropertyChanged("TrendsSell");
+            CrawlItems(TrendsSell);
+        }
+
+        void TrendActionBuy(PostResult rs)
+        {
+            TrendsBuy = new ObservableCollection<HotItem>(CurrendTrendApi.ParseTrendBuy(JToken.Parse(rs.Result)));
+            OnPropertyChanged("TrendsBuy");
+            CrawlItems(TrendsBuy);
+        }
+
+        private void CrawlItems(IEnumerable<HotItem> items)
+        {
+            foreach (var item in items)
+            {
+                item.BuildItem(false);
+                item.Crawl();
+            }
+        }
+
         private void ThreadRun()
         {
             LoadItems();
             LoadRecipes();
             //LoadRavenDB();
+
+            String uriTrendSell = CurrendTrendApi.UriTrendSell();
+            ScrapeHelper.Get(uriTrendSell, "", null, "", TrendActionSell, "");
+
+            String uriTrendBuy = CurrendTrendApi.UriTrendBuy();
+            ScrapeHelper.Get(uriTrendBuy, "", null, "", TrendActionBuy, "");
 
             try
             {

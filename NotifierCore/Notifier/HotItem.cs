@@ -47,6 +47,156 @@ namespace NotifierCore.Notifier
         private Money _buyMoney;
         private Money _sellMoney;
 
+        private DateTime _dateTimeTrend;
+
+
+        private float _sellPriceMove;
+        private float _buyPriceMove;
+        private double _sellCountMove;
+        private double _buyCountMove;
+
+        private float _sellPriceMovePercent;
+        private float _buyPriceMovePercent;
+        private float _sellCountMovePercent;
+        private float _buyCountMovePercent;
+
+        // --------------------------------------------------
+
+        public DateTime DateTimeTrend
+        {
+            get { return _dateTimeTrend; }
+            set
+            {
+                _dateTimeTrend = value;
+                OnPropertyChanged("DateTimeTrend");
+            }
+        }
+
+        // --------------------------------------------------
+
+        public String BuyCountMovePercentFormat
+        {
+            get { return String.Format("{0:0.00}", SellPriceMovePercent * 100); }
+        }
+
+        public float BuyCountMovePercent
+        {
+            get { return _buyCountMovePercent; }
+            set
+            {
+                _buyCountMovePercent = value;
+                OnPropertyChanged("BuyCountMovePercent");
+                OnPropertyChanged("BuyCountMovePercentFormat");
+            }
+        }
+
+        public String SellCountMovePercentFormat
+        {
+            get { return String.Format("{0:0.00}", SellCountMovePercent * 100); }
+        }
+
+        public float SellCountMovePercent
+        {
+            get { return _sellCountMovePercent; }
+            set
+            {
+                _sellCountMovePercent = value;
+                OnPropertyChanged("SellCountMovePercent");
+                OnPropertyChanged("SellCountMovePercentFormat");
+            }
+        }
+
+        // --------------------------------------------------
+        public String BuyPriceMovePercentFormat
+        {
+            get { return String.Format("{0:0.00}%", BuyPriceMovePercent * 100); }
+        }
+
+        public float BuyPriceMovePercent
+        {
+            get { return _buyPriceMovePercent; }
+            set
+            {
+                _buyPriceMovePercent = value;
+                OnPropertyChanged("BuyPriceMovePercent");
+                OnPropertyChanged("BuyPriceMovePercentFormat");
+            }
+        }
+
+        public String SellPriceMovePercentFormat
+        {
+            get { return String.Format("{0:0.00}%", SellPriceMovePercent * 100); }
+        }
+
+        public float SellPriceMovePercent
+        {
+            get { return _sellPriceMovePercent; }
+            set
+            {
+                _sellPriceMovePercent = value;
+                OnPropertyChanged("SellPriceMovePercent");
+                OnPropertyChanged("SellPriceMovePercentFormat");
+            }
+        }
+
+        // --------------------------------------------------
+
+        public double BuyCountMove
+        {
+            get { return _buyCountMove; }
+            set
+            {
+                _buyCountMove = value;
+                OnPropertyChanged("BuyCountMove");
+            }
+        }
+
+        public double SellCountMove
+        {
+            get { return _sellCountMove; }
+            set
+            {
+                _sellCountMove = value;
+                OnPropertyChanged("SellCountMove");
+            }
+        }
+
+        // --------------------------------------------------
+
+        public Money BuyPriceMoveMoney
+        {
+            get { return new Money((decimal)BuyPriceMove); }
+        }
+
+        public float BuyPriceMove
+        {
+            get { return _buyPriceMove; }
+            set
+            {
+                _buyPriceMove = value;
+                OnPropertyChanged("BuyPriceMove");
+                OnPropertyChanged("BuyPriceMoveMoney");
+            }
+        }
+
+        // --------------------------------------------------
+
+        public Money SellPriceMoveMoney
+        {
+            get { return new Money((decimal)SellPriceMove); }
+        }
+
+        public float SellPriceMove
+        {
+            get { return _sellPriceMove; }
+            set
+            {
+                _sellPriceMove = value;
+                OnPropertyChanged("SellPriceMove");
+                OnPropertyChanged("SellPriceMoveMoney");
+            }
+        }
+
         private ItemContext _marginContext;
         public ItemContext MarginContext
         {

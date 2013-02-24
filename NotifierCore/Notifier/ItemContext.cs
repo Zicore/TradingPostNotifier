@@ -86,7 +86,7 @@ namespace ZicoresTradingPostNotifier.ViewModel
             }
         }
         private long _volume;
-        private Money _money;
+        private Money _money = new Money();
         private ObservableCollection<NotifierRule> _rules = new ObservableCollection<NotifierRule>();
 
         public ItemContext(ContextType contextType, HotItem item)

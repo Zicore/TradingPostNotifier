@@ -166,8 +166,21 @@
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <Grid x:Name="grid" DataContext="{Binding}">
-                                    <Border CornerRadius="4" DataContext="{Binding Path=BuyPriceMovePercent}" Style="{StaticResource BorderHighlight}">
+                                    <Border CornerRadius="4" DataContext="{Binding Path=SellPriceMovePercent}" Style="{StaticResource BorderHighlight}">
                                         <TextBlock MinWidth="50" Margin="2" DataContext="{Binding ElementName=grid, Path=DataContext}" TextAlignment="Center" Text="{Binding SellPriceMovePercentFormat}" Background="Transparent" FontWeight="Bold"></TextBlock>
+                                    </Border>
+                                </Grid>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </c:GridViewColumnEx>
+                    
+                    <c:GridViewColumnEx Header="Trend Sell Money" Identifier="7" c:GridViewSort.PropertyName="SellPriceMove">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid x:Name="grid" DataContext="{Binding}">
+                                    <Border DataContext="{Binding Path=SellPriceMoveMoney}" CornerRadius="4" Style="{StaticResource BorderHighlightMoney}">
+                                        <my:MoneyView DataContext="{Binding}" Background="Transparent">
+                                        </my:MoneyView>
                                     </Border>
                                 </Grid>
                             </DataTemplate>
@@ -194,7 +207,32 @@
                         </GridViewColumn.CellTemplate>
                     </c:GridViewColumnEx>
 
-                    <c:GridViewColumnEx Header="Demand" Identifier="7" c:GridViewSort.PropertyName="BuyContext.Volume">
+                    <c:GridViewColumnEx Header="Trend Buy %" Identifier="7" c:GridViewSort.PropertyName="BuyPriceMovePercent">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid x:Name="grid" DataContext="{Binding}">
+                                    <Border CornerRadius="4" DataContext="{Binding Path=BuyPriceMovePercent}" Style="{StaticResource BorderHighlight}">
+                                        <TextBlock MinWidth="50" Margin="2" DataContext="{Binding ElementName=grid, Path=DataContext}" TextAlignment="Center" Text="{Binding BuyPriceMovePercentFormat}" Background="Transparent" FontWeight="Bold"></TextBlock>
+                                    </Border>
+                                </Grid>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </c:GridViewColumnEx>
+
+                    <c:GridViewColumnEx Header="Trend Buy Money" Identifier="7" c:GridViewSort.PropertyName="BuyPriceMove">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid x:Name="grid" DataContext="{Binding}">
+                                    <Border DataContext="{Binding Path=BuyPriceMoveMoney}" CornerRadius="4" Style="{StaticResource BorderHighlightMoney}">
+                                        <my:MoneyView DataContext="{Binding}" Background="Transparent">
+                                        </my:MoneyView>
+                                    </Border>
+                                </Grid>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </c:GridViewColumnEx>
+
+                    <c:GridViewColumnEx Header="Demand" Identifier="8" c:GridViewSort.PropertyName="BuyContext.Volume">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock FontSize="12" FontWeight="Bold" Text="{Binding Path=BuyContext.Volume}"></TextBlock>
@@ -203,7 +241,7 @@
                     </c:GridViewColumnEx>
 
 
-                    <c:GridViewColumnEx Header="Margin" Identifier="8" c:GridViewSort.PropertyName="MarginMoney.TotalCopper">
+                    <c:GridViewColumnEx Header="Margin" Identifier="9" c:GridViewSort.PropertyName="MarginMoney.TotalCopper">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <Grid x:Name="grid" DataContext="{Binding}">
@@ -216,7 +254,7 @@
                         </GridViewColumn.CellTemplate>
                     </c:GridViewColumnEx>
 
-                    <c:GridViewColumnEx Header="%" Identifier="9" c:GridViewSort.PropertyName="MarginPercentNumber">
+                    <c:GridViewColumnEx Header="%" Identifier="10" c:GridViewSort.PropertyName="MarginPercentNumber">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <Grid x:Name="grid" DataContext="{Binding}">

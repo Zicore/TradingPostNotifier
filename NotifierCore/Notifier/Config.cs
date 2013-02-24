@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using Zicore.Xml;
 
-namespace Scraper.Notifier
+namespace NotifierCore.Notifier
 {
     public class ColumnInfo
     {

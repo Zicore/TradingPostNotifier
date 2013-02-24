@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using LibraryBase.Wpf.ViewModel;
 
-namespace Scraper.Notifier
+namespace NotifierCore.Notifier
 {
     public class Language : BindableBase
     {
@@ -25,7 +25,7 @@ namespace Scraper.Notifier
             this.LanguageKey = language;
         }
 
-        public Language(String language,String displayName)
+        public Language(String language, String displayName)
         {
             this.LanguageKey = language;
             this.DisplayName = displayName;

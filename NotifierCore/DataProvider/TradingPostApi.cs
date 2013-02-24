@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Scraper.Notifier;
+using NotifierCore.Crawler;
+using NotifierCore.Notifier;
 using Newtonsoft.Json.Linq;
 using System.Diagnostics;
 using System.Globalization;
 
-namespace Scraper.Crawler
+namespace NotifierCore.DataProvider
 {
     /// <summary>
     /// Generates uris parses the requests and provides some vars to differ between the apis

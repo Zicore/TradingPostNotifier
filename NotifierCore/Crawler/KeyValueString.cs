@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using LibraryBase.Wpf.ViewModel;
 
-namespace Scraper.Crawler
+namespace NotifierCore.Crawler
 {
     public class KeyValueString : BindableBase
     {

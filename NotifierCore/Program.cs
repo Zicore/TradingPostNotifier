@@ -2,18 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Scraper.Crawler;
+using NotifierCore.DataProvider;
 using System.Net;
 using System.Windows.Forms;
 
-namespace Scraper
+namespace NotifierCore
 {
     class Program
     {
         [STAThread]
         static void Main()
         {
-            
+
         }
 
         //static void s_Finished(object sender, Crawler.Event.ScrapeFinishedEventArgs e)

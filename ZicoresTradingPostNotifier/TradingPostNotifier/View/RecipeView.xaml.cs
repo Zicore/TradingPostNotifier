@@ -11,7 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Scraper.Notifier;
+using NotifierCore.Notifier;
 using ZicoresTradingPostNotifier.Helper;
 using ZicoresTradingPostNotifier.ViewModel;
 

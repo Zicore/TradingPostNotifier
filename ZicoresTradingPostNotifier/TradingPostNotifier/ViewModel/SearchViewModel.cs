@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using GuildWarsCalculator;
 using LibraryBase.Wpf.Commands;
 using LibraryBase.Wpf.Event;
 using LibraryBase.Wpf.ViewModel;
 using Newtonsoft.Json.Linq;
-using Scraper.Crawler;
-using Scraper.Notifier;
+using NotifierCore.Crawler;
+using NotifierCore.DataProvider;
+using NotifierCore.Notifier;
 using ZicoresTradingPostNotifier.Model;
 
 namespace ZicoresTradingPostNotifier.ViewModel

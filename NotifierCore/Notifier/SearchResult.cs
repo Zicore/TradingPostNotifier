@@ -5,7 +5,7 @@ using System.Text;
 using Newtonsoft.Json.Linq;
 using System.Diagnostics;
 
-namespace Scraper.Notifier
+namespace NotifierCore.Notifier
 {
     public enum JsonResultType
     {

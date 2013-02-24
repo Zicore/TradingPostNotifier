@@ -4,12 +4,12 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using Newtonsoft.Json.Linq;
-using Scraper.Crawler;
-using Scraper.Notifier.Event;
+using NotifierCore.Crawler;
+using NotifierCore.DataProvider;
+using NotifierCore.Notifier.Event;
 using LibraryBase.Wpf.ViewModel;
 using System.Drawing;
 using System.IO;
-using GuildWarsCalculator;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using ZicoresTradingPostNotifier.ViewModel;
@@ -20,7 +20,7 @@ using System.Windows;
 using LibraryBase.Wpf.Commands;
 using System.Windows.Data;
 
-namespace Scraper.Notifier
+namespace NotifierCore.Notifier
 {
     public class HotItem : BindableBase
     {
@@ -436,7 +436,7 @@ namespace Scraper.Notifier
             get
             {
                 int margin = (int)(Math.Floor(SellMoney.TotalCopper * 0.85 - BuyMoney.TotalCopper));
-                return new Money(0, 0, margin) {Name = "Margin"};
+                return new Money(0, 0, margin) { Name = "Margin" };
             }
         }
 
@@ -726,14 +726,14 @@ namespace Scraper.Notifier
                 {
                     ItemBuildDone = true;
                     String uri = HotItemController.CurrentApi.UriBuildItem(DataId); //new UriHelper().UseSearchApi().Add("ids", DataId.ToString()).Generate();
-                    s.Finished -= new EventHandler<Crawler.Event.ScrapeFinishedEventArgs>(sSearch_Finished);
-                    s.Finished += new EventHandler<Crawler.Event.ScrapeFinishedEventArgs>(sSearch_Finished);
+                    s.Finished -= new EventHandler<DataProvider.Event.ScrapeFinishedEventArgs>(sSearch_Finished);
+                    s.Finished += new EventHandler<DataProvider.Event.ScrapeFinishedEventArgs>(sSearch_Finished);
                     s.CrawlString(uri, DataId, DataId, HotItemController.CurrentApi);
                 }
             }
         }
 
-        void sSearch_Finished(object sender, Crawler.Event.ScrapeFinishedEventArgs e)
+        void sSearch_Finished(object sender, DataProvider.Event.ScrapeFinishedEventArgs e)
         {
             if (e.Id == this.DataId)
             {
@@ -760,15 +760,15 @@ namespace Scraper.Notifier
             using (var s = new ScrapeHelper(HotItemController.Config.SessionKey))
             {
                 String uri = HotItemController.CurrentApi.UriListingItem(DataId); //new UriHelper().UseListingApi().AddId(DataId.ToString()).Generate();
-                s.Finished -= new EventHandler<Crawler.Event.ScrapeFinishedEventArgs>(s_Finished);
-                s.Finished += new EventHandler<Crawler.Event.ScrapeFinishedEventArgs>(s_Finished);
+                s.Finished -= new EventHandler<DataProvider.Event.ScrapeFinishedEventArgs>(s_Finished);
+                s.Finished += new EventHandler<DataProvider.Event.ScrapeFinishedEventArgs>(s_Finished);
                 s.CrawlString(uri, DataId, DataId, HotItemController.CurrentApi);
             }
         }
 
 
 
-        void s_Finished(object sender, Crawler.Event.ScrapeFinishedEventArgs e)
+        void s_Finished(object sender, DataProvider.Event.ScrapeFinishedEventArgs e)
         {
             if (e.Id == this.DataId)
             {
@@ -792,7 +792,7 @@ namespace Scraper.Notifier
         {
             if (RemoveItemRequest != null)
             {
-                RemoveItemRequest(this, new EventArgs<Scraper.Notifier.HotItem>(this));
+                RemoveItemRequest(this, new EventArgs<HotItem>(this));
             }
         }
 
@@ -811,7 +811,7 @@ namespace Scraper.Notifier
         {
             if (AddItemRequest != null)
             {
-                AddItemRequest(this, new EventArgs<Scraper.Notifier.HotItem>(this));
+                AddItemRequest(this, new EventArgs<HotItem>(this));
             }
         }
 

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using LibraryBase.Wpf.ViewModel;
 
-namespace Scraper.Notifier
+namespace NotifierCore.Notifier
 {
     public class ColumnMap : BindableBase
     {

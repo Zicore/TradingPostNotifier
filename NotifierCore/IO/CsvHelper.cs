@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace Scraper.IO
+namespace NotifierCore.IO
 {
     public class CsvHelper
     {
@@ -13,7 +13,7 @@ namespace Scraper.IO
 
         }
 
-        public static void WriteCsv(String path,string[] columns, object[][] rows,string seperator)
+        public static void WriteCsv(String path, string[] columns, object[][] rows, string seperator)
         {
             using (StreamWriter sw = new StreamWriter(path))
             {

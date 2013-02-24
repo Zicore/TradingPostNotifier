@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Scraper.Notifier.Event;
+using NotifierCore.Notifier.Event;
 using ZicoresTradingPostNotifier.View;
 using System.Windows;
 using ZicoresTradingPostNotifier.Model;
@@ -10,8 +10,7 @@ using System.Collections.ObjectModel;
 using System.Windows.Input;
 using LibraryBase.Wpf.Commands;
 using LibraryBase.Wpf.ViewModel;
-using GuildWarsCalculator;
-using Scraper.Notifier;
+using NotifierCore.Notifier;
 
 namespace ZicoresTradingPostNotifier.ViewModel
 {

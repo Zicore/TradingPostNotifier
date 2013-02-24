@@ -4,7 +4,8 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using LibraryBase.Wpf.ViewModel;
-using Scraper.Crawler;
+using NotifierCore.Crawler;
+using NotifierCore.DataProvider;
 
 namespace ZicoresTradingPostNotifier.Model
 {

@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace Scraper.GW2DB
+namespace NotifierCore.Notifier
 {
     public class SlimItem
     {

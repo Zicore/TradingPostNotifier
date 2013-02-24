@@ -8,8 +8,8 @@ using Microsoft.Research.DynamicDataDisplay;
 using Microsoft.Research.DynamicDataDisplay.Charts;
 using Microsoft.Research.DynamicDataDisplay.DataSources; // EnumerableDataSource
 using Microsoft.Research.DynamicDataDisplay.PointMarkers;
-using Scraper.Crawler;
-using Scraper.Notifier;
+using NotifierCore.DataProvider;
+using NotifierCore.Notifier;
 
 namespace ZicoresTradingPostNotifier.ViewModel
 {

@@ -5,14 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Windows.Input;
 using System.Xml.Serialization;
-using GuildWarsCalculator;
 using LibraryBase.Wpf.Commands;
 using LibraryBase.Wpf.ViewModel;
 using NotifierCore.Notifier;
-using Scraper.Notifier.Event;
+using NotifierCore.Notifier.Event;
 using ZicoresTradingPostNotifier.ViewModel;
 
-namespace Scraper.Notifier
+namespace NotifierCore.Notifier
 {
     public class GemRuleViewModel : BindableBase, INotificationHost
     {
@@ -31,7 +30,7 @@ namespace Scraper.Notifier
                 Rules = new ObservableCollection<NotifierRule>();
             foreach (var notifierRule in Rules)
             {
-                notifierRule.RemoveRule += new EventHandler<Scraper.Notifier.Event.RemoveRuleEventArgs>(rule_RemoveRule);
+                notifierRule.RemoveRule += new EventHandler<RemoveRuleEventArgs>(rule_RemoveRule);
                 notifierRule.Host = this;
             }
         }
@@ -39,7 +38,7 @@ namespace Scraper.Notifier
         private void AddRule()
         {
             var rule = new NotifierRule(null, RuleType.Disabled, 0, ContextType.Buy, this);
-            rule.RemoveRule += new EventHandler<Scraper.Notifier.Event.RemoveRuleEventArgs>(rule_RemoveRule);
+            rule.RemoveRule += new EventHandler<RemoveRuleEventArgs>(rule_RemoveRule);
             Rules.Add(rule);
         }
 

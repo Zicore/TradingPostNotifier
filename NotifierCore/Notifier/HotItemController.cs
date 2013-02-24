@@ -2,25 +2,26 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using NotifierCore.Crawler;
+using NotifierCore.DataProvider;
+using NotifierCore.IO;
+using NotifierCore.Notifier.Event;
 using Zicore.Collections.Generic;
-using Scraper.Crawler;
 using System.Threading;
-using Scraper.Notifier.Event;
 using System.Collections.ObjectModel;
 using LibraryBase.Wpf.ViewModel;
 using System.Threading.Tasks;
 using LibraryBase.Wpf.Event;
 using ZicoresTradingPostNotifier.ViewModel;
 using System.Diagnostics;
-using Scraper.IO;
 using System.IO;
 using Zicore.Xml;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
-using Scraper.GW2DB;
+
 //using MongoDB.Driver;
 
-namespace Scraper.Notifier
+namespace NotifierCore.Notifier
 {
     public enum GuildWars2Status
     {
@@ -769,7 +770,7 @@ namespace Scraper.Notifier
             _keyHelper.UriFound -= new EventHandler<SessionKeyReader.UriFoundEventArgs>(keyHelper_UriFound);
         }
 
-        void transactionScraper_Finished(object sender, Crawler.Event.ScrapeFinishedEventArgs e)
+        void transactionScraper_Finished(object sender, DataProvider.Event.ScrapeFinishedEventArgs e)
         {
             var result = new SearchResult(e.Value, (String)e.Arg, e.Uri, JsonResultType.Transactions, e.TransactionType);
             if (SearchFinished != null)
@@ -859,7 +860,7 @@ namespace Scraper.Notifier
                     int offset = (page) * HotItemController.CurrentApi.ItemsPerPage;
 
                     ScrapeHelper searchScraper = new ScrapeHelper(Config.SessionKey);
-                    searchScraper.Finished += new EventHandler<Crawler.Event.ScrapeFinishedEventArgs>(searchScraper_Finished);
+                    searchScraper.Finished += new EventHandler<DataProvider.Event.ScrapeFinishedEventArgs>(searchScraper_Finished);
 
                     string sortingMode = filters.SortingMode.ToString();
                     if (filters.SortingMode == SortingMode.none)
@@ -912,12 +913,12 @@ namespace Scraper.Notifier
             }
         }
 
-        void searchScraper_Finished(object sender, Crawler.Event.ScrapeFinishedEventArgs e)
+        void searchScraper_Finished(object sender, DataProvider.Event.ScrapeFinishedEventArgs e)
         {
             ScrapeHelper searchScraper = sender as ScrapeHelper;
             if (searchScraper != null)
             {
-                searchScraper.Finished -= new EventHandler<Crawler.Event.ScrapeFinishedEventArgs>(searchScraper_Finished);
+                searchScraper.Finished -= new EventHandler<DataProvider.Event.ScrapeFinishedEventArgs>(searchScraper_Finished);
             }
             IsSearchInProgress = false;
 

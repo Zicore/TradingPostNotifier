@@ -58,22 +58,18 @@
     <Compile Include="..\ZicoresTradingPostNotifier\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Crawler\BuyResult.cs" />
     <Compile Include="Crawler\Event\ScrapeFinishedEventArgs.cs" />
-    <Compile Include="Crawler\Gw2SpidyApi.cs" />
-    <Compile Include="Crawler\HttpPost.cs" />
-    <Compile Include="Crawler\IndexWorker.cs" />
-    <Compile Include="Crawler\ItemStore.cs" />
-    <Compile Include="Crawler\ITradingPostApi.cs" />
+    <Compile Include="DataProvider\Gw2SpidyApi.cs" />
+    <Compile Include="DataProvider\ITradingPostApi.cs" />
     <Compile Include="Crawler\KeyValueString.cs" />
     <Compile Include="Crawler\PostResult.cs" />
-    <Compile Include="Crawler\TradingPostApi.cs" />
+    <Compile Include="DataProvider\TradingPostApi.cs" />
     <Compile Include="Crawler\UriHelper.cs" />
     <Compile Include="Crawler\WebClientEx.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="GuildWars2\Money.cs" />
-    <Compile Include="GW2DB\SlimItem.cs" />
+    <Compile Include="Notifier\Money.cs" />
+    <Compile Include="Notifier\SlimItem.cs" />
     <Compile Include="IO\CsvHelper.cs" />
     <Compile Include="IO\ICsvExport.cs" />
     <Compile Include="IO\ICsvImport.cs" />
@@ -139,10 +135,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="GuildWars2\img\copper.png" />
-    <Content Include="GuildWars2\img\gold.png" />
-    <Content Include="GuildWars2\img\silver.png" />
+    <Content Include="Notifier\img\copper.png" />
+    <Content Include="Notifier\img\gold.png" />
+    <Content Include="Notifier\img\silver.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

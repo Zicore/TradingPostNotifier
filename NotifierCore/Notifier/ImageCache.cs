@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using NotifierCore.Notifier.Event;
 using ZicoresUtils.Zicore.Configuration;
 using System.Threading;
 using System.Net;
 using System.IO;
 using Zicore.Collections.Generic;
-using Scraper.Notifier.Event;
 
-namespace Scraper.Notifier
+namespace NotifierCore.Notifier
 {
     public class ImageCache
     {

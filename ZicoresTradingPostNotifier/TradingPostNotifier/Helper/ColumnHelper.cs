@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using Scraper.Notifier;
+using NotifierCore.Notifier;
 using ZicoresTradingPostNotifier.Controls;
 using ZicoresTradingPostNotifier.ViewModel;
 

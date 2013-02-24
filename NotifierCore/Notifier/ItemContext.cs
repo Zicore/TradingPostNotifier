@@ -4,13 +4,11 @@ using System.Linq;
 using System.Text;
 using LibraryBase.Wpf.ViewModel;
 using System.Windows.Input;
-using Scraper.Notifier;
-using GuildWarsCalculator;
 using System.Collections.ObjectModel;
 using LibraryBase.Wpf.Event;
 using LibraryBase.Wpf.Commands;
 using System.Xml.Serialization;
-using Scraper.Notifier.Event;
+using NotifierCore.Notifier.Event;
 using NotifierCore.Notifier;
 
 namespace ZicoresTradingPostNotifier.ViewModel
@@ -118,13 +116,13 @@ namespace ZicoresTradingPostNotifier.ViewModel
 
         public void ActivateEventHandler(NotifierRule rule)
         {
-            rule.RemoveRule += new EventHandler<Scraper.Notifier.Event.RemoveRuleEventArgs>(rule_RemoveRule);
+            rule.RemoveRule += new EventHandler<NotifierCore.Notifier.Event.RemoveRuleEventArgs>(rule_RemoveRule);
         }
 
         private void AddRule()
         {
             var rule = new NotifierRule(Item, RuleType.Disabled, 0, ContextType, this);
-            rule.RemoveRule += new EventHandler<Scraper.Notifier.Event.RemoveRuleEventArgs>(rule_RemoveRule);
+            rule.RemoveRule += new EventHandler<NotifierCore.Notifier.Event.RemoveRuleEventArgs>(rule_RemoveRule);
             Rules.Add(rule);
         }
 
@@ -140,9 +138,9 @@ namespace ZicoresTradingPostNotifier.ViewModel
             }
         }
 
-        void rule_RemoveRule(object sender, Scraper.Notifier.Event.RemoveRuleEventArgs e)
+        void rule_RemoveRule(object sender, NotifierCore.Notifier.Event.RemoveRuleEventArgs e)
         {
-            e.Rule.RemoveRule -= new EventHandler<Scraper.Notifier.Event.RemoveRuleEventArgs>(rule_RemoveRule);
+            e.Rule.RemoveRule -= new EventHandler<NotifierCore.Notifier.Event.RemoveRuleEventArgs>(rule_RemoveRule);
             Rules.Remove(e.Rule);
         }
 

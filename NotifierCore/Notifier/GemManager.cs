@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
-using GuildWarsCalculator;
 using LibraryBase.Wpf.ViewModel;
 using Newtonsoft.Json.Linq;
-using Scraper.Crawler;
+using NotifierCore.Crawler;
+using NotifierCore.DataProvider;
 using ZicoresTradingPostNotifier.ViewModel;
 
-namespace Scraper.Notifier
+namespace NotifierCore.Notifier
 {
     public class GemManager : BindableBase
     {

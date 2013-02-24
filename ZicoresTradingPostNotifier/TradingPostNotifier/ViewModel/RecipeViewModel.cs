@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using LibraryBase.Wpf.ViewModel;
-using Scraper.Notifier;
+using NotifierCore.Notifier;
 
 namespace ZicoresTradingPostNotifier.ViewModel
 {

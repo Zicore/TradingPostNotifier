@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Scraper.JsonNet
+namespace NotifierCore.JsonNet
 {
     public class JsonHelper
     {

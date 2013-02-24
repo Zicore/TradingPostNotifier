@@ -8,8 +8,8 @@ using System.Windows.Controls;
 using Microsoft.Research.DynamicDataDisplay.Charts.Axes;
 using System.Globalization;
 using Microsoft.Research.DynamicDataDisplay.Charts;
+using NotifierCore.Notifier;
 using ZicoresTradingPostNotifier.View;
-using GuildWarsCalculator;
 
 namespace ZicoresTradingPostNotifier.Chart
 {

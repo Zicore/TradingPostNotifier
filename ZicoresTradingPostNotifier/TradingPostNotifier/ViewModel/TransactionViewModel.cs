@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Collections.ObjectModel;
-using Scraper.Notifier;
+using NotifierCore.Crawler;
+using NotifierCore.Notifier;
 using System.Windows.Input;
-using Scraper.Crawler;
-using Scraper.Crawler.Event;
+using NotifierCore.DataProvider;
+using NotifierCore.DataProvider.Event;
 using System.Threading.Tasks;
 using LibraryBase.Wpf.ViewModel;
 using LibraryBase.Wpf.Commands;
@@ -160,7 +161,7 @@ namespace ZicoresTradingPostNotifier.ViewModel
 
         public void FindBoughtAndSoldItems(TransactionType type, List<HotItem> itemsCache)
         {
-            if (type == Scraper.Notifier.TransactionType.Sold || type == Scraper.Notifier.TransactionType.Bought)
+            if (type == NotifierCore.Notifier.TransactionType.Sold || type == NotifierCore.Notifier.TransactionType.Bought)
             {
                 //var dtUtc =  + new TimeSpan(-1, 0, 0);
                 var dtUtc = TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.Local, TimeZoneInfo.Utc);

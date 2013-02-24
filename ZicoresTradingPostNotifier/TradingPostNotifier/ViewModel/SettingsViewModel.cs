@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Collections.ObjectModel;
 using ZicoresTradingPostNotifier.Model;
-using Scraper.Notifier;
+using NotifierCore.Notifier;
 using LibraryBase.Wpf.ViewModel;
 using LibraryBase.Wpf.Commands;
 

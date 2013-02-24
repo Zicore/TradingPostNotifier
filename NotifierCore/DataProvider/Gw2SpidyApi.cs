@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Scraper.Notifier;
+using NotifierCore.Notifier;
 using Newtonsoft.Json.Linq;
 using System.Diagnostics;
 
-namespace Scraper.Crawler
+namespace NotifierCore.DataProvider
 {
     public class Gw2SpidyApi : ITradingPostApi
     {

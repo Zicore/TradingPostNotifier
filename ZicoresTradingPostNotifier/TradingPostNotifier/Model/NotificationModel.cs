@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Scraper.Notifier;
+using NotifierCore.Notifier;
 using System.Windows;
 using System.Windows.Input;
 using LibraryBase.Wpf.ViewModel;
-using GuildWarsCalculator;
-using Scraper.Notifier.Event;
+using NotifierCore.Notifier.Event;
 
 namespace ZicoresTradingPostNotifier.Model
 {

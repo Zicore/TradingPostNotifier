@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
-using GuildWarsCalculator;
 using LibraryBase.Wpf.ViewModel;
 
-namespace Scraper.Notifier
+namespace NotifierCore.Notifier
 {
     public enum RecipeWay
     {

@@ -7,7 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using LibraryBase.Wpf.ViewModel;
 
-namespace Scraper.Notifier
+namespace NotifierCore.Notifier
 {
     public class TransactionController : BindableBase
     {

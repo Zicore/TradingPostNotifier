@@ -3,15 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using LibraryBase.Wpf.ViewModel;
-using GuildWarsCalculator;
-using Scraper.Notifier.Event;
+using NotifierCore.Notifier.Event;
 using System.Windows.Input;
 using System.Xml.Serialization;
 using LibraryBase.Wpf.Commands;
 using ZicoresTradingPostNotifier.ViewModel;
 using NotifierCore.Notifier;
 
-namespace Scraper.Notifier
+namespace NotifierCore.Notifier
 {
     public enum RuleType
     {
@@ -138,7 +137,7 @@ namespace Scraper.Notifier
 
         public NotifierRule()
         {
-            this.Money = new GuildWarsCalculator.Money(0, 0, 0) { Name = "Rule" };
+            this.Money = new Money(0, 0, 0) { Name = "Rule" };
             this.SelectedRuleType = RuleType.Disabled;
         }
 
@@ -154,7 +153,7 @@ namespace Scraper.Notifier
         public NotifierRule(HotItem item, RuleType type, int value, ContextType contextType, INotificationHost host)
         {
             this.Host = host;
-            this.Money = new GuildWarsCalculator.Money(0, 0, value) { Name = "Rule" };
+            this.Money = new Money(0, 0, value) { Name = "Rule" };
             this.Item = item;
             this.SelectedRuleType = type;
             this.ContextType = contextType;

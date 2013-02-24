@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Scraper.Notifier;
+using NotifierCore.Notifier;
 using Newtonsoft.Json.Linq;
 
-namespace Scraper.Crawler
+namespace NotifierCore.DataProvider
 {
     public interface ITradingPostApi
     {

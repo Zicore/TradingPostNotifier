@@ -9,7 +9,7 @@ using System.Globalization;
 using ZicoresTradingPostNotifier.Event;
 using ZicoresTradingPostNotifier.ViewModel;
 using ZicoresTradingPostNotifier.View;
-using Scraper.Notifier;
+using NotifierCore.Notifier;
 
 namespace ZicoresTradingPostNotifier
 {

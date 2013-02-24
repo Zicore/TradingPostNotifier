@@ -1,16 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Net;
-using System.Collections.Specialized;
-using Scraper.Crawler.Event;
+using NotifierCore.DataProvider;
+using NotifierCore.DataProvider.Event;
+using NotifierCore.Notifier;
 using System.Diagnostics;
-using Scraper.Crawler;
-using Scraper.Notifier;
-using System.ComponentModel;
 
-namespace Scraper.Crawler
+namespace NotifierCore.Crawler
 {
     public class ScrapeHelper : IDisposable
     {

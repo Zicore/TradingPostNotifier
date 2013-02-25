@@ -121,32 +121,41 @@ namespace ZicoresTradingPostNotifier.ViewModel
                 }
             }
             MainWindowViewModel.Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    for (int i = 0; i < result.Items.Count; i++)
+                    {
+                        result.Items[i].IsExpanded = false;
+                        var item = Items.FirstOrDefault(x => x.DataId == result.Items[i].DataId);
+                        if (item == null)
                         {
-                            for (int i = 0; i < result.Items.Count; i++)
+                            Items.Add(result.Items[i]);
+                        }
+                        else
+                        {
+                            for (int j = 0; j < result.Items[i].Items.Count; j++)
                             {
-                                result.Items[i].IsExpanded = false;
-                                var item = Items.FirstOrDefault(x => x.DataId == result.Items[i].DataId);
-                                if (item == null)
+                                var innerItem = item.Items.FirstOrDefault(x => x.ListingId == result.Items[i].Items[j].ListingId);
+                                if (innerItem == null)
                                 {
-
-                                    Items.Add(result.Items[i]);
-
-                                }
-                                else
-                                {
-                                    for (int j = 0; j < result.Items[i].Items.Count; j++)
-                                    {
-                                        var innerItem = item.Items.FirstOrDefault(x => x.ListingId == result.Items[i].Items[j].ListingId);
-                                        if (innerItem == null)
-                                        {
-                                            var child = result.Items[i].Items[j];
-                                            item.Items.Add(child);
-                                            item.GroupItem(child, item.Items);
-                                        }
-                                    }
+                                    var child = result.Items[i].Items[j];
+                                    item.Items.Add(child);
+                                    item.GroupItem(child, item.Items);
                                 }
                             }
-                        }));
+                        }
+                    }
+                    for (int i = 0; i < Items.Count; i++)
+                    {
+                        HotItem item = Items[i];
+                        var rs = result.Items.FirstOrDefault(x => x.ListingId == item.ListingId);
+                        if (rs == null)
+                        {
+                            item.Notify = false;
+                            Items.Remove(item);
+                            i--;
+                        }
+                    }
+                }));
 
             //Items = new ObservableCollection<HotItem>(result.Items);
 

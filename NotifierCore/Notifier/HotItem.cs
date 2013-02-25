@@ -50,13 +50,14 @@ namespace NotifierCore.Notifier
         private DateTime _dateTimeTrend;
 
 
-        private float _sellPriceMove;
-        private float _buyPriceMove;
+        private float _sellPriceMoveCurrent;
+        private float _buyPriceMoveCurrent;
         private double _sellCountMove;
         private double _buyCountMove;
 
-        private float _sellPriceMovePercent;
-        private float _buyPriceMovePercent;
+        private float _sellPriceMove;
+        private float _buyPriceMove;
+
         private float _sellCountMovePercent;
         private float _buyCountMovePercent;
 
@@ -76,7 +77,7 @@ namespace NotifierCore.Notifier
 
         public String BuyCountMovePercentFormat
         {
-            get { return String.Format("{0:0.00}", SellPriceMovePercent * 100); }
+            get { return String.Format("{0:0.00}", SellPriceMove * 100); }
         }
 
         public float BuyCountMovePercent
@@ -107,17 +108,23 @@ namespace NotifierCore.Notifier
         }
 
         // --------------------------------------------------
-        public String BuyPriceMovePercentFormat
+        //public String BuyPriceMovePercentFormat
+        //{
+        //    get { return String.Format("{0:0.00}%", BuyPriceMove * 100); }
+        //}
+
+        public Money BuyPriceMoveMoney
         {
-            get { return String.Format("{0:0.00}%", BuyPriceMovePercent * 100); }
+            get { return new Money((decimal)BuyPriceMove); }
         }
 
-        public float BuyPriceMovePercent
+
+        public float BuyPriceMove
         {
-            get { return _buyPriceMovePercent; }
+            get { return _buyPriceMove; }
             set
             {
-                _buyPriceMovePercent = value;
+                _buyPriceMove = value;
                 OnPropertyChanged("BuyPriceMovePercent");
                 OnPropertyChanged("BuyPriceMovePercentFormat");
             }
@@ -125,15 +132,20 @@ namespace NotifierCore.Notifier
 
         public String SellPriceMovePercentFormat
         {
-            get { return String.Format("{0:0.00}%", SellPriceMovePercent * 100); }
+            get { return String.Format("{0:0.00}%", SellPriceMove * 100); }
         }
 
-        public float SellPriceMovePercent
+        public Money SellPriceMoveMoney
         {
-            get { return _sellPriceMovePercent; }
+            get { return new Money((decimal)SellPriceMove); }
+        }
+
+        public float SellPriceMove
+        {
+            get { return _sellPriceMove; }
             set
             {
-                _sellPriceMovePercent = value;
+                _sellPriceMove = value;
                 OnPropertyChanged("SellPriceMovePercent");
                 OnPropertyChanged("SellPriceMovePercentFormat");
             }
@@ -163,17 +175,17 @@ namespace NotifierCore.Notifier
 
         // --------------------------------------------------
 
-        public Money BuyPriceMoveMoney
+        public Money BuyPriceMoveCurrentMoney
         {
-            get { return new Money((decimal)BuyPriceMove); }
+            get { return new Money((decimal)BuyPriceMoveCurrent); }
         }
 
-        public float BuyPriceMove
+        public float BuyPriceMoveCurrent
         {
-            get { return _buyPriceMove; }
+            get { return _buyPriceMoveCurrent; }
             set
             {
-                _buyPriceMove = value;
+                _buyPriceMoveCurrent = value;
                 OnPropertyChanged("BuyPriceMove");
                 OnPropertyChanged("BuyPriceMoveMoney");
             }
@@ -181,17 +193,17 @@ namespace NotifierCore.Notifier
 
         // --------------------------------------------------
 
-        public Money SellPriceMoveMoney
+        public Money SellPriceMoveCurrentMoney
         {
-            get { return new Money((decimal)SellPriceMove); }
+            get { return new Money((decimal)SellPriceMoveCurrent); }
         }
 
-        public float SellPriceMove
+        public float SellPriceMoveCurrent
         {
-            get { return _sellPriceMove; }
+            get { return _sellPriceMoveCurrent; }
             set
             {
-                _sellPriceMove = value;
+                _sellPriceMoveCurrent = value;
                 OnPropertyChanged("SellPriceMove");
                 OnPropertyChanged("SellPriceMoveMoney");
             }

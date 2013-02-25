@@ -137,15 +137,15 @@ namespace NotifierCore.DataProvider
             {
                 var item = new HotItem(token["data_id"].ToObject<int>())
                     {
-                        SellPriceMove = token["sell_price"].ToObject<float>(),
-                        BuyPriceMove = token["buy_price"].ToObject<float>(),
+                        SellPriceMoveCurrent = token["sell_price"].ToObject<float>(),
+                        BuyPriceMoveCurrent = token["buy_price"].ToObject<float>(),
                         SellCountMove = token["sell_count"].ToObject<double>(),
                         BuyCountMove = token["buy_count"].ToObject<double>(),
 
                         DateTimeTrend = token["datetime"].ToObject<DateTime>(),
 
-                        SellPriceMovePercent = token["sell_price_move"].ToObject<float>(),
-                        BuyPriceMovePercent = token["buy_price_move"].ToObject<float>(),
+                        SellPriceMove = token["sell_price_move"].ToObject<float>(),
+                        BuyPriceMove = token["buy_price_move"].ToObject<float>(),
                         SellCountMovePercent = token["sell_count_move"].ToObject<float>(),
                         BuyCountMovePercent = token["buy_count_move"].ToObject<float>(),
                     };
@@ -161,15 +161,15 @@ namespace NotifierCore.DataProvider
             {
                 var item = new HotItem(token["data_id"].ToObject<int>())
                 {
-                    SellPriceMove = token["sell_price"].ToObject<float>(),
-                    BuyPriceMove = token["buy_price"].ToObject<float>(),
+                    SellPriceMoveCurrent = token["sell_price"].ToObject<float>(),
+                    BuyPriceMoveCurrent = token["buy_price"].ToObject<float>(),
                     SellCountMove = token["sell_count"].ToObject<double>(),
                     BuyCountMove = token["buy_count"].ToObject<double>(),
 
                     DateTimeTrend = token["datetime"].ToObject<DateTime>(),
 
-                    SellPriceMovePercent = token["sell_price_move"].ToObject<float>(),
-                    BuyPriceMovePercent = token["buy_price_move"].ToObject<float>(),
+                    SellPriceMove = token["sell_price_move"].ToObject<float>(),
+                    BuyPriceMove = token["buy_price_move"].ToObject<float>(),
                     SellCountMovePercent = token["sell_count_move"].ToObject<float>(),
                     BuyCountMovePercent = token["buy_count_move"].ToObject<float>(),
                 };

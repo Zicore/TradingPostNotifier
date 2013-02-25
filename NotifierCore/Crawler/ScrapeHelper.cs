@@ -161,8 +161,11 @@ namespace NotifierCore.Crawler
             }
             catch (WebException ex)
             {
-                HttpStatusCode code = (((HttpWebResponse)ex.Response).StatusCode);
-                responseCode = (int)code;
+                if (ex.Status == WebExceptionStatus.ProtocolError)
+                {
+                    HttpStatusCode code = (((HttpWebResponse)ex.Response).StatusCode);
+                    responseCode = (int)code;
+                }
             }
             catch (Exception)
             {

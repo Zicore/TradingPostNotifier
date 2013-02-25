@@ -61,8 +61,6 @@
 
         <!-- Group header style-->
         <Style x:Key="GroupHeaderStyle" TargetType="{x:Type GroupItem}">
-
-
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type GroupItem}">

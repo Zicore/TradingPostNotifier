@@ -7,6 +7,10 @@ I've finally managed it to structurize my project and made it open source.
 
 For the changelog and the latest releases visit the trading post notifiers website: [notifier.zicore.de](http://notifier.zicore.de).
 
+Blend SDK
+=========
+You need to install the Blend WPF SDK for .Net 4.0: http://www.microsoft.com/en-us/download/details.aspx?id=10801 otherwise you can't build or debug this application.
+(System.Windows.Interactivity.dll)
 
 Features
 ========

@@ -196,7 +196,8 @@ namespace ZicoresTradingPostNotifier.ViewModel
                         else
                         {
                             //notificationItem.Rule.
-                            
+                            notificationItem.Rule.Quantitiy += item.Rule.Quantitiy;
+                            //notificationItem.
                         }
                     }
                 }

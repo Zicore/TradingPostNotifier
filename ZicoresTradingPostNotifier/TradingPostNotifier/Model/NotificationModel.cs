@@ -215,8 +215,8 @@ namespace ZicoresTradingPostNotifier.Model
                 this.BuyMoney = item.BuyMoney;
                 this.SellMoney = item.SellMoney;
             }
-
             this.Rule = rule;
+            Rule.ApplyItemValues(item); // TODO: Refactoring, someday NotifierRule and NotificationModel must be merged together
         }
 
         public NotificationModel(GemManager gemManager, GemRuleViewModel item, NotifierRule rule, String message, DateTime timeStamp, NotificationType notificationType)

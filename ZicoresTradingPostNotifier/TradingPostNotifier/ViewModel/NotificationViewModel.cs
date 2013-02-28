@@ -196,7 +196,10 @@ namespace ZicoresTradingPostNotifier.ViewModel
                         else
                         {
                             //notificationItem.Rule.
-                            notificationItem.Rule.Quantitiy += item.Rule.Quantitiy;
+                            if (notificationItem.Item != null && item.Item != null && notificationItem.Item.ListingId != item.Item.ListingId)
+                            {
+                                notificationItem.Rule.Quantitiy += item.Rule.Quantitiy;
+                            }
                             //notificationItem.
                         }
                     }

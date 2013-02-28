@@ -130,6 +130,24 @@ namespace NotifierCore.Notifier
             }
         }
 
+        public void ApplyItemValues(HotItem item)
+        {
+            if (item != null)
+            {
+                Name = item.Name;
+                Quantitiy = item.Quantity;
+                Image = item.Image;
+            }
+        }
+
+        public void ApplyItemValues(GemManager item)
+        {
+            if (item != null)
+            {
+                // TODO: Refactoring
+            }
+        }
+
         HotItem _item;
 
         [XmlIgnore]

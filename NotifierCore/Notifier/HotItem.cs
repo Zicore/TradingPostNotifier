@@ -1125,7 +1125,7 @@ namespace NotifierCore.Notifier
             //    groupItem.Items.Add(i);
             //}
 
-            var list = result.GroupBy(x => x.TransactionTime.Day);
+            var list = result.GroupBy(x => x.ListingId);
 
             foreach (var group in list)
             {

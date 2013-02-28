@@ -132,15 +132,29 @@ namespace ZicoresTradingPostNotifier.ViewModel
                         }
                         else
                         {
+
+                            bool replace = false;
                             for (int j = 0; j < result.Items[i].Items.Count; j++)
                             {
-                                var innerItem = item.Items.FirstOrDefault(x => x.ListingId == result.Items[i].Items[j].ListingId);
-                                if (innerItem == null)
+                                //var innerItem = item.Items.FirstOrDefault(x => x.ListingId == result.Items[i].Items[j].ListingId);
+                                int count = result.Items[i].Items.Sum(x => x.Quantity);
+                                int oldCount = item.Items.Sum(x => x.Quantity);
+                                if (count != oldCount)
                                 {
-                                    var child = result.Items[i].Items[j];
-                                    item.Items.Add(child);
-                                    item.GroupItem(child, item.Items);
+                                    // var child = result.Items[i].Items[j];
+                                    // item.Items.Add(child);
+                                    // item.GroupItem(child, item.Items);
+                                    replace = true;
                                 }
+                            }
+                            if (replace)
+                            {
+                                result.Items[i].IsExpanded = item.IsExpanded;
+                                result.Items[i].IsGroup = item.IsGroup;
+                                result.Items[i].Notify = item.Notify; // Did i miss something ??
+
+                                Items.Remove(item);
+                                Items.Add(result.Items[i]);
                             }
                         }
                     }

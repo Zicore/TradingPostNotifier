@@ -181,11 +181,23 @@ namespace ZicoresTradingPostNotifier.ViewModel
             {
                 try
                 {
-                    int count = collection.Count(x => x.DataId == item.DataId);
-                    //var localItem = collection.FirstOrDefault(x => x.Item.DataId == item.Item.DataId);
-                    if (item.IsMessageNotification || count <= 0)
+                    var notificationItem = collection.FirstOrDefault(x => x.DataId == item.DataId);
+                    if (notificationItem == null)
                     {
+                        //var localItem = collection.FirstOrDefault(x => x.Item.DataId == item.Item.DataId);
                         collection.Add(item);
+                    }
+                    else
+                    {
+                        if (item.IsMessageNotification)
+                        {
+                            collection.Add(item);
+                        }
+                        else
+                        {
+                            //notificationItem.Rule.
+                            
+                        }
                     }
                 }
                 catch

@@ -15,7 +15,7 @@ namespace ZicoresTradingPostNotifier.Model
         private bool _acknowledged = false;
         private HotItem _item;
         private NotifierRule _ruleSell;
-        private NotifierRule _ruleBuy;
+        //private NotifierRule _ruleBuy;
 
         public const double TradingFeePercentValue = 0.85;
 
@@ -72,11 +72,7 @@ namespace ZicoresTradingPostNotifier.Model
         {
             get
             {
-                if (Item != null)
-                {
-                    return _transactionMoney * Item.Quantity;
-                }
-                return _transactionMoney;
+                return _transactionMoney * Rule.Quantitiy;
             }
         }
 
@@ -139,26 +135,6 @@ namespace ZicoresTradingPostNotifier.Model
                 OnPropertyChanged("Rule");
             }
         }
-
-        //public NotifierRule RuleBuy
-        //{
-        //    get { return _ruleBuy; }
-        //    set
-        //    {
-        //        _ruleBuy = value;
-        //        OnPropertyChanged("RuleBuy");
-        //    }
-        //}
-
-        //public NotifierRule RuleMargin
-        //{
-        //    get { return _ruleBuy; }
-        //    set
-        //    {
-        //        _ruleBuy = value;
-        //        OnPropertyChanged("RuleBuy");
-        //    }
-        //}
 
         public Visibility BuyVisibility
         {

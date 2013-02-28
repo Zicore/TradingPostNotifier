@@ -30,6 +30,10 @@ namespace NotifierCore.Notifier
         private RuleType _ruleType = RuleType.Disabled;
         private Money _money;
         private bool _isActive = false;
+        private int _quantitiy = 0;
+        private String _image;
+        private String _name;
+
 
         DateTime _acceptTime;
         public DateTime AcceptTime
@@ -155,6 +159,12 @@ namespace NotifierCore.Notifier
             this.Host = host;
             this.Money = new Money(0, 0, value) { Name = "Rule" };
             this.Item = item;
+            if (Item != null)
+            {
+                Name = item.Name;
+                Quantitiy = item.Quantity;
+                Image = item.Image;
+            }
             this.SelectedRuleType = type;
             this.ContextType = contextType;
         }
@@ -234,6 +244,36 @@ namespace NotifierCore.Notifier
                     _removeRuleCommand = new RelayCommand(param => this.RemoveRuleRequest());
 
                 return _removeRuleCommand;
+            }
+        }
+
+        public int Quantitiy
+        {
+            get { return _quantitiy; }
+            set
+            {
+                _quantitiy = value;
+                OnPropertyChanged("Quantitiy");
+            }
+        }
+
+        public string Image
+        {
+            get { return _image; }
+            set
+            {
+                _image = value;
+                OnPropertyChanged("Image");
+            }
+        }
+
+        public string Name
+        {
+            get { return _name; }
+            set
+            {
+                _name = value;
+                OnPropertyChanged("Name");
             }
         }
 

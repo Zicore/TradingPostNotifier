@@ -668,8 +668,8 @@ namespace NotifierCore.Notifier
             String uriTrendSell = CurrendTrendApi.UriTrendSell();
             ScrapeHelper.Get(uriTrendSell, "", null, "", TrendActionSell, "");
 
-            String uriTrendBuy = CurrendTrendApi.UriTrendBuy();
-            ScrapeHelper.Get(uriTrendBuy, "", null, "", TrendActionBuy, "");
+            //String uriTrendBuy = CurrendTrendApi.UriTrendBuy();
+            //ScrapeHelper.Get(uriTrendBuy, "", null, "", TrendActionBuy, "");
 
             try
             {

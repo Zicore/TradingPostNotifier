@@ -96,7 +96,7 @@
                                         <StackPanel HorizontalAlignment="Stretch">
                                             <Grid Width="48" Height="48" Margin="2,1,2,1" HorizontalAlignment="Center">
                                                 <Border CornerRadius="8,4,8,4" Background="White" BorderThickness="2" BorderBrush="Tomato" x:Name="opacityMask"></Border>
-                                                <Image Visibility="{Binding GemInVisibility}" Grid.Row="0" Margin="1" Source="{Binding Path=Rule.Image}" Stretch="UniformToFill" SnapsToDevicePixels="True">
+                                                <Image Visibility="{Binding GemInVisibility}" Grid.Row="0" Margin="1" Source="{Binding Path=Image}" Stretch="UniformToFill" SnapsToDevicePixels="True">
                                                     <Image.OpacityMask>
                                                         <VisualBrush Visual="{Binding ElementName=opacityMask}"></VisualBrush>
                                                     </Image.OpacityMask>
@@ -108,7 +108,7 @@
                                                 </Image>
                                             </Grid>
                                             <TextBlock FontSize="12" FontWeight="Bold" >
-                                                <Hyperlink Command="{Binding NavigateToUriCommand}"><TextBlock TextWrapping="Wrap" Text="{Binding Path=Rule.Name}"/></Hyperlink>
+                                                <Hyperlink Command="{Binding NavigateToUriCommand}"><TextBlock TextWrapping="Wrap" Text="{Binding Path=Name}"/></Hyperlink>
                                             </TextBlock>
 
                                             <StackPanel Orientation="Horizontal" Visibility="{Binding MessageInVisibility}">
@@ -118,7 +118,7 @@
                                             <StackPanel Orientation="Horizontal" Visibility="{Binding MessageVisibility}">
                                                 <TextBlock Margin="1" FontSize="12" FontWeight="Bold" Text="{Binding Path=Message}"></TextBlock>
                                                 <TextBlock Margin="1" FontSize="12" FontWeight="Bold" Text=" x"></TextBlock>
-                                                <TextBlock Margin="1" FontSize="12" FontWeight="Bold" Text="{Binding Path=Rule.Quantity}"></TextBlock>
+                                                <TextBlock Margin="1" FontSize="12" FontWeight="Bold" Text="{Binding Path=Quantitiy}"></TextBlock>
                                             </StackPanel>
 
                                             <TextBlock Margin="1" FontSize="12" Text="{Binding Path=TimeStampString}"></TextBlock>

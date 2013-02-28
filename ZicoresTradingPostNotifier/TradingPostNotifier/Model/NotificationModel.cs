@@ -17,6 +17,41 @@ namespace ZicoresTradingPostNotifier.Model
         private NotifierRule _ruleSell;
         //private NotifierRule _ruleBuy;
 
+        private int _quantitiy = 0;
+        private String _image;
+        private String _name;
+
+
+        public int Quantitiy
+        {
+            get { return _quantitiy; }
+            set
+            {
+                _quantitiy = value;
+                OnPropertyChanged("Quantitiy");
+            }
+        }
+
+        public string Image
+        {
+            get { return _image; }
+            set
+            {
+                _image = value;
+                OnPropertyChanged("Image");
+            }
+        }
+
+        public string Name
+        {
+            get { return _name; }
+            set
+            {
+                _name = value;
+                OnPropertyChanged("Name");
+            }
+        }
+
         public const double TradingFeePercentValue = 0.85;
 
         String message;
@@ -72,7 +107,11 @@ namespace ZicoresTradingPostNotifier.Model
         {
             get
             {
-                return _transactionMoney * Rule.Quantitiy;
+                if (Rule != null)
+                {
+                    return _transactionMoney * Quantitiy;
+                }
+                return _transactionMoney;
             }
         }
 
@@ -133,6 +172,16 @@ namespace ZicoresTradingPostNotifier.Model
             {
                 _ruleSell = value;
                 OnPropertyChanged("Rule");
+            }
+        }
+
+        public void ApplyItemValues(HotItem item)
+        {
+            if (item != null)
+            {
+                Name = item.Name;
+                Quantitiy = item.Quantity;
+                Image = item.Image;
             }
         }
 
@@ -216,7 +265,9 @@ namespace ZicoresTradingPostNotifier.Model
                 this.SellMoney = item.SellMoney;
             }
             this.Rule = rule;
-            Rule.ApplyItemValues(item); // TODO: Refactoring, someday NotifierRule and NotificationModel must be merged together
+
+            ApplyItemValues(item);
+            // TODO: Refactoring, someday NotifierRule and NotificationModel must be merged together
         }
 
         public NotificationModel(GemManager gemManager, GemRuleViewModel item, NotifierRule rule, String message, DateTime timeStamp, NotificationType notificationType)
@@ -242,6 +293,7 @@ namespace ZicoresTradingPostNotifier.Model
             {
                 this.DataId = -1;
             }
+            Name = message;
         }
 
         public void AsTransaction()

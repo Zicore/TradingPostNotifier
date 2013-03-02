@@ -87,6 +87,7 @@ namespace ZicoresTradingPostNotifier.Model
                 _isMessageNotification = value;
                 OnPropertyChanged("IsMessageNotification");
                 OnPropertyChanged("MessageVisibility");
+               
             }
         }
 

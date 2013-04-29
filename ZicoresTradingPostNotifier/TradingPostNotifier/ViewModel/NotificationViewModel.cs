@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using LibraryBase.Wpf.Win32;
 using NotifierCore.Notifier.Event;
 using ZicoresTradingPostNotifier.View;
 using System.Windows;
@@ -77,7 +78,12 @@ namespace ZicoresTradingPostNotifier.ViewModel
                         double y = SystemParameters.PrimaryScreenHeight - NotificationView.Height - 40;
                         NotificationView.Left = x;
                         NotificationView.Top = y;
-                        NotificationView.Show();
+                        NotificationView.Activate();
+                        NotificationView.Topmost = HotItemController.Config.IsTopMostNotification;  // important
+                        if (HotItemController.Config.IsTopMostNotification)
+                        {
+                            NotificationView.Show();
+                        }
                     }
                 }
                 else

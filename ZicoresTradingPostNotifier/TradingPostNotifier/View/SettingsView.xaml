@@ -20,6 +20,7 @@
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"></ColumnDefinition>
@@ -44,13 +45,14 @@
         <TextBox Margin="2" Grid.Column="1" Grid.ColumnSpan="1" Grid.Row="7" Text="{Binding TransactionTime}"></TextBox>
 
         <CheckBox Margin="2" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="8" IsChecked="{Binding IsTransactionNotificationEnabled}">Transaction Notifications Enabled</CheckBox>
+        <CheckBox Margin="2" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="9" IsChecked="{Binding IsTopMostNotification}">Notifiaction Popup Enabled</CheckBox>
 
-        <TextBlock Margin="2" Grid.Column="0" Grid.Row="9" Text="Session Key"></TextBlock>
-        <TextBox IsReadOnly="True" Margin="2" Grid.Column="1" Grid.Row="9" Text="{Binding SessionKey,Mode=OneWay}"></TextBox>
+        <TextBlock Margin="2" Grid.Column="0" Grid.Row="10" Text="Session Key"></TextBlock>
+        <TextBox IsReadOnly="True" Margin="2" Grid.Column="1" Grid.Row="11" Text="{Binding SessionKey,Mode=OneWay}"></TextBox>
         
-        <TextBlock Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="10">Dataprovider (requires restart)</TextBlock>
-        <RadioButton Margin="2" Grid.Column="0" Grid.Row="11" IsChecked="{Binding IsTradingPostDataprovider, Mode=TwoWay}">Trading Post</RadioButton>
-        <RadioButton Margin="2" Grid.Column="1" Grid.Row="11" IsChecked="{Binding IsGW2SpidyDataprovider, Mode=TwoWay}">GW2Spidy</RadioButton>
+        <TextBlock Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="11">Dataprovider (requires restart)</TextBlock>
+        <RadioButton Margin="2" Grid.Column="0" Grid.Row="13" IsChecked="{Binding IsTradingPostDataprovider, Mode=TwoWay}">Trading Post</RadioButton>
+        <RadioButton Margin="2" Grid.Column="1" Grid.Row="14" IsChecked="{Binding IsGW2SpidyDataprovider, Mode=TwoWay}">GW2Spidy</RadioButton>
         <!--
         <TextBlock Margin="3" Grid.Row="1" Grid.Column="0">Columns Watchlist:</TextBlock>
         <StackPanel Margin="3" Grid.Row="1" Grid.Column="1">

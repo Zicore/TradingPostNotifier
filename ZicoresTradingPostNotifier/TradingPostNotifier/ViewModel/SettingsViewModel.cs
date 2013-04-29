@@ -165,5 +165,15 @@ namespace ZicoresTradingPostNotifier.ViewModel
                 OnPropertyChanged("IsTradingPostDataprovider");
             }
         }
+
+        public bool IsTopMostNotification
+        {
+            get { return HotItemController.Config.IsTopMostNotification; }
+            set
+            {
+                HotItemController.Config.IsTopMostNotification = value;
+                OnPropertyChanged("IsTopMostNotification");
+            }
+        }
     }
 }

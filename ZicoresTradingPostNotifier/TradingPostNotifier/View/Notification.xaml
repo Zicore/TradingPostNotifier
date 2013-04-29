@@ -9,7 +9,7 @@
         xmlns:b="clr-namespace:LibraryBase.Wpf.Behaviour;assembly=LibraryBaseWpf"
         xmlns:dp="clr-namespace:ZicoresTradingPostNotifier.Helper"
         xmlns:c="clr-namespace:ZicoresTradingPostNotifier.Controls"
-        WindowStyle="None" Topmost="True"
+        WindowStyle="None"
         Title="Notification" Height="600" Width="400" Icon="/ZicoresTradingPostNotifier;component/icon.ico">
     <Window.Resources>
         <Style x:Key="BorderedItem" TargetType="ListViewItem">

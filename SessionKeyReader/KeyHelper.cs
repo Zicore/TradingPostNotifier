@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Net;
@@ -7,6 +8,7 @@ using System.Diagnostics;
 using LibMemorySearch;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Globalization;
 
 namespace SessionKeyReader
 {
@@ -85,34 +87,62 @@ namespace SessionKeyReader
             set { _uri = value; }
         }
 
+        const string KEY = "tradingpost-live.ncplatform.net";
+
+        public string ReadKey()
+        {
+            using (
+                StreamReader stream =
+                    new StreamReader(
+                        File.Open(
+                            Directory.GetParent(Process.GetProcessesByName("awesomium_process")[0].MainModule.FileName)
+                                     .FullName + @"\data\Cookies", FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                )
+            {
+                string cookies = stream.ReadToEnd();
+                stream.Close();
+
+                string sessionId = cookies.Substring(cookies.IndexOf(KEY, System.StringComparison.Ordinal) + KEY.Length + 1, 36);
+                return sessionId;
+            }
+        }
+
         private void WaitForUrlThread(object s)
         {
-            Process p = WaitForProcess();
+            //Process p = WaitForProcess();
 
-            MemorySearcher ms = new MemorySearcher(p);
+            //MemorySearcher ms = new MemorySearcher(p);
             try
             {
-                Debug.WriteLine("Caching Gw2 memory regions...");
-                ms.BuildCache();
-                Debug.WriteLine("Searching for url...");
-                string url = ms.FindString(searchString, searchWildcards);
-                while (url == null)
-                {
-                    Debug.WriteLine("Url not found, waiting 1 second and trying again.");
-                    Thread.Sleep(1000);
-                    Debug.WriteLine("Caching new Gw2 memory regions...");
-                    ms.BuildCache();
-                    Debug.WriteLine("Searching for url...");
-                    url = ms.FindString(searchString, searchWildcards);
-                }
-                Debug.WriteLine(String.Format("Url found {0}", url));
-                this.Uri = url;
-                Key = ParseSessionKey(url);
+                //Debug.WriteLine("Caching Gw2 memory regions...");
+                //ms.BuildCache();
+                //Debug.WriteLine("Searching for url...");
+                //string url = ms.FindString(searchString, searchWildcards);
+                //while (url == null)
+                //{
+                //    Debug.WriteLine("Url not found, waiting 1 second and trying again.");
+                //    Thread.Sleep(1000);
+                //    Debug.WriteLine("Caching new Gw2 memory regions...");
+                //    ms.BuildCache();
+                //    Debug.WriteLine("Searching for url...");
+                //    url = ms.FindString(searchString, searchWildcards);
+                //}
+                //Debug.WriteLine(String.Format("Url found {0}", url));
+                //this.Uri = url;
+                //Key = ParseSessionKey(url);
                 //event fired
+                try
+                {
+                    Key = ReadKey();
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex);
+                }
             }
             finally
             {
-                ms.ClearCache();
+                //ms.ClearCache();
                 running = false;
 
                 if (UriFound != null)

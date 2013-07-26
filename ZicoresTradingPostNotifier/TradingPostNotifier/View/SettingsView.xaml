@@ -48,7 +48,7 @@
         <CheckBox Margin="2" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="9" IsChecked="{Binding IsTopMostNotification}">Notifiaction Popup Enabled</CheckBox>
 
         <TextBlock Margin="2" Grid.Column="0" Grid.Row="10" Text="Session Key"></TextBlock>
-        <TextBox IsReadOnly="True" Margin="2" Grid.Column="1" Grid.Row="11" Text="{Binding SessionKey,Mode=OneWay}"></TextBox>
+        <TextBox IsReadOnly="True" Margin="2" Grid.Column="1" Grid.Row="10" Text="{Binding SessionKey,Mode=OneWay}"></TextBox>
         
         <TextBlock Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="11">Dataprovider (requires restart)</TextBlock>
         <RadioButton Margin="2" Grid.Column="0" Grid.Row="13" IsChecked="{Binding IsTradingPostDataprovider, Mode=TwoWay}">Trading Post</RadioButton>

@@ -23,9 +23,9 @@
         </Border>
 
         <TabControl Grid.Row="1">
-            <TabItem Header="Trends" Background="WhiteSmoke" FontWeight="DemiBold" >
+            <!-- <TabItem Header="Trends" Background="WhiteSmoke" FontWeight="DemiBold" >
                 <my:TrendView DataContext="{Binding HotItemController}"></my:TrendView>
-            </TabItem>
+            </TabItem> -->
             
             <TabItem Header="Search" Background="SkyBlue" FontWeight="DemiBold" >
                 <my:SearchView DataContext="{Binding SearchViewModel}"></my:SearchView>

@@ -63,6 +63,13 @@ namespace NotifierCore.DataProvider
             return sr;
         }
 
+        private T ParseToken<T>(JToken token, String key)
+        {
+            if (token[key] != null)
+                return token[key].ToObject<T>();
+            return default(T);
+        }
+
         public SearchResult ParseTransaction(SearchResult sr, JObject json, TransactionType type)
         {
             if (sr == null)
@@ -80,30 +87,30 @@ namespace NotifierCore.DataProvider
                     for (int i = 0; i < token.Count(); i++)
                     {
                         int dataId = token[i]["data_id"].ToObject<int>();
-
+                        var t = token[i];
                         HotItem item = new HotItem(dataId)
                         {
-                            Name = token[i]["name"].ToObject<String>(),
-                            UnitPrice = token[i]["unit_price"].ToObject<int>(),
-                            SellPrice = token[i]["sell_price"].ToObject<int>(),
-                            BuyPrice = token[i]["buy_price"].ToObject<int>(),
-                            ImgUri = token[i]["img"].ToObject<String>(),
-                            Quantity = token[i]["quantity"].ToObject<int>(),
-                            SaleVolume = token[i]["sell_count"].ToObject<int>(),
-                            BuyVolume = token[i]["buy_count"].ToObject<int>(),
-                            DateTimeStamp = token[i]["created"].ToObject<String>(),
-                            ListingId = token[i]["listing_id"].ToObject<long>(),
-                            Rarity = token[i]["rarity"].ToObject<int>(),
+                            Name = ParseToken<String>(t, "name"),
+                            UnitPrice = ParseToken<int>(t, "unit_price"),
+                            SellPrice = ParseToken<int>(t, "sell_price"),
+                            BuyPrice = ParseToken<int>(t, "buy_price"),
+                            ImgUri = ParseToken<String>(t, "img"),
+                            Quantity = ParseToken<int>(t, "quantity"),
+                            SaleVolume = ParseToken<int>(t, "sell_count"),
+                            BuyVolume = ParseToken<int>(t, "buy_count"),
+                            DateTimeStamp = ParseToken<String>(t, "created"),
+                            ListingId = ParseToken<long>(t, "listing_id"),
+                            Rarity = ParseToken<int>(t, "rarity"),
                         };
 
                         if (type == TransactionType.Bought)
                         {
-                            item.TransactionTime = token[i]["purchased"].ToObject<DateTime>();
+                            item.TransactionTime = ParseToken<DateTime>(t, "purchased");
                         }
 
                         if (type == TransactionType.Sold)
                         {
-                            item.TransactionTime = token[i]["purchased"].ToObject<DateTime>();
+                            item.TransactionTime = ParseToken<DateTime>(t, "purchased");
                         }
 
                         sr.Items.Add(item);

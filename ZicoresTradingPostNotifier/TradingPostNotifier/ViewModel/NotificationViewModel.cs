@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using LibraryBase.Wpf.Win32;
 using NotifierCore.Notifier.Event;
 using ZicoresTradingPostNotifier.View;
 using System.Windows;
@@ -77,7 +78,12 @@ namespace ZicoresTradingPostNotifier.ViewModel
                         double y = SystemParameters.PrimaryScreenHeight - NotificationView.Height - 40;
                         NotificationView.Left = x;
                         NotificationView.Top = y;
-                        NotificationView.Show();
+                        NotificationView.Activate();
+                        NotificationView.Topmost = HotItemController.Config.IsTopMostNotification;  // important
+                        if (HotItemController.Config.IsTopMostNotification)
+                        {
+                            NotificationView.Show();
+                        }
                     }
                 }
                 else
@@ -181,11 +187,27 @@ namespace ZicoresTradingPostNotifier.ViewModel
             {
                 try
                 {
-                    int count = collection.Count(x => x.DataId == item.DataId);
-                    //var localItem = collection.FirstOrDefault(x => x.Item.DataId == item.Item.DataId);
-                    if (item.IsMessageNotification || count <= 0)
+                    var notificationItem = collection.FirstOrDefault(x => x.DataId == item.DataId);
+                    if (notificationItem == null)
                     {
+                        //var localItem = collection.FirstOrDefault(x => x.Item.DataId == item.Item.DataId);
                         collection.Add(item);
+                    }
+                    else
+                    {
+                        if (item.IsMessageNotification)
+                        {
+                            collection.Add(item);
+                        }
+                        else
+                        {
+                            //notificationItem.Rule.
+                            if (notificationItem.Item != null && item.Item != null && notificationItem.Item.ListingId != item.Item.ListingId)
+                            {
+                                notificationItem.Quantitiy += item.Quantitiy;
+                            }
+                            //notificationItem.
+                        }
                     }
                 }
                 catch

@@ -386,6 +386,45 @@ namespace ZicoresTradingPostNotifier.ViewModel
 
         Random random = new Random();
 
+        private void CheckItemSell(HotItem item)
+        {
+            if (item.Notify && DateTime.Now > item.AcceptTime + item.TimeOut)
+            {
+                item.Crawl();
+                if (item.BuyPrice > item.UnitPrice)
+                {
+                    MainWindow.Dispatcher.BeginInvoke((Action)delegate
+                    {
+                        var model =
+                            new NotificationModel(item,
+                                new NotifierRule(item, RuleType.Higher, item.UnitPrice, ContextType.Other, null), "Higher", DateTime.Now, NotificationType.Buy);
+
+                        NotifiactionViewModel.AddBuyNotification(model);
+                        NotifiactionViewModel.ShowOnNotifiaction();
+                    });
+                }
+            }
+        }
+
+        private void CheckItemBuy(HotItem item)
+        {
+            if (item.Notify && DateTime.Now > item.AcceptTime + item.TimeOut)
+            {
+                item.Crawl();
+                if (item.SellPrice < item.UnitPrice)
+                {
+                    MainWindow.Dispatcher.BeginInvoke((Action)delegate
+                    {
+                        var model =
+                            new NotificationModel(item,
+                                new NotifierRule(item, RuleType.Less, item.UnitPrice, ContextType.Other, null), "Less", DateTime.Now, NotificationType.Sell);
+                        NotifiactionViewModel.AddBuyNotification(model);
+                        NotifiactionViewModel.ShowOnNotifiaction();
+                    });
+                }
+            }
+        }
+
         private void Worker(object state)
         {
             try
@@ -397,41 +436,20 @@ namespace ZicoresTradingPostNotifier.ViewModel
                     for (int i = 0; i < BuyingViewModel.Items.Count; i++)
                     {
                         HotItem item = BuyingViewModel.Items[i];
-                        if (item.Notify && DateTime.Now > item.AcceptTime + item.TimeOut)
+                        CheckItemSell(item);
+                        foreach (var it in item.Items)
                         {
-                            item.Crawl();
-                            if (item.BuyPrice > item.UnitPrice)
-                            {
-                                MainWindow.Dispatcher.BeginInvoke((Action)delegate
-                                {
-                                    var model =
-                                        new NotificationModel(item,
-                                            new NotifierRule(item, RuleType.Higher, item.UnitPrice, ContextType.Other, null), "Higher", DateTime.Now, NotificationType.Buy);
-
-                                    NotifiactionViewModel.AddBuyNotification(model);
-                                    NotifiactionViewModel.ShowOnNotifiaction();
-                                });
-                            }
+                            CheckItemSell(it);
                         }
                     }
 
                     for (int i = 0; i < SellingViewModel.Items.Count; i++)
                     {
                         HotItem item = SellingViewModel.Items[i];
-                        if (item.Notify && DateTime.Now > item.AcceptTime + item.TimeOut)
+                        CheckItemBuy(item);
+                        foreach (var it in item.Items)
                         {
-                            item.Crawl();
-                            if (item.SellPrice < item.UnitPrice)
-                            {
-                                MainWindow.Dispatcher.BeginInvoke((Action)delegate
-                                {
-                                    var model =
-                                        new NotificationModel(item,
-                                            new NotifierRule(item, RuleType.Less, item.UnitPrice, ContextType.Other, null), "Less", DateTime.Now, NotificationType.Sell);
-                                    NotifiactionViewModel.AddBuyNotification(model);
-                                    NotifiactionViewModel.ShowOnNotifiaction();
-                                });
-                            }
+                            CheckItemBuy(it);
                         }
                     }
                     Thread.Sleep(random.Next(HotItemController.CurrentApi.WorkerTransactionTimeOut - 500, HotItemController.CurrentApi.WorkerTransactionTimeOut + 500));

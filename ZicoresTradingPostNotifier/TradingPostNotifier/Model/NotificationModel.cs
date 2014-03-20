@@ -15,7 +15,42 @@ namespace ZicoresTradingPostNotifier.Model
         private bool _acknowledged = false;
         private HotItem _item;
         private NotifierRule _ruleSell;
-        private NotifierRule _ruleBuy;
+        //private NotifierRule _ruleBuy;
+
+        private int _quantitiy = 0;
+        private String _image;
+        private String _name;
+
+
+        public int Quantitiy
+        {
+            get { return _quantitiy; }
+            set
+            {
+                _quantitiy = value;
+                OnPropertyChanged("Quantitiy");
+            }
+        }
+
+        public string Image
+        {
+            get { return _image; }
+            set
+            {
+                _image = value;
+                OnPropertyChanged("Image");
+            }
+        }
+
+        public string Name
+        {
+            get { return _name; }
+            set
+            {
+                _name = value;
+                OnPropertyChanged("Name");
+            }
+        }
 
         public const double TradingFeePercentValue = 0.85;
 
@@ -52,6 +87,7 @@ namespace ZicoresTradingPostNotifier.Model
                 _isMessageNotification = value;
                 OnPropertyChanged("IsMessageNotification");
                 OnPropertyChanged("MessageVisibility");
+               
             }
         }
 
@@ -72,9 +108,9 @@ namespace ZicoresTradingPostNotifier.Model
         {
             get
             {
-                if (Item != null)
+                if (Rule != null)
                 {
-                    return _transactionMoney * Item.Quantity;
+                    return _transactionMoney * Quantitiy;
                 }
                 return _transactionMoney;
             }
@@ -140,25 +176,15 @@ namespace ZicoresTradingPostNotifier.Model
             }
         }
 
-        //public NotifierRule RuleBuy
-        //{
-        //    get { return _ruleBuy; }
-        //    set
-        //    {
-        //        _ruleBuy = value;
-        //        OnPropertyChanged("RuleBuy");
-        //    }
-        //}
-
-        //public NotifierRule RuleMargin
-        //{
-        //    get { return _ruleBuy; }
-        //    set
-        //    {
-        //        _ruleBuy = value;
-        //        OnPropertyChanged("RuleBuy");
-        //    }
-        //}
+        public void ApplyItemValues(HotItem item)
+        {
+            if (item != null)
+            {
+                Name = item.Name;
+                Quantitiy = item.Quantity;
+                Image = item.Image;
+            }
+        }
 
         public Visibility BuyVisibility
         {
@@ -239,8 +265,10 @@ namespace ZicoresTradingPostNotifier.Model
                 this.BuyMoney = item.BuyMoney;
                 this.SellMoney = item.SellMoney;
             }
-
             this.Rule = rule;
+
+            ApplyItemValues(item);
+            // TODO: Refactoring, someday NotifierRule and NotificationModel must be merged together
         }
 
         public NotificationModel(GemManager gemManager, GemRuleViewModel item, NotifierRule rule, String message, DateTime timeStamp, NotificationType notificationType)
@@ -266,6 +294,7 @@ namespace ZicoresTradingPostNotifier.Model
             {
                 this.DataId = -1;
             }
+            Name = message;
         }
 
         public void AsTransaction()

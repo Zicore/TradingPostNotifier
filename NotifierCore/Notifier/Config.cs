@@ -171,6 +171,13 @@ namespace NotifierCore.Notifier
             set { _isTradingPostDataProvider = value; }
         }
 
+        private bool _isTopMostNotification = false;
+        public bool IsTopMostNotification
+        {
+            get { return _isTopMostNotification; }
+            set { _isTopMostNotification = value; }
+        }
+
         private ObservableCollection<NotifierRule> _rulesBuyGems = new ObservableCollection<NotifierRule>();
         public ObservableCollection<NotifierRule> RulesBuyGems
         {

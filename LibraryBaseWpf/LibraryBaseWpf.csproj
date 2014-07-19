@@ -48,6 +48,8 @@
     <Compile Include="..\ZicoresTradingPostNotifier\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="AdornerServices\WatermarkAdorner.cs" />
+    <Compile Include="AdornerServices\WatermarkService.cs" />
     <Compile Include="Behaviour\BindableSelectedItemBehavior.cs" />
     <Compile Include="Behaviour\IgnoreMouseWheelBehavior.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
@@ -57,7 +59,9 @@
     <Compile Include="Common\BindableBase.cs" />
     <Compile Include="Win32\User32.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="AttachedProperties\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

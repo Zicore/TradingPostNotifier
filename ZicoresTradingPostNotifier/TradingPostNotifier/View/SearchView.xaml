@@ -176,7 +176,7 @@
         </Grid>
 
         <Expander IsExpanded="{Binding HasResults}" Margin="2" Header="Results" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Stretch">
-            <ScrollViewer>
+            
                 <DockPanel VerticalAlignment="Top">
                     <my:PagerView DataContext="{Binding Pager}" DockPanel.Dock="Top"></my:PagerView>
 
@@ -337,7 +337,6 @@
                     </ListView>
                     <my:PagerView DataContext="{Binding Pager}" DockPanel.Dock="Top"></my:PagerView>
                 </DockPanel>
-            </ScrollViewer>
         </Expander>
     </Grid>
 </UserControl>

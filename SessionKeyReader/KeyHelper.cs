@@ -87,7 +87,7 @@ namespace SessionKeyReader
             set { _uri = value; }
         }
 
-        const string KEY = "tradingpost-live.ncplatform.net";
+        const string KEY = ".ncplatform.nets";
 
         public string ReadKey()
         {
@@ -102,7 +102,7 @@ namespace SessionKeyReader
                 string cookies = stream.ReadToEnd();
                 stream.Close();
 
-                string sessionId = cookies.Substring(cookies.IndexOf(KEY, System.StringComparison.Ordinal) + KEY.Length + 1, 36);
+                string sessionId = cookies.Substring(cookies.IndexOf(KEY, System.StringComparison.Ordinal) + KEY.Length, 36);
                 return sessionId;
             }
         }

@@ -281,7 +281,7 @@ namespace ZicoresTradingPostNotifier.ViewModel
         }
 
 
-        public MainWindowViewModel(MainWindow mainWindow, bool isTradingPostDataProvider)
+        public MainWindowViewModel(MainWindow mainWindow)
         {
             this.MainWindow = mainWindow;
             MainWindowViewModel.Dispatcher = mainWindow.Dispatcher;
@@ -297,7 +297,7 @@ namespace ZicoresTradingPostNotifier.ViewModel
             _fileOpenProvider.Filter = "CSV Files|*csv";
             _fileOpenProvider.PathSelected += _fileOpenProvider_PathSelected;
 
-            HotItemController = new HotItemController(isTradingPostDataProvider);
+            HotItemController = new HotItemController();
 
             HotItemController.GuildWars2StatusChanged += HotItemController_GuildWars2StatusChanged;
 
@@ -324,7 +324,7 @@ namespace ZicoresTradingPostNotifier.ViewModel
             GemViewModel = new GemViewModel(this);
 
             LoadConfig();
-            Config.IsTradingPostDataProvider = isTradingPostDataProvider;
+            Config.IsTradingPostDataProvider = true;
             Config.FirstTimeStarted = false;
             HotItemController.Config = this.Config;
             HotItemController.StartWorker();

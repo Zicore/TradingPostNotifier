@@ -39,8 +39,8 @@ namespace NotifierCore.Notifier
 
     public class Config : XmlSerializable
     {
-        public static event EventHandler Loading;
-        public static event EventHandler Saving;
+        public static event EventHandler LoadingConfig;
+        public static event EventHandler SavingConfig;
 
         private List<HotItem> _items = new List<HotItem>();
         private String _sessionKey = "";
@@ -114,9 +114,9 @@ namespace NotifierCore.Notifier
 
         public override void Save()
         {
-            if (Config.Saving != null)
+            if (Config.SavingConfig != null)
             {
-                Config.Saving(this, new EventArgs());
+                Config.SavingConfig(this, new EventArgs());
             }
             base.Save("Config.xml");
         }
@@ -124,9 +124,9 @@ namespace NotifierCore.Notifier
         public override void Load()
         {
             base.Load("Config.xml");
-            if (Config.Loading != null)
+            if (Config.LoadingConfig != null)
             {
-                Config.Loading(this, new EventArgs());
+                Config.LoadingConfig(this, new EventArgs());
             }
         }
 

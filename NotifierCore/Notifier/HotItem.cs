@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
+using GW2DotNET;
+using GW2DotNET.Entities.Commerce;
+using GW2DotNET.Entities.Items;
+using GW2DotNET.V2.Common;
 using Newtonsoft.Json.Linq;
 using NotifierCore.Crawler;
 using NotifierCore.DataProvider;
@@ -44,8 +49,7 @@ namespace NotifierCore.Notifier
         private JObject _listingJson;
         private bool _itemBuildDone = false;
         private String _image;
-        private Money _buyMoney;
-        private Money _sellMoney;
+
 
         private DateTime _dateTimeTrend;
 
@@ -226,13 +230,10 @@ namespace NotifierCore.Notifier
         private int _quantity;
         private int _unitPrice;
 
-        private double _movementIndex = 0;
-
         private long _saleVolume;
         private long _buyVolume;
 
         private Money _unitPriceMoney;
-        private String _uri;
         private bool _notify = false;
         private bool _isGroup = false;
         private ObservableCollection<HotItem> _items = new ObservableCollection<HotItem>();
@@ -402,8 +403,16 @@ namespace NotifierCore.Notifier
         public static event EventHandler<EventArgs<HotItem>> AddItemRequest;
         public static event EventHandler<EventArgs<HotItem>> RemoveItemRequest;
 
-        public event EventHandler Crawled;
-        public event EventHandler Built;
+        public event EventHandler PriceChanged;
+        public event EventHandler ItemCreated;
+
+        public void UpdatePriceChanged()
+        {
+            if (PriceChanged != null)
+            {
+                PriceChanged(this, new EventArgs());
+            }
+        }
 
         public virtual bool Notify
         {
@@ -742,6 +751,10 @@ namespace NotifierCore.Notifier
                 {
                     int itemId = HotItemController.Self.DataIdToItemId[DataId];
                     IsRecipeItem = HotItemController.Self.CreatedIdToRecipe.ContainsKey(itemId);
+                    if (IsRecipeItem)
+                    {
+
+                    }
                 }
 
                 OnPropertyChanged("DataId");
@@ -884,70 +897,36 @@ namespace NotifierCore.Notifier
         {
             if (!ItemBuildDone || force)
             {
-                using (var s = new ScrapeHelper(HotItemController.Config.SessionKey))
+                //using (var s = new ScrapeHelper(HotItemController.Config.SessionKey))
+                //{
+                ItemBuildDone = true;
+
+                if (ItemCreated != null)
                 {
-                    ItemBuildDone = true;
-                    String uri = HotItemController.CurrentApi.UriBuildItem(DataId); //new UriHelper().UseSearchApi().Add("ids", DataId.ToString()).Generate();
-                    s.Finished -= new EventHandler<DataProvider.Event.ScrapeFinishedEventArgs>(sSearch_Finished);
-                    s.Finished += new EventHandler<DataProvider.Event.ScrapeFinishedEventArgs>(sSearch_Finished);
-                    s.CrawlString(uri, DataId, DataId, HotItemController.CurrentApi);
+                    ItemCreated(this, new EventArgs());
                 }
+                //20140918 zicore new API
+
+                //Name = item.Name;
+                //Level = item.Level;
+                //RarityWord = item.Rarity.ToString();
+
+                //}
             }
         }
 
-        void sSearch_Finished(object sender, DataProvider.Event.ScrapeFinishedEventArgs e)
-        {
-            if (e.Id == this.DataId)
-            {
-                try
-                {
-                    this.ItemJson = JObject.Parse(e.Value);
-                    HotItemController.CurrentApi.ParseItem(this, ItemJson);
-                }
-                catch
-                {
-
-                }
-
-                if (Built != null)
-                {
-                    Built(this, new EventArgs());
-                }
-            }
-        }
-
-        public virtual void Crawl()
+        public virtual void UpdatePrices()
         {
             DataId = DataId;
-            using (var s = new ScrapeHelper(HotItemController.Config.SessionKey))
-            {
-                String uri = HotItemController.CurrentApi.UriListingItem(DataId); //new UriHelper().UseListingApi().AddId(DataId.ToString()).Generate();
-                s.Finished -= new EventHandler<DataProvider.Event.ScrapeFinishedEventArgs>(s_Finished);
-                s.Finished += new EventHandler<DataProvider.Event.ScrapeFinishedEventArgs>(s_Finished);
-                s.CrawlString(uri, DataId, DataId, HotItemController.CurrentApi);
-            }
-        }
+            var listing = TradingPostApiOfficial.PriceService.Find(DataId);
 
+            this.BuyVolume = listing.BuyOffers.Quantity;
+            this.BuyPrice = listing.BuyOffers.UnitPrice;
 
+            this.SaleVolume = listing.SellOffers.Quantity;
+            this.SellPrice = listing.SellOffers.UnitPrice;
 
-        void s_Finished(object sender, DataProvider.Event.ScrapeFinishedEventArgs e)
-        {
-            if (e.Id == this.DataId)
-            {
-                try
-                {
-                    this.ListingJson = JObject.Parse(e.Value);
-                    HotItemController.CurrentApi.ParseItemListing(this, ListingJson);
-                }
-                catch
-                {
-
-                }
-                if (Crawled != null)
-                {
-                    Crawled(this, new EventArgs());
-                }
-            }
+            UpdatePriceChanged();
         }
 
         private void RemoveItem()

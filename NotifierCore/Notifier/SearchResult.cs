@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using Newtonsoft.Json.Linq;
 using System.Diagnostics;
+using NotifierCore.DB;
+using NotifierCore.DataProvider;
 
 namespace NotifierCore.Notifier
 {
@@ -53,6 +55,23 @@ namespace NotifierCore.Notifier
 
         }
 
+        public static SearchResult ParseSearchResult(IEnumerable<Item> items)
+        {
+            var result = new SearchResult();
+            result.JsonResultType = JsonResultType.Search;
+
+            result.Items.Clear();
+            var hotItems = new List<HotItem>();
+            foreach (var itemDetail in items)
+            {
+                var item = HotItemController.FromDataId(itemDetail.Id);
+                hotItems.Add(item);
+            }
+            HotItemController.UpdatePricesMultiple(hotItems);
+            result.Items = hotItems;
+            return result;
+        }
+
         public SearchResult(String jsonString, String searchString, String searchUri, JsonResultType jsonResultType, TransactionType transactionType)
         {
             this.TransactionType = transactionType;
@@ -97,7 +116,7 @@ namespace NotifierCore.Notifier
                 switch (JsonResultType)
                 {
                     case JsonResultType.Search:
-                        ParseSearchResult();
+                        //ParseSearchResult();
                         break;
                     case JsonResultType.Transactions:
                         ParseTransactionResult();
@@ -149,7 +168,7 @@ namespace NotifierCore.Notifier
 
         public int Page
         {
-            get { return (int)(Offset / HotItemController.CurrentApi.ItemsPerPage); }
+            get { return (int)(Offset / TradingPostApiOfficial.ItemsPerPage); }
         }
 
         public List<HotItem> Items
@@ -194,12 +213,6 @@ namespace NotifierCore.Notifier
 
             }
             return uniqueItems;
-        }
-
-        private void ParseSearchResult()
-        {
-            Items.Clear();
-            HotItemController.CurrentApi.ParseSearch(this, this.JsonObject);
         }
     }
 }

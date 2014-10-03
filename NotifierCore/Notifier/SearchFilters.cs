@@ -32,9 +32,10 @@ namespace NotifierCore.Notifier
 
         private String typeId = "";
         private String subTypeId = "";
-        private String levelMin = "";
-        private String levelMax = "";
+        private int levelMin = 0;
+        private int levelMax = 0;
         private String rarity = "";
+        private int _itemsPerPage = 200;
 
         public bool DescendingSorting
         {
@@ -74,13 +75,13 @@ namespace NotifierCore.Notifier
             set { subTypeId = value; }
         }
 
-        public String LevelMin
+        public int LevelMin
         {
             get { return levelMin; }
             set { levelMin = value; }
         }
 
-        public String LevelMax
+        public int LevelMax
         {
             get { return levelMax; }
             set { levelMax = value; }
@@ -114,6 +115,12 @@ namespace NotifierCore.Notifier
         {
             get { return _count; }
             set { _count = value; }
+        }
+
+        public int ItemsPerPage
+        {
+            get { return _itemsPerPage; }
+            set { _itemsPerPage = value; }
         }
     }
 }

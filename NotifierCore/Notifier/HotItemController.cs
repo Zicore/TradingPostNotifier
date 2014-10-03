@@ -1,28 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using GW2DotNET.Entities.Commerce;
-using GW2DotNET.V2.Common;
 using NotifierCore.Crawler;
 using NotifierCore.DataProvider;
 using NotifierCore.IO;
 using NotifierCore.Notifier.Event;
-using Zicore.Collections.Generic;
 using System.Threading;
 using System.Collections.ObjectModel;
 using LibraryBase.Wpf.ViewModel;
 using System.Threading.Tasks;
 using LibraryBase.Wpf.Event;
-using ZicoresTradingPostNotifier.ViewModel;
-using System.Diagnostics;
 using System.IO;
 using Zicore.Xml;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
-using GW2DotNET;
-
-//using MongoDB.Driver;
 
 namespace NotifierCore.Notifier
 {
@@ -239,64 +231,20 @@ namespace NotifierCore.Notifier
             set { _itemDB = value; }
         }
 
-        //MongoClient _mongoClient;
-        //public MongoClient MongoClient
-        //{
-        //    get { return _mongoClient; }
-        //    set { _mongoClient = value; }
-        //}
-
-        //MongoServer _mongoServer;
-        //public MongoServer MongoServer
-        //{
-        //    get { return _mongoServer; }
-        //    set { _mongoServer = value; }
-        //}
-
-        //EmbeddableDocumentStore _documentStore;
-        //public EmbeddableDocumentStore DocumentStore
-        //{
-        //    get { return _documentStore; }
-        //    set { _documentStore = value; }
-        //}
-
-        //ItemStore _itemStore;
-        //public ItemStore ItemStore
-        //{
-        //    get { return _itemStore; }
-        //    set { _itemStore = value; }
-        //}
-
         // ------------------------------------------------------- //
         ITradingPostApi gw2SpidyApi = new Gw2SpidyApi();
-        // ITradingPostApi tradingPostApi = new TradingPostApi();
 
-        public HotItemController(bool isTradingPostDataProvider)
+        public HotItemController()
         {
             Self = this;
             String[] args = Environment.GetCommandLineArgs();
-            IsOfficialDatasource = (args.Length > 1 && (args[1] == "/unsafe" || args[1] == "/unsecure")) || isTradingPostDataProvider;
-
+            IsOfficialDatasource = true;
             CurrentTrendApi = new ZicoreApi();
 
             UsingBackupApi = true;
             CurrentApi = gw2SpidyApi;
             HotItemController.IsMultiLanguageSupported = true;
             HotItemController.IsTransactionsSupported = false; // Sadly currently not supported...
-
-            //if (IsOfficialDatasource)
-            //{
-            //    UsingBackupApi = true;
-            //    CurrentApi = gw2SpidyApi;
-            //    HotItemController.IsMultiLanguageSupported = true;
-            //    HotItemController.IsTransactionsSupported = true;
-            //}
-            //else
-            //{
-            //    CurrentApi = gw2SpidyApi;
-            //    HotItemController.IsMultiLanguageSupported = false;
-            //    HotItemController.IsTransactionsSupported = false;
-            //}
         }
 
         // ------------------------------------------------------- //
@@ -305,18 +253,6 @@ namespace NotifierCore.Notifier
         {
             _tMainWorker = new Thread(new ThreadStart(ThreadRun));
             _tMainWorker.Start();
-
-            //if (CurrentApi.IsUnsafe || UsingBackupApi)
-            //{
-            //    tProcessFinder = new Thread(new ThreadStart(ThreadRunProcessVerifier));
-            //    tProcessFinder.Start();
-            //}
-            //else
-            //{
-            //    GuildWars2Status = Notifier.GuildWars2Status.FoundKey;
-            //}
-
-
         }
 
         string itemsFile = "DB\\items.json";

@@ -2,50 +2,18 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Icon="/ZicoresTradingPostNotifier;component/icon.ico"
-        Title="Zicore's - Trading Post - Notifier" Height="485" Width="660">
+        Title="Zicore's - Trading Post - Notifier" Height="130" Width="660">
     <Grid>
         <StackPanel Orientation="Vertical">
             <TextBlock TextWrapping="Wrap" Margin="4">
                 <Run FontWeight="Bold" FontSize="18">Zicore's - Trading Post - Notifier</Run>
                 <LineBreak></LineBreak>
-                <Run>This is the first time you run this application.</Run>
-                <LineBreak></LineBreak>
-                <Run>In order to use it, you have to agree to this agreement.</Run>
-                <LineBreak></LineBreak>
-                <LineBreak></LineBreak>
-                <Run>There are two ways to run this application.</Run>
-                <LineBreak></LineBreak>
-                <LineBreak></LineBreak>
-                <Run FontWeight="Bold">1. GW2Spidy.com as Dataprovider</Run>
-                <LineBreak></LineBreak>
-                <Run>This requests data from gw2spidy developed by Drakie. While using this dataprovider, there is no way to track what you're doing.
-                    However the amount of requests is limited, there is no access to transactions and some features only work with the official trading post dataprovider.</Run>
-                <LineBreak></LineBreak>
-                <LineBreak></LineBreak>
-                <Run FontWeight="Bold">2. The official Trading Post as Dataprovider</Run>
-                <LineBreak></LineBreak>
-                <Run>The official Trading Post runs as a website in the Guild Wars 2 client. By knowing that, it's quite easy to replicate the requests and get the data.</Run>
-                <LineBreak></LineBreak>
-                <Run>To request data, a session key is required, which is requested by the Guild Wars 2 client.</Run>
-                <LineBreak></LineBreak>
-                <Run>This application scans the memory of Guild Wars 2 to obtain the session key and caches it.</Run>
-                <LineBreak></LineBreak>
-                <Run>It will use the gathered session key, as long as it's valid. So in best case the memory of GW2 is read only once a few days.</Run>
-                <LineBreak></LineBreak>
-                <Run>This dataprovider unlocks all features of this application.</Run>
-                <LineBreak></LineBreak>
-                <LineBreak></LineBreak>
-                <Run FontWeight="Bold">Anyways use at your own risk/valuation!</Run>
-                <LineBreak></LineBreak>
-                <LineBreak></LineBreak>
-                <Run>If you have read the agreement press button 1. or 2. to agree.</Run>
-                <LineBreak></LineBreak>
-                <Run FontStyle="Italic">(You can change the dataprovider, in the settings menu, at any time.)</Run>
+                Official API Implemented :-) Have fun!
             </TextBlock>
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="2">
-                <Button FontSize="20" FontWeight="SemiBold" Margin="2" Width="180" Click="Button_GW2Spidy_Click">1. GW2Spidy.com</Button>
-                <Button FontSize="20" FontWeight="SemiBold" Margin="2" Width="180" Click="Button_TradingPost_Click">2. Trading Post</Button>
+                <Button FontSize="20" FontWeight="SemiBold" Margin="2" Width="180" Click="Button_GW2Spidy_Click">OK</Button>
+                <Button FontSize="20" FontWeight="SemiBold" Margin="2" Width="180" Click="Button_TradingPost_Click">OK</Button>
                 <Button FontSize="20" FontWeight="SemiBold" Margin="2" Width="180" Click="Button_Exit_Click">Exit</Button>
             </StackPanel>
         </StackPanel>

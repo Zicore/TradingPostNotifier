@@ -74,7 +74,7 @@ namespace ZicoresTradingPostNotifier
         private void StartMain(bool isTradingPostDataProvider)
         {
             window = new MainWindow();
-            var viewModel = new MainWindowViewModel(window, isTradingPostDataProvider);
+            var viewModel = new MainWindowViewModel(window);
             window.DataContext = viewModel;
             window.Show();
         }

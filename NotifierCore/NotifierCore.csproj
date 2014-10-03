@@ -38,12 +38,23 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+    <Reference Include="GW2.NET, Version=0.9.9.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>JsonNet\Newtonsoft.Json.dll</HintPath>
+      <HintPath>GW2.NET\GW2.NET.dll</HintPath>
+    </Reference>
+    <Reference Include="GW2.NET.Core, Version=0.9.9.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>GW2.NET\GW2.NET.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ZicoresTradingPostNotifier\packages\Newtonsoft.Json.6.0.3\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="RestSharp">
+      <HintPath>..\ZicoresTradingPostNotifier\packages\RestSharp.104.4.0\lib\net4\RestSharp.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -64,18 +75,18 @@
     <Compile Include="Crawler\KeyValueString.cs" />
     <Compile Include="Crawler\PostResult.cs" />
     <Compile Include="DataProvider\ITrendApi.cs" />
-    <Compile Include="DataProvider\TradingPostApi.cs" />
-    <Compile Include="Crawler\UriHelper.cs" />
+    <Compile Include="DataProvider\TradingPostApiOfficial.cs" />
     <Compile Include="Crawler\WebClientEx.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="DataProvider\ZicoreApi.cs" />
+    <Compile Include="DB\Item.cs" />
     <Compile Include="Notifier\Money.cs" />
+    <Compile Include="Notifier\SearchService.cs" />
     <Compile Include="Notifier\SlimItem.cs" />
     <Compile Include="IO\CsvHelper.cs" />
     <Compile Include="IO\ICsvExport.cs" />
     <Compile Include="IO\ICsvImport.cs" />
-    <Compile Include="JsonNet\JsonHelper.cs" />
     <Compile Include="Notifier\ColumnMap.cs" />
     <Compile Include="Notifier\Config.cs" />
     <Compile Include="Notifier\Event\CacheStoredEventArgs.cs" />
@@ -94,18 +105,25 @@
     <Compile Include="Notifier\Recipe.cs" />
     <Compile Include="Notifier\SearchFilters.cs" />
     <Compile Include="Notifier\SearchResult.cs" />
-    <Compile Include="Notifier\TransactionController.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Crawler\ScrapeHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="JsonNet\Newtonsoft.Json.dll" />
-    <None Include="JsonNet\Newtonsoft.Json.pdb" />
-    <None Include="JsonNet\Newtonsoft.Json.xml" />
+    <None Include="DB\items_de.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="DB\items_en.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="DB\items_es.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="DB\items_fr.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LibraryBaseWpf\LibraryBaseWpf.csproj">
@@ -116,16 +134,27 @@
       <Project>{a54e2798-ee37-4418-89c7-8b2a1b85d73c}</Project>
       <Name>ZicoresUtils</Name>
     </ProjectReference>
-    <ProjectReference Include="..\LibMemorySearch\LibMemorySearch.csproj">
-      <Project>{57abdc07-0041-4268-95f8-8e73f82d0473}</Project>
-      <Name>LibMemorySearch</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SessionKeyReader\SessionKeyReader.csproj">
-      <Project>{1616b27b-1a29-49cc-a812-160f82e448e5}</Project>
-      <Name>SessionKeyReader</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="GW2.NET\CodeContracts\GW2.NET.Compression.Contracts.dll" />
+    <Content Include="GW2.NET\CodeContracts\GW2.NET.Contracts.dll" />
+    <Content Include="GW2.NET\CodeContracts\GW2.NET.Core.Contracts.dll" />
+    <Content Include="GW2.NET\CodeContracts\GW2.NET.Newtonsoft.Contracts.dll" />
+    <Content Include="GW2.NET\CodeContracts\GW2.NET.RestSharp.Contracts.dll" />
+    <Content Include="GW2.NET\GW2.NET.Compression.dll" />
+    <Content Include="GW2.NET\GW2.NET.Compression.xml" />
+    <Content Include="GW2.NET\GW2.NET.Core.dll" />
+    <Content Include="GW2.NET\GW2.NET.Core.xml" />
+    <Content Include="GW2.NET\GW2.NET.dll" />
+    <Content Include="GW2.NET\GW2.NET.Newtonsoft.dll" />
+    <Content Include="GW2.NET\GW2.NET.Newtonsoft.xml" />
+    <Content Include="GW2.NET\GW2.NET.RestSharp.dll" />
+    <Content Include="GW2.NET\GW2.NET.RestSharp.xml" />
+    <Content Include="GW2.NET\GW2.NET.XML" />
+    <Content Include="GW2.NET\Newtonsoft.Json.dll" />
+    <Content Include="GW2.NET\Newtonsoft.Json.xml" />
+    <Content Include="GW2.NET\RestSharp.dll" />
+    <Content Include="GW2.NET\RestSharp.xml" />
     <Content Include="Notifier\img\copper.png" />
     <Content Include="Notifier\img\gold.png" />
     <Content Include="Notifier\img\silver.png" />

@@ -111,7 +111,7 @@
                         <Border BorderBrush="{StaticResource AboutBorderBrush}" BorderThickness="2" Background="{StaticResource AboutBrush}" CornerRadius="16" Grid.Column="1" Grid.Row="1">
                             <StackPanel Orientation="Vertical" Margin="8">
                                 <StackPanel Orientation="Vertical">
-                                    <TextBlock FontWeight="Bold" FontSize="16" Text="Zicore's Trading Post Notifier - R15-B"></TextBlock>
+                                    <TextBlock FontWeight="Bold" FontSize="16" Text="Zicore's Trading Post Notifier - R16"></TextBlock>
                                     <TextBlock></TextBlock>
                                     <TextBlock FontWeight="SemiBold" Text="Developed 2012-2014 by Zicore / TehGear"></TextBlock>
                                     <TextBlock Text="© 2011-2014 ArenaNet, Inc. All rights reserved."></TextBlock>
@@ -128,7 +128,7 @@
                                     </TextBlock>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="Last Build: 2014-03-11"></TextBlock>
+                                    <TextBlock Text="Last Build: 2014-10-03"></TextBlock>
                                 </StackPanel>
                                 <StackPanel Margin="2">
                                     <Image Stretch="None" Source="Images/powered_gw2db_onLight.png" PreviewMouseUp="Image_PreviewMouseUp"></Image>

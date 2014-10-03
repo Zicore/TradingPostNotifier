@@ -62,10 +62,10 @@
     <LinearGradientBrush x:Key="AboutBorderBrush" StartPoint="0,0" EndPoint="0,1">
         <LinearGradientBrush.GradientStops>
             <GradientStopCollection>
-                <GradientStop Color="Red" Offset="0.0"/>
+                <GradientStop Color="Lime" Offset="0.0"/>
                 <GradientStop Color="Black" Offset="0.3"/>
                 <GradientStop Color="Black" Offset="0.7"/>
-                <GradientStop Color="#FFFF8B00" Offset="1.0"/>
+                <GradientStop Color="DodgerBlue" Offset="1.0"/>
             </GradientStopCollection>
         </LinearGradientBrush.GradientStops>
     </LinearGradientBrush>

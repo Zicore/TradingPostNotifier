@@ -30,15 +30,13 @@ namespace ZicoresTradingPostNotifier.ViewModel
             set { _timer = value; }
         }
 
-        Thread workerThread;
+        //Thread workerThread;
 
         RelayCommand _exportWatchlistCommand;
         RelayCommand _importWatchlistCommand;
-        RelayCommand _searchCommand;
         RelayCommand _closeCommand;
         RelayCommand _resetIndicesCommand;
         RelayCommand _clearWatchlistCommand;
-        RelayCommand _buyOfferCommand;
 
         private Config _config;
 
@@ -157,6 +155,47 @@ namespace ZicoresTradingPostNotifier.ViewModel
             get { return _dispatcher; }
             private set { _dispatcher = value; }
         }
+        public Visibility ProcessBorderVisibility
+        {
+            get
+            {
+                switch (HotItemController.GuildWars2Status)
+                {
+                    case GuildWars2Status.NotRunning:
+                        return Visibility.Visible;
+                    case GuildWars2Status.SearchingKey:
+                        return Visibility.Visible;
+                    case GuildWars2Status.FoundKey:
+                        return Visibility.Collapsed;
+                    case GuildWars2Status.Loading:
+                        return Visibility.Visible;
+                    case GuildWars2Status.FinishedLoading:
+                        return Visibility.Collapsed;
+                    default:
+                        return Visibility.Collapsed;
+                }
+            }
+        }
+
+        public string GuildWars2StatusText
+        {
+            get
+            {
+                switch (HotItemController.GuildWars2Status)
+                {
+                    case GuildWars2Status.NotRunning:
+                        return "Please start Guild Wars 2";
+                    case GuildWars2Status.SearchingKey:
+                        return "Please open the trading post now";
+                    case GuildWars2Status.Loading:
+                        return "Loading Items and Recipes...";
+                    case GuildWars2Status.FoundKey:
+                        return "";
+                    default:
+                        return "";
+                }
+            }
+        }
 
         public Visibility TransactionsVisibility
         {
@@ -172,7 +211,7 @@ namespace ZicoresTradingPostNotifier.ViewModel
         {
             get
             {
-                return HotItemController.IsUnsafe ?
+                return HotItemController.IsOfficialDatasource ?
                 "Zicore's - Guild Wars 2 - Trading Post Notifier (Trading Post)" : "Zicore's - Guild Wars 2 - Trading Post Notifier (GW2Spidy.com)";
             }
         }
@@ -260,7 +299,7 @@ namespace ZicoresTradingPostNotifier.ViewModel
 
             HotItemController = new HotItemController(isTradingPostDataProvider);
 
-            HotItemController.GuildWars2StatusChanged += new EventHandler<EventArgs<GuildWars2Status>>(HotItemController_GuildWars2StatusChanged);
+            HotItemController.GuildWars2StatusChanged += HotItemController_GuildWars2StatusChanged;
 
             NotifiactionViewModel = new NotificationViewModel(this);
 
@@ -276,10 +315,10 @@ namespace ZicoresTradingPostNotifier.ViewModel
             SellingViewModel = new TransactionViewModel(this, TransactionType.Selling);
             SellingViewModel.DisplayName = "Selling Items";
 
-            MessageViewModel = new ViewModel.MessageViewModel(this);
+            MessageViewModel = new MessageViewModel(this);
 
-            SettingsViewModel = new ViewModel.SettingsViewModel(HotItemController);
-            SearchViewModel = new ViewModel.SearchViewModel(HotItemController, this);
+            SettingsViewModel = new SettingsViewModel(HotItemController);
+            SearchViewModel = new SearchViewModel(HotItemController, this);
             RecipeViewModel = new RecipeViewModel(HotItemController);
             ChartViewModel = new ChartViewModel(this);
             GemViewModel = new GemViewModel(this);
@@ -290,15 +329,10 @@ namespace ZicoresTradingPostNotifier.ViewModel
             HotItemController.Config = this.Config;
             HotItemController.StartWorker();
 
-            workerThread = new Thread(Worker);
-            workerThread.Start();
+            //workerThread = new Thread(Worker);
+            //workerThread.Start();
 
             //Timer = new DispatcherTimer(new TimeSpan(0, 0, 1), DispatcherPriority.Normal, new EventHandler(timerTick), MainWindowViewModel.Dispatcher);
-        }
-
-        void timerTick(Object sender, EventArgs e)
-        {
-
         }
 
         void _fileOpenProvider_PathSelected(object sender, EventArgs<FileOpenViewModel> e)
@@ -349,117 +383,84 @@ namespace ZicoresTradingPostNotifier.ViewModel
             set { _config = value; }
         }
 
-        public Visibility ProcessBorderVisibility
-        {
-            get
-            {
-                switch (HotItemController.GuildWars2Status)
-                {
-                    case GuildWars2Status.NotRunning:
-                        return Visibility.Visible;
-                    case GuildWars2Status.SearchingKey:
-                        return Visibility.Visible;
-                    case GuildWars2Status.FoundKey:
-                        return Visibility.Collapsed;
-                    default:
-                        return Visibility.Collapsed;
-                }
-            }
-        }
-        public string GuildWars2StatusText
-        {
-            get
-            {
-                switch (HotItemController.GuildWars2Status)
-                {
-                    case GuildWars2Status.NotRunning:
-                        return "Please start Guild Wars 2";
-                    case GuildWars2Status.SearchingKey:
-                        return "Please open the trading post now";
-                    case GuildWars2Status.FoundKey:
-                        return "";
-                    default:
-                        return "";
-                }
-            }
-        }
+
 
         Random random = new Random();
 
-        private void CheckItemSell(HotItem item)
-        {
-            if (item.Notify && DateTime.Now > item.AcceptTime + item.TimeOut)
-            {
-                item.Crawl();
-                if (item.BuyPrice > item.UnitPrice)
-                {
-                    MainWindow.Dispatcher.BeginInvoke((Action)delegate
-                    {
-                        var model =
-                            new NotificationModel(item,
-                                new NotifierRule(item, RuleType.Higher, item.UnitPrice, ContextType.Other, null), "Higher", DateTime.Now, NotificationType.Buy);
+        //private void CheckItemSell(HotItem item)
+        //{
+        //    if (item.Notify && DateTime.Now > item.AcceptTime + item.TimeOut)
+        //    {
+        //        item.UpdatePrices();
+        //        if (item.BuyPrice > item.UnitPrice)
+        //        {
+        //            MainWindow.Dispatcher.BeginInvoke((Action)delegate
+        //            {
+        //                var model =
+        //                    new NotificationModel(item,
+        //                        new NotifierRule(item, RuleType.Higher, item.UnitPrice, ContextType.Other, null), "Higher", DateTime.Now, NotificationType.Buy);
 
-                        NotifiactionViewModel.AddBuyNotification(model);
-                        NotifiactionViewModel.ShowOnNotifiaction();
-                    });
-                }
-            }
-        }
+        //                NotifiactionViewModel.AddBuyNotification(model);
+        //                NotifiactionViewModel.ShowOnNotifiaction();
+        //            });
+        //        }
+        //    }
+        //}
 
-        private void CheckItemBuy(HotItem item)
-        {
-            if (item.Notify && DateTime.Now > item.AcceptTime + item.TimeOut)
-            {
-                item.Crawl();
-                if (item.SellPrice < item.UnitPrice)
-                {
-                    MainWindow.Dispatcher.BeginInvoke((Action)delegate
-                    {
-                        var model =
-                            new NotificationModel(item,
-                                new NotifierRule(item, RuleType.Less, item.UnitPrice, ContextType.Other, null), "Less", DateTime.Now, NotificationType.Sell);
-                        NotifiactionViewModel.AddBuyNotification(model);
-                        NotifiactionViewModel.ShowOnNotifiaction();
-                    });
-                }
-            }
-        }
+        //private void CheckItemBuy(HotItem item)
+        //{
+        //    if (item.Notify && DateTime.Now > item.AcceptTime + item.TimeOut)
+        //    {
+        //        item.UpdatePrices();
+        //        if (item.SellPrice < item.UnitPrice)
+        //        {
+        //            MainWindow.Dispatcher.BeginInvoke((Action)delegate
+        //            {
+        //                var model =
+        //                    new NotificationModel(item,
+        //                        new NotifierRule(item, RuleType.Less, item.UnitPrice, ContextType.Other, null), "Less", DateTime.Now, NotificationType.Sell);
+        //                NotifiactionViewModel.AddBuyNotification(model);
+        //                NotifiactionViewModel.ShowOnNotifiaction();
+        //            });
+        //        }
+        //    }
+        //}
 
-        private void Worker(object state)
-        {
-            try
-            {
-                while (IsRunning)
-                {
-                    RefreshTransactions();
+        //private void Worker(object state)
+        //{
+        //    try
+        //    {
+        //        while (IsRunning)
+        //        {
+        //            RefreshTransactions();
 
-                    for (int i = 0; i < BuyingViewModel.Items.Count; i++)
-                    {
-                        HotItem item = BuyingViewModel.Items[i];
-                        CheckItemSell(item);
-                        foreach (var it in item.Items)
-                        {
-                            CheckItemSell(it);
-                        }
-                    }
+        //            for (int i = 0; i < BuyingViewModel.Items.Count; i++)
+        //            {
+        //                HotItem item = BuyingViewModel.Items[i];
+        //                CheckItemSell(item);
+        //                foreach (var it in item.Items)
+        //                {
+        //                    CheckItemSell(it);
+        //                }
+        //            }
 
-                    for (int i = 0; i < SellingViewModel.Items.Count; i++)
-                    {
-                        HotItem item = SellingViewModel.Items[i];
-                        CheckItemBuy(item);
-                        foreach (var it in item.Items)
-                        {
-                            CheckItemBuy(it);
-                        }
-                    }
-                    Thread.Sleep(random.Next(HotItemController.CurrentApi.WorkerTransactionTimeOut - 500, HotItemController.CurrentApi.WorkerTransactionTimeOut + 500));
-                }
-            }
-            catch (ThreadInterruptedException)
-            {
-                IsRunning = false;
-            }
-        }
+        //            for (int i = 0; i < SellingViewModel.Items.Count; i++)
+        //            {
+        //                HotItem item = SellingViewModel.Items[i];
+        //                CheckItemBuy(item);
+        //                foreach (var it in item.Items)
+        //                {
+        //                    CheckItemBuy(it);
+        //                }
+        //            }
+        //            Thread.Sleep(random.Next(HotItemController.CurrentApi.WorkerTransactionTimeOut - 500, HotItemController.CurrentApi.WorkerTransactionTimeOut + 500));
+        //        }
+        //    }
+        //    catch (ThreadInterruptedException)
+        //    {
+        //        IsRunning = false;
+        //    }
+        //}
 
         private void LoadConfig()
         {
@@ -502,7 +503,7 @@ namespace ZicoresTradingPostNotifier.ViewModel
 
         private void SaveConfig()
         {
-            workerThread.Interrupt();
+            //workerThread.Interrupt();
             HotItemController.Cache.IsRunning = false;
             HotItemController.IsRunning = false;
 
@@ -521,19 +522,16 @@ namespace ZicoresTradingPostNotifier.ViewModel
         {
             OnPropertyChanged("GuildWars2StatusText");
             OnPropertyChanged("ProcessBorderVisibility");
-            if (e.Value == GuildWars2Status.FoundKey)
-            {
-                RefreshTransactions();
-            }
+            OnPropertyChanged("SearchVisibility");
         }
 
-        private void RefreshTransactions()
-        {
-            SoldViewModel.RefreshItems();
-            BoughtViewModel.RefreshItems();
-            SellingViewModel.RefreshItems();
-            BuyingViewModel.RefreshItems();
-        }
+        //private void RefreshTransactions()
+        //{
+        //    SoldViewModel.RefreshItems();
+        //    BoughtViewModel.RefreshItems();
+        //    SellingViewModel.RefreshItems();
+        //    BuyingViewModel.RefreshItems();
+        //}
 
         void HotItemViewModel_AddItemRequest(object sender, EventArgs<HotItem> e)
         {

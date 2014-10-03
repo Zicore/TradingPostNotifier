@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using GW2DotNET.Entities.Commerce;
+using GW2DotNET.V2.Common;
 using NotifierCore.Crawler;
 using NotifierCore.DataProvider;
 using NotifierCore.IO;
@@ -18,6 +20,7 @@ using System.IO;
 using Zicore.Xml;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
+using GW2DotNET;
 
 //using MongoDB.Driver;
 
@@ -27,7 +30,9 @@ namespace NotifierCore.Notifier
     {
         NotRunning,
         SearchingKey,
-        FoundKey
+        FoundKey,
+        Loading,
+        FinishedLoading
     }
 
     public class HotItemController : BindableBase, ICsvExport, ICsvImport
@@ -63,22 +68,18 @@ namespace NotifierCore.Notifier
             }
         }
 
+
+
         public event EventHandler<PriceChangedEventArgs> ItemBuild;
         public event EventHandler<NotificationEventArgs> BuyNotification;
-        public event EventHandler<NotificationEventArgs> SellNotification;
         public event EventHandler<PriceChangedEventArgs> BuyPriceChanged;
         public event EventHandler<PriceChangedEventArgs> SellPriceChanged;
         public event EventHandler<EventArgs<GuildWars2Status>> GuildWars2StatusChanged;
-        public event EventHandler<EventArgs<SearchResult>> SearchFinished;
         public event EventHandler RecipesLoaded;
 
         // ------------------------------------------------------- //
 
-        SessionKeyReader.KeyHelper _keyHelper;
-        ScrapeHelper _scraper;
-
-        Thread tMainWorker;
-        Thread tProcessFinder;
+        Thread _tMainWorker;
 
         // ------------------------------------------------------- //
 
@@ -87,20 +88,6 @@ namespace NotifierCore.Notifier
         {
             get { return _usingBackupApi; }
             set { _usingBackupApi = value; }
-        }
-
-        private SearchFilters _currentSearchFilters = new SearchFilters();
-        public SearchFilters CurrentSearchFilters
-        {
-            get { return _currentSearchFilters; }
-            set { _currentSearchFilters = value; }
-        }
-
-        private SearchResult _lastSearchResult;
-        public SearchResult LastSearchResult
-        {
-            get { return _lastSearchResult; }
-            set { _lastSearchResult = value; }
         }
 
         private static bool _isTransactionsSupported;
@@ -124,11 +111,11 @@ namespace NotifierCore.Notifier
             set { _currentApi = value; }
         }
 
-        private static ITrendApi _currendTrendApi;
-        public static ITrendApi CurrendTrendApi
+        private static ITrendApi _currentTrendApi;
+        public static ITrendApi CurrentTrendApi
         {
-            get { return _currendTrendApi; }
-            set { _currendTrendApi = value; }
+            get { return _currentTrendApi; }
+            set { _currentTrendApi = value; }
         }
 
         private static Config _config;
@@ -138,11 +125,11 @@ namespace NotifierCore.Notifier
             set { _config = value; }
         }
 
-        private static bool _isUnsafe = false;
-        public static bool IsUnsafe
+        private static bool _isOfficialDatasource = false;
+        public static bool IsOfficialDatasource
         {
-            get { return _isUnsafe; }
-            set { _isUnsafe = value; }
+            get { return _isOfficialDatasource; }
+            set { _isOfficialDatasource = value; }
         }
 
         private bool _isSessionKeyValid;
@@ -191,14 +178,6 @@ namespace NotifierCore.Notifier
             }
         }
 
-        bool _isSearchInProgress = false;
-
-        public bool IsSearchInProgress
-        {
-            get { return _isSearchInProgress; }
-            set { _isSearchInProgress = value; }
-        }
-
         GemManager gem = new GemManager();
         public GemManager Gem
         {
@@ -237,13 +216,9 @@ namespace NotifierCore.Notifier
                 _isRunning = value;
                 if (!IsRunning)
                 {
-                    if (tMainWorker != null)
+                    if (_tMainWorker != null)
                     {
-                        tMainWorker.Interrupt();
-                    }
-                    if (tProcessFinder != null)
-                    {
-                        tProcessFinder.Interrupt();
+                        _tMainWorker.Interrupt();
                     }
                 }
                 OnPropertyChanged("IsRunning");
@@ -294,47 +269,54 @@ namespace NotifierCore.Notifier
 
         // ------------------------------------------------------- //
         ITradingPostApi gw2SpidyApi = new Gw2SpidyApi();
-        ITradingPostApi tradingPostApi = new TradingPostApi();
+        // ITradingPostApi tradingPostApi = new TradingPostApi();
 
         public HotItemController(bool isTradingPostDataProvider)
         {
             Self = this;
             String[] args = Environment.GetCommandLineArgs();
-            IsUnsafe = (args.Length > 1 && (args[1] == "/unsafe" || args[1] == "/unsecure")) || isTradingPostDataProvider;
+            IsOfficialDatasource = (args.Length > 1 && (args[1] == "/unsafe" || args[1] == "/unsecure")) || isTradingPostDataProvider;
 
-            CurrendTrendApi = new ZicoreApi();
+            CurrentTrendApi = new ZicoreApi();
 
-            if (IsUnsafe) // declaring search for SessionKey as 'unsafe'
-            {
-                UsingBackupApi = true;
-                CurrentApi = gw2SpidyApi;
-                HotItemController.IsMultiLanguageSupported = true;
-                HotItemController.IsTransactionsSupported = true;
-            }
-            else
-            {
-                CurrentApi = gw2SpidyApi;
-                HotItemController.IsMultiLanguageSupported = false;
-                HotItemController.IsTransactionsSupported = false;
-            }
+            UsingBackupApi = true;
+            CurrentApi = gw2SpidyApi;
+            HotItemController.IsMultiLanguageSupported = true;
+            HotItemController.IsTransactionsSupported = false; // Sadly currently not supported...
+
+            //if (IsOfficialDatasource)
+            //{
+            //    UsingBackupApi = true;
+            //    CurrentApi = gw2SpidyApi;
+            //    HotItemController.IsMultiLanguageSupported = true;
+            //    HotItemController.IsTransactionsSupported = true;
+            //}
+            //else
+            //{
+            //    CurrentApi = gw2SpidyApi;
+            //    HotItemController.IsMultiLanguageSupported = false;
+            //    HotItemController.IsTransactionsSupported = false;
+            //}
         }
 
         // ------------------------------------------------------- //
 
         public void StartWorker()
         {
-            tMainWorker = new Thread(new ThreadStart(ThreadRun));
-            tMainWorker.Start();
+            _tMainWorker = new Thread(new ThreadStart(ThreadRun));
+            _tMainWorker.Start();
 
-            if (CurrentApi.IsUnsafe || UsingBackupApi)
-            {
-                tProcessFinder = new Thread(new ThreadStart(ThreadRunProcessVerifier));
-                tProcessFinder.Start();
-            }
-            else
-            {
-                GuildWars2Status = Notifier.GuildWars2Status.FoundKey;
-            }
+            //if (CurrentApi.IsUnsafe || UsingBackupApi)
+            //{
+            //    tProcessFinder = new Thread(new ThreadStart(ThreadRunProcessVerifier));
+            //    tProcessFinder.Start();
+            //}
+            //else
+            //{
+            //    GuildWars2Status = Notifier.GuildWars2Status.FoundKey;
+            //}
+
+
         }
 
         string itemsFile = "DB\\items.json";
@@ -394,29 +376,12 @@ namespace NotifierCore.Notifier
                         JToken token = JObject.ReadFrom(jsonTextReader);
                         for (int i = 0; i < token.Count(); i++)
                         {
-                            //SlimItem r = new SlimItem()
-                            //{
                             int id = token[i]["ID"].ToObject<int>();
                             int externalId = token[i]["ExternalID"].ToObject<int>();
                             int dataId = token[i]["DataID"].ToObject<int>();
-                            //String name = token[i]["Name"].ToObject<String>();
-                            //int rarity = token[i]["Rarity"].ToObject<int>();
-                            //Value = token[i]["Value"].ToObject<int>(),
-                            //Defense = token[i]["Defense"].ToObject<int>(),
-                            //MinPower = token[i]["MinPower"].ToObject<int>(),
-                            //MaxPower = token[i]["MaxPower"].ToObject<int>(),
-                            //Type = token[i]["Type"].ToObject<int>(),
-                            //Level = token[i]["Level"].ToObject<int>(),
-                            //RequiredLevel = token[i]["RequiredLevel"].ToObject<int>(),
-                            //ConsumableType = token[i]["ConsumableType"].ToObject<int>(),
-                            //};
-
-                            //if (token[i]["Description"] != null)
-                            //    r.Description = token[i]["Description"].ToObject<string>();
 
                             DataIdToItemId.Add(dataId, id);
                             ItemIdToDataId.Add(id, dataId);
-                            //ItemDB.Add(r);
                         }
                     }
                 }
@@ -483,8 +448,6 @@ namespace NotifierCore.Notifier
 
         public void Add(HotItem item)
         {
-            //item.BuyNotification += new EventHandler<NotificationEventArgs>(item_BuyNotification);
-            //item.SellNotification += new EventHandler<NotificationEventArgs>(item_SellNotification);
             item.BuyPriceChanged += new EventHandler<PriceChangedEventArgs>(item_BuyPriceChanged);
             item.SellPriceChanged += new EventHandler<PriceChangedEventArgs>(item_SellPriceChanged);
             Queue.Add(item);
@@ -506,22 +469,6 @@ namespace NotifierCore.Notifier
             }
         }
 
-        //void item_BuyNotification(object sender, NotificationEventArgs e)
-        //{
-        //    if (BuyNotification != null)
-        //    {
-        //        BuyNotification(sender, e);
-        //    }
-        //}
-
-        //void item_SellNotification(object sender, NotificationEventArgs e)
-        //{
-        //    if (SellNotification != null)
-        //    {
-        //        SellNotification(sender, e);
-        //    }
-        //}
-
         void item_SellPriceChanged(object sender, PriceChangedEventArgs e)
         {
             if (SellPriceChanged != null)
@@ -540,25 +487,23 @@ namespace NotifierCore.Notifier
 
         public void Remove(HotItem item)
         {
-            //item.BuyNotification -= new EventHandler<NotificationEventArgs>(item_BuyNotification);
-            //item.SellNotification -= new EventHandler<NotificationEventArgs>(item_SellNotification);
             item.BuyPriceChanged -= new EventHandler<PriceChangedEventArgs>(item_BuyPriceChanged);
             item.SellPriceChanged -= new EventHandler<PriceChangedEventArgs>(item_SellPriceChanged);
             Queue.Remove(item);
         }
 
-        private void CheckGuildWars2Process()
-        {
-            try
-            {
-                var proc = Process.GetProcessesByName("Gw2");
-                GuildWars2Running = proc != null && proc.Length > 0;
-            }
-            catch
-            {
+        //private void CheckGuildWars2Process()
+        //{
+        //    try
+        //    {
+        //        var proc = Process.GetProcessesByName("Gw2");
+        //        GuildWars2Running = proc != null && proc.Length > 0;
+        //    }
+        //    catch
+        //    {
 
-            }
-        }
+        //    }
+        //}
 
         SerializableDictionary<int, HotItem> _recipeItemPool = new SerializableDictionary<int, HotItem>();
         public SerializableDictionary<int, HotItem> RecipeItemPool
@@ -573,8 +518,8 @@ namespace NotifierCore.Notifier
             if (!RecipeItemPool.ContainsKey(dataId))
             {
                 var newItem = new HotItem(dataId);
-                newItem.Built += newItem_Built;
-                newItem.Crawled += newItem_Crawled;
+                newItem.ItemCreated += newItem_Built;
+                newItem.PriceChanged += newItem_Crawled;
                 RecipeItemPool.Add(dataId, newItem);
             }
 
@@ -591,8 +536,8 @@ namespace NotifierCore.Notifier
             if (RecipeItemPool.ContainsKey(dataId))
             {
                 var newItem = RecipeItemPool[dataId];
-                newItem.Built -= newItem_Built;
-                newItem.Crawled -= newItem_Crawled;
+                newItem.ItemCreated -= newItem_Built;
+                newItem.PriceChanged -= newItem_Crawled;
                 RecipeItemPool[dataId].Items.Clear();
                 RecipeItemPool.Remove(dataId);
             }
@@ -638,14 +583,14 @@ namespace NotifierCore.Notifier
 
         void TrendActionSell(PostResult rs)
         {
-            TrendsSell = new ObservableCollection<HotItem>(CurrendTrendApi.ParseTrendSell(JToken.Parse(rs.Result)));
+            TrendsSell = new ObservableCollection<HotItem>(CurrentTrendApi.ParseTrendSell(JToken.Parse(rs.Result)));
             OnPropertyChanged("TrendsSell");
             CrawlItems(TrendsSell);
         }
 
         void TrendActionBuy(PostResult rs)
         {
-            TrendsBuy = new ObservableCollection<HotItem>(CurrendTrendApi.ParseTrendBuy(JToken.Parse(rs.Result)));
+            TrendsBuy = new ObservableCollection<HotItem>(CurrentTrendApi.ParseTrendBuy(JToken.Parse(rs.Result)));
             OnPropertyChanged("TrendsBuy");
             CrawlItems(TrendsBuy);
         }
@@ -655,14 +600,49 @@ namespace NotifierCore.Notifier
             foreach (var item in items)
             {
                 item.BuildItem(false);
-                item.Crawl();
+                item.UpdatePrices();
+            }
+        }
+
+        public static HotItem FromDataId(int dataId)
+        {
+            var item = TradingPostApiOfficial.ItemTradingPostDB.Values.FirstOrDefault(x => x.Id == dataId);
+            if (item != null)
+            {
+                var hotItem = new HotItem(dataId)
+                    {
+                        Name = item.Name,
+                        ImgUri = item.Icon,
+                        RarityWord = item.Rarity,
+                        Level = item.Level
+                    };
+                return hotItem;
+            }
+            return null;
+        }
+
+        public static void UpdateItemDetails(HotItem hotItem)
+        {
+            var item = TradingPostApiOfficial.ItemTradingPostDB.Values.FirstOrDefault(x => x.Id == hotItem.DataId);
+            if (item != null)
+            {
+                hotItem.Name = item.Name;
+                hotItem.ImgUri = item.Icon;
+                hotItem.RarityWord = item.Rarity;
+                hotItem.Level = item.Level;
             }
         }
 
         private void ThreadRun()
         {
+            GuildWars2Status = Notifier.GuildWars2Status.Loading;
+
             LoadItems();
             LoadRecipes();
+
+            TradingPostApiOfficial.Initialize();
+
+            GuildWars2Status = Notifier.GuildWars2Status.FinishedLoading;
             //LoadRavenDB();
 
             //String uriTrendSell = CurrendTrendApi.UriTrendSell();
@@ -675,90 +655,63 @@ namespace NotifierCore.Notifier
             {
                 while (IsRunning)
                 {
-                    while (IsSearchInProgress)
+                    //while (IsSearchInProgress)
+                    //{
+                    //    Thread.Sleep(10);
+                    //}
+                    for (int i = 0; i < Queue.Count; i++)
                     {
-                        Thread.Sleep(10);
+                        HotItem item = Queue[i];
+
+                        Task.Factory.StartNew(() =>
+                        {
+                            item.BuildItem(ForceItemBuild); // It checks that the item gets build only once
+                            item.UpdatePrices();
+                            item.CompareToRules();
+                        });
+
+                        //ItemStore.Store(Queue);
+                        Thread.Sleep(100);
                     }
-                    if (IsSessionKeyValid || !CurrentApi.IsUnsafe)
+
+                    try
                     {
-                        for (int i = 0; i < Queue.Count; i++)
+
+                        var items = new List<HotItem>(RecipeItemPool.Values);
+
+
+                        foreach (var item in RecipeItemPool)
                         {
-                            HotItem item = Queue[i];
-
-                            Task.Factory.StartNew(() =>
-                            {
-                                item.BuildItem(ForceItemBuild); // It checks that the item gets build only once
-                                item.Crawl();
-                                item.CompareToRules();
-                            });
-
-                            //ItemStore.Store(Queue);
-                            if (!CurrentApi.IsUnsafe)
-                            {
-                                Thread.Sleep(random.Next(250, 550));
-                            }
-                            else
-                            {
-                                Thread.Sleep(random.Next(125, 300));
-                            }
+                            UpdateItemDetails(item.Value);
+                            item.Value.BuildItem(false);
                         }
 
-                        try
-                        {
-                            foreach (var item in RecipeItemPool)
-                            {
-                                Task.Factory.StartNew(() =>
-                                {
-                                    item.Value.BuildItem(ForceItemBuild); // It checks that the item gets build only once
-                                    item.Value.Crawl();
-                                    //item.Value.CompareToRules();
-                                });
-                                if (!CurrentApi.IsUnsafe)
-                                {
-                                    Thread.Sleep(random.Next(250, 550));
-                                }
-                                else
-                                {
-                                    Thread.Sleep(random.Next(125, 300));
-                                }
-                            }
-                        }
-                        catch
-                        {
-                            // Changed the collection
-                        }
-
-                        try
-                        {
-                            Gem.Update();
-                        }
-                        catch
-                        {
-
-                        }
+                        UpdatePricesMultiple(items);
                     }
+                    catch
+                    {
+                        // Changed the collection
+                    }
+
+                    try
+                    {
+                        Gem.Update();
+                    }
+                    catch
+                    {
+
+                    }
+
                     ForceItemBuild = false;
-                    Thread.Sleep(random.Next(HotItemController.CurrentApi.WorkerTimeOut - 500, HotItemController.CurrentApi.WorkerTimeOut + 500));
+                    Thread.Sleep(5000);
                 }
+
             }
             catch (ThreadInterruptedException)
             {
                 IsRunning = false;
             }
         }
-
-        //private void LoadRavenDB()
-        //{
-        //    //MongoClient = new MongoClient("mongodb://localhost");
-        //    //MongoServer = MongoClient.GetServer();
-        //    //var db = MongoServer.GetDatabase("ztpn");
-
-        //    var path = Path.Combine(ZicoresUtils.Zicore.Configuration.ConfigHelper.GetConfigFolder(), "RavenDB");
-        //    DocumentStore = new EmbeddableDocumentStore { DataDirectory = path };
-        //    DocumentStore.Initialize();
-
-        //    ItemStore = new ItemStore(DocumentStore);
-        //}
 
         private void UpdateItem(HotItem item1, HotItem item2)
         {
@@ -775,221 +728,137 @@ namespace NotifierCore.Notifier
             item1.ImgUri = item2.ImgUri;
         }
 
-        private void ThreadRunProcessVerifier()
+        //public void EnableSorting(String mode)
+        //{
+        //    if (CurrentApi.IsAdvancedSearchSupported)
+        //    {
+        //        SortingMode sortingMode = SortingMode.none;
+        //        switch (mode)
+        //        {
+        //            case "Image": sortingMode = SortingMode.reset;
+        //                break;
+        //            case "Supply": sortingMode = SortingMode.count;
+        //                break;
+        //            case "Sell": sortingMode = SortingMode.price;
+        //                break;
+        //            case "Name": sortingMode = SortingMode.name;
+        //                break;
+        //            case "Level": sortingMode = SortingMode.level;
+        //                break;
+        //            case "Count": sortingMode = SortingMode.count;
+        //                break;
+        //            case "Rarity": sortingMode = SortingMode.rarity;
+        //                break;
+        //            default:
+        //                sortingMode = SortingMode.none;
+        //                break;
+        //        }
+        //        if (sortingMode != SortingMode.none)
+        //        {
+        //            if (sortingMode != SortingMode.reset)
+        //            {
+        //                if (CurrentSearchFilters.SortingMode == sortingMode)
+        //                {
+        //                    switch (CurrentSearchFilters.SortDirection)
+        //                    {
+        //                        case SortDirection.Disabled:
+        //                            CurrentSearchFilters.SortDirection = SortDirection.Ascending;
+        //                            break;
+        //                        case SortDirection.Ascending:
+        //                            CurrentSearchFilters.SortDirection = SortDirection.Descending;
+        //                            break;
+        //                        case SortDirection.Descending:
+        //                            CurrentSearchFilters.SortDirection = SortDirection.Disabled;
+        //                            break;
+        //                        default:
+        //                            CurrentSearchFilters.SortDirection = SortDirection.Disabled;
+        //                            break;
+        //                    }
+        //                }
+        //                else
+        //                {
+        //                    CurrentSearchFilters.SortDirection = SortDirection.Ascending;
+        //                    CurrentSearchFilters.SortingMode = sortingMode;
+        //                }
+        //            }
+        //            else
+        //            {
+        //                CurrentSearchFilters.SortDirection = SortDirection.Disabled;
+        //            }
+
+        //            if (CurrentSearchFilters.SortDirection == SortDirection.Disabled)
+        //            {
+        //                CurrentSearchFilters.SortingMode = SortingMode.none;
+        //            }
+
+        //            Search(0, CurrentSearchFilters);
+        //        }
+
+        //    }
+        //}
+
+        public static void UpdatePricesMultiple(List<HotItem> items)
         {
-            try
+            const int endPointLimit = 200;
+            const int maxEntries = 1000;
+            //TradingPostApiOfficial.PriceService.Discover();
+
+            var ids = new List<int>();
+            var idGroups = new List<List<int>>();
+
+            for (int i = 1; i <= items.Count && i <= maxEntries; i++)
             {
-                GuildWars2Status = Notifier.GuildWars2Status.NotRunning;
-
-                while (IsRunning)
+                ids.Add(items[i - 1].DataId);
+                if (i % endPointLimit == 0 || i == items.Count)
                 {
-                    if (_scraper == null)
-                    {
-                        _scraper = new ScrapeHelper(Config.SessionKey);
-                    }
-                    _scraper.EatCookie(Config.SessionKey);
-                    if (_scraper.VerifyKey())
-                    {
-                        CurrentApi = tradingPostApi;
-                        GuildWars2Status = Notifier.GuildWars2Status.FoundKey;
-                        IsSessionKeyValid = true;
-                        break;
-                    }
-                    else
-                    {
-                        CheckGuildWars2Process();
-                        if (_keyHelper == null)
-                        {
-                            _keyHelper = new SessionKeyReader.KeyHelper();
-                        }
-
-                        if (GuildWars2Running && !_keyHelper.Running)
-                        {
-                            GuildWars2Status = Notifier.GuildWars2Status.SearchingKey;
-                            _keyHelper.UriFound -= new EventHandler<SessionKeyReader.UriFoundEventArgs>(keyHelper_UriFound);
-                            _keyHelper.UriFound += new EventHandler<SessionKeyReader.UriFoundEventArgs>(keyHelper_UriFound);
-                            _keyHelper.FindKey();
-                        }
-                    }
-                    Thread.Sleep(10000);
+                    idGroups.Add(ids);
+                    ids = new List<int>();
                 }
             }
-            catch (ThreadInterruptedException)
-            {
-                IsRunning = false;
-            }
-        }
 
-        void keyHelper_UriFound(object sender, SessionKeyReader.UriFoundEventArgs e)
-        {
-            if (!String.IsNullOrEmpty(e.Key))
+            foreach (var idGroup in idGroups)
             {
-                Config.SessionKey = e.Key;
-                CurrentApi = tradingPostApi;
-                GuildWars2Status = Notifier.GuildWars2Status.FoundKey;
-            }
-            _keyHelper.UriFound -= new EventHandler<SessionKeyReader.UriFoundEventArgs>(keyHelper_UriFound);
-        }
+                var result = TradingPostApiOfficial.PriceService.FindAll(idGroup);
 
-        void transactionScraper_Finished(object sender, DataProvider.Event.ScrapeFinishedEventArgs e)
-        {
-            var result = new SearchResult(e.Value, (String)e.Arg, e.Uri, JsonResultType.Transactions, e.TransactionType);
-            if (SearchFinished != null)
-            {
-                SearchFinished(this, new EventArgs<SearchResult>(result));
-            }
-        }
-
-        public void EnableSorting(String mode)
-        {
-            if (CurrentApi.IsAdvancedSearchSupported)
-            {
-                SortingMode sortingMode = SortingMode.none;
-                switch (mode)
+                foreach (var aggregateListing in result)
                 {
-                    case "Image": sortingMode = SortingMode.reset;
-                        break;
-                    case "Supply": sortingMode = SortingMode.count;
-                        break;
-                    case "Sell": sortingMode = SortingMode.price;
-                        break;
-                    case "Name": sortingMode = SortingMode.name;
-                        break;
-                    case "Level": sortingMode = SortingMode.level;
-                        break;
-                    case "Count": sortingMode = SortingMode.count;
-                        break;
-                    case "Rarity": sortingMode = SortingMode.rarity;
-                        break;
-                    default:
-                        sortingMode = SortingMode.none;
-                        break;
-                }
-                if (sortingMode != SortingMode.none)
-                {
-                    if (sortingMode != SortingMode.reset)
+                    var item = items.FirstOrDefault(x => x.DataId == aggregateListing.Value.ItemId);
+                    if (item != null)
                     {
-                        if (CurrentSearchFilters.SortingMode == sortingMode)
-                        {
-                            switch (CurrentSearchFilters.SortDirection)
-                            {
-                                case SortDirection.Disabled:
-                                    CurrentSearchFilters.SortDirection = SortDirection.Ascending;
-                                    break;
-                                case SortDirection.Ascending:
-                                    CurrentSearchFilters.SortDirection = SortDirection.Descending;
-                                    break;
-                                case SortDirection.Descending:
-                                    CurrentSearchFilters.SortDirection = SortDirection.Disabled;
-                                    break;
-                                default:
-                                    CurrentSearchFilters.SortDirection = SortDirection.Disabled;
-                                    break;
-                            }
-                        }
-                        else
-                        {
-                            CurrentSearchFilters.SortDirection = SortDirection.Ascending;
-                            CurrentSearchFilters.SortingMode = sortingMode;
-                        }
+                        UpdatePrice(aggregateListing.Value, item);
                     }
-                    else
-                    {
-                        CurrentSearchFilters.SortDirection = SortDirection.Disabled;
-                    }
-
-                    if (CurrentSearchFilters.SortDirection == SortDirection.Disabled)
-                    {
-                        CurrentSearchFilters.SortingMode = SortingMode.none;
-                    }
-
-                    Search(0, CurrentSearchFilters);
-                }
-
-            }
-        }
-
-        public void Search(int page, SearchFilters filters)
-        {
-            if (SearchFinished != null)
-            {
-                this.CurrentSearchFilters = filters;
-                TaskFactory f = new TaskFactory();
-                var t = f.StartNew(() =>
-                {
-                    int count = HotItemController.CurrentApi.ItemsPerPage;
-                    int offset = (page) * HotItemController.CurrentApi.ItemsPerPage;
-
-                    ScrapeHelper searchScraper = new ScrapeHelper(Config.SessionKey);
-                    searchScraper.Finished += new EventHandler<DataProvider.Event.ScrapeFinishedEventArgs>(searchScraper_Finished);
-
-                    string sortingMode = filters.SortingMode.ToString();
-                    if (filters.SortingMode == SortingMode.none)
-                    {
-                        sortingMode = null;
-                    }
-                    IsSearchInProgress = true;
-                    String uri = HotItemController.CurrentApi.UriSearch(
-                        filters.QueryString, offset, count, filters.TypeId, filters.SubTypeId, filters.Rarity, filters.LevelMin, filters.LevelMax, sortingMode, filters.DescendingSorting); //h.UseSearchApi().Add("text", query).Add("offset", offset.ToString()).Add("count", count.ToString()).Generate();
-                    searchScraper.CrawlString(uri, 0, filters.QueryString, HotItemController.CurrentApi);
-                });
-            }
-        }
-
-        public void Search(int page)
-        {
-            Search(page, CurrentSearchFilters);
-        }
-
-        public void SearchPage(int page)
-        {
-            if (LastSearchResult != null)
-            {
-                if ((page - 1) * HotItemController.CurrentApi.ItemsPerPage < LastSearchResult.Total) // -1 because to correct the offset
-                {
-                    Search(page - 1, CurrentSearchFilters);
                 }
             }
         }
 
-        public void SearchNextPage()
+        public static void UpdatePrice(AggregateListing listing, HotItem hotItem)
         {
-            if (LastSearchResult != null)
-            {
-                if (LastSearchResult.Offset + HotItemController.CurrentApi.ItemsPerPage < LastSearchResult.Total)
-                {
-                    Search(LastSearchResult.Page + 1, CurrentSearchFilters);
-                }
-            }
+            hotItem.BuyVolume = listing.BuyOffers.Quantity;
+            hotItem.BuyPrice = listing.BuyOffers.UnitPrice;
+
+            hotItem.SaleVolume = listing.SellOffers.Quantity;
+            hotItem.SellPrice = listing.SellOffers.UnitPrice;
+
+            hotItem.UpdatePriceChanged();
         }
 
-        public void SearchPreviousPage()
-        {
-            if (LastSearchResult != null)
-            {
-                if (LastSearchResult.Offset > 1)
-                {
-                    Search(LastSearchResult.Page - 1, CurrentSearchFilters);
-                }
-            }
-        }
 
-        void searchScraper_Finished(object sender, DataProvider.Event.ScrapeFinishedEventArgs e)
-        {
-            ScrapeHelper searchScraper = sender as ScrapeHelper;
-            if (searchScraper != null)
-            {
-                searchScraper.Finished -= new EventHandler<DataProvider.Event.ScrapeFinishedEventArgs>(searchScraper_Finished);
-            }
-            IsSearchInProgress = false;
+        //void searchScraper_Finished(object sender, DataProvider.Event.ScrapeFinishedEventArgs e)
+        //{
+        //    ScrapeHelper searchScraper = sender as ScrapeHelper;
+        //    if (searchScraper != null)
+        //    {
+        //        searchScraper.Finished -= new EventHandler<DataProvider.Event.ScrapeFinishedEventArgs>(searchScraper_Finished);
+        //    }
+        //    IsSearchInProgress = false;
 
-            this.LastSearchResult = new SearchResult(e.Value, (String)e.Arg, e.Uri, JsonResultType.Search, e.TransactionType);
-            this.LastSearchResult.Filters = CurrentSearchFilters;
-            if (SearchFinished != null)
-            {
-                SearchFinished(this, new EventArgs<SearchResult>(this.LastSearchResult));
-            }
-        }
+        //    this.LastSearchResult = new SearchResult(e.Value, (String)e.Arg, e.Uri, JsonResultType.Search, e.TransactionType);
+        //    this.LastSearchResult.Filters = CurrentSearchFilters;
+        //    if (SearchFinished != null)
+        //    {
+        //        SearchFinished(this, new EventArgs<SearchResult>(this.LastSearchResult));
+        //    }
+        //}
 
         public void ChangeLanguage(String language)
         {

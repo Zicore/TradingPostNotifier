@@ -33,8 +33,6 @@ namespace NotifierCore.Notifier
         private bool _isActive = false;
 
 
-
-        private bool _acknowledged = false;
         private HotItem _item;
         private NotifierRule _ruleSell;
         //private NotifierRule _ruleBuy;

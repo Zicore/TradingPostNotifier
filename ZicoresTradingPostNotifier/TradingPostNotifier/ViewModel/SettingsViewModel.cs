@@ -59,10 +59,10 @@ namespace ZicoresTradingPostNotifier.ViewModel
 
         private ObservableCollection<LanguageModel> _languages = new ObservableCollection<LanguageModel>()
         {
-            new LanguageModel("en-us","English"),
-            new LanguageModel("de-de","German"),
-            new LanguageModel("fr-fr","French"),
-            new LanguageModel("es-es","Espain")
+            new LanguageModel("en","English"),
+            new LanguageModel("de","German"),
+            new LanguageModel("fr","French"),
+            new LanguageModel("es","Espain")
         };
 
         public ObservableCollection<LanguageModel> Languages

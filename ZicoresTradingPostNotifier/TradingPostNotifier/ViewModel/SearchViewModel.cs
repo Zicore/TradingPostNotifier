@@ -25,60 +25,74 @@ namespace ZicoresTradingPostNotifier.ViewModel
 
         }
 
+        readonly SearchService _searchService = new SearchService();
+
         public SearchViewModel(HotItemController hotItemController, MainWindowViewModel mainViewModel)
         {
-            ParseCategories();
-            ParseRarities();
+
             this._mainViewModel = mainViewModel;
             this._hotItemController = hotItemController;
             this._hotItemController.GuildWars2StatusChanged += _hotItemController_GuildWars2StatusChanged;
-            this._hotItemController.SearchFinished += new EventHandler<EventArgs<SearchResult>>(HotItemController_SearchFinished);
+            this._searchService.SearchFinished += HotItemController_SearchFinished;
 
             Pager.RequestNext += Pager_RequestNext;
             Pager.RequestPrevious += Pager_RequestPrevious;
             Pager.RequestSelectPage += Pager_RequestSelectPage;
         }
 
+        public Visibility SearchVisibility
+        {
+            get
+            {
+                switch (_hotItemController.GuildWars2Status)
+                {
+                    case GuildWars2Status.Loading:
+                        return Visibility.Collapsed;
+                    case GuildWars2Status.FinishedLoading:
+                        return Visibility.Visible;
+                    default: return Visibility.Collapsed;
+                }
+            }
+        }
+
         void _hotItemController_GuildWars2StatusChanged(object sender, EventArgs<GuildWars2Status> e)
         {
-            if (e.Value == GuildWars2Status.FoundKey)
+            if (e.Value == GuildWars2Status.FinishedLoading)
             {
-                OnPropertyChanged("AdvancedSearchVisiblity");
+                ParseCategories();
+                ParseRarities();
+
+                OnPropertyChanged("SearchVisibility");
             }
         }
 
         void Pager_RequestSelectPage(object sender, EventArgs<int> e)
         {
-            _hotItemController.SearchPage(e.Value);
+            _searchService.SearchPage(e.Value);
         }
 
         void Pager_RequestPrevious(object sender, EventArgs e)
         {
-            _hotItemController.SearchPreviousPage();
+            _searchService.SearchPreviousPage();
         }
 
         void Pager_RequestNext(object sender, EventArgs e)
         {
-            _hotItemController.SearchNextPage();
+            _searchService.SearchNextPage();
         }
 
-        public void SortClickRedirect(GridViewColumnHeader column)
-        {
-            if (column != null)
-            {
-                _hotItemController.EnableSorting(column.Column.Header.ToString());
-            }
-        }
+        //public void SortClickRedirect(GridViewColumnHeader column)
+        //{
+        //    if (column != null)
+        //    {
+        //        searchService.EnableSorting(column.Column.Header.ToString());
+        //    }
+        //}
 
         private ObservableCollection<HotItem> _searchedItems = new ObservableCollection<HotItem>();
 
         RelayCommand _searchCommand;
         RelayCommand _viewRecipeCommand;
-        RelayCommand _searchNext;
-        RelayCommand _searchPrevious;
-        RelayCommand _selectPage;
-
-        RelayCommand _buyOfferCommand;
 
         private String _searchString;
         HotItemController _hotItemController;
@@ -184,32 +198,50 @@ namespace ZicoresTradingPostNotifier.ViewModel
 
         private void ParseCategories()
         {
+            var categories = new List<Category> { new Category("*", "All") };
             JObject json = JObject.Parse(jsonCategories);
-            Categories.Add(new Category("*", "All"));
+            categories.Add(new Category("*", "All"));
             for (int i = 0; i < json["results"].Count(); i++)
             {
                 JToken t = json["results"][i];
-                var k = new Category(t["id"].ToObject<String>(), t["name"].ToObject<String>());
+                var name = t["name"].ToObject<String>();
+                var k = new Category(name, name);
                 var subJson = json["results"][i]["subtypes"];
                 k.Items.Add(new KeyValueString("*", "All"));
                 for (int j = 0; j < subJson.Count(); j++)
                 {
-                    k.Items.Add(new KeyValueString(subJson[j]["id"].ToString(), subJson[j]["name"].ToString()));
+                    name = subJson[j]["name"].ToString();
+                    k.Items.Add(new KeyValueString(name, name));
                 }
 
-                Categories.Add(k);
+                categories.Add(k);
             }
+            Categories = new ObservableCollection<Category>(categories);
         }
+
+        //private void ParseCategories()
+        //{
+        //    var categories = new List<Category> { new Category("*", "All") };
+        //    for (int i = 0; i < TradingPostApiOfficial.CategoriesDB.Count; i++)
+        //    {
+        //        var categoryName = TradingPostApiOfficial.CategoriesDB[i];
+        //        var category = new Category(categoryName, categoryName);
+        //        categories.Add(category);
+        //    }
+        //    Categories = new ObservableCollection<Category>(categories);
+        //}
 
         private void ParseRarities()
         {
+            var rarities = new List<KeyValueString>();
             JObject json = JObject.Parse(jsonRarities);
-            Rarities.Add(new KeyValueString("*", "All"));
+            rarities.Add(new KeyValueString("*", "All"));
             for (int i = 0; i < json["results"].Count(); i++)
             {
                 JToken t = json["results"][i];
-                Rarities.Add(new KeyValueString(t["id"].ToObject<String>(), t["name"].ToObject<String>()));
+                rarities.Add(new KeyValueString(t["id"].ToObject<String>(), t["name"].ToObject<String>()));
             }
+            Rarities = new ObservableCollection<KeyValueString>(rarities);
         }
 
         public ICommand ViewRecipeCommand
@@ -217,7 +249,7 @@ namespace ZicoresTradingPostNotifier.ViewModel
             get
             {
                 if (_viewRecipeCommand == null)
-                    _viewRecipeCommand = new RelayCommand(param => this.ViewRecipe(param));
+                    _viewRecipeCommand = new RelayCommand(this.ViewRecipe);
 
                 return _viewRecipeCommand;
             }
@@ -257,7 +289,7 @@ namespace ZicoresTradingPostNotifier.ViewModel
         {
             get
             {
-                return HotItemController.CurrentApi.IsAdvancedSearchSupported ? Visibility.Visible : Visibility.Collapsed;
+                return Visibility.Visible;
             }
         }
 
@@ -299,17 +331,17 @@ namespace ZicoresTradingPostNotifier.ViewModel
                     rarity = null;
             }
 
-            SearchFilters f = new SearchFilters()
+            var f = new SearchFilters()
             {
                 QueryString = SearchString,
                 TypeId = category,
                 SubTypeId = subCategory,
                 Rarity = rarity,
-                LevelMin = MinLevel.ToString(),
-                LevelMax = MaxLevel.ToString(),
+                LevelMin = MinLevel,
+                LevelMax = MaxLevel,
             };
 
-            _hotItemController.Search(0, f);
+            _searchService.Search(0, f);
         }
 
         public ObservableCollection<HotItem> SearchedItems
@@ -322,15 +354,8 @@ namespace ZicoresTradingPostNotifier.ViewModel
         {
             if (e.Value.JsonResultType == JsonResultType.Search)
             {
-                Pager.Setup(e.Value.Total, e.Value.Offset, HotItemController.CurrentApi.ItemsPerPage);
+                Pager.Setup(e.Value.Total, e.Value.Offset, _searchService.Filter.ItemsPerPage);
 
-                foreach (HotItem item in e.Value.Items)
-                {
-                    Task.Factory.StartNew(() =>
-                    {
-                        item.Crawl();
-                    });
-                }
                 MainWindowViewModel.Dispatcher.BeginInvoke((Action)delegate
                 {
                     SearchedItems.Clear();

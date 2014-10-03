@@ -90,8 +90,8 @@ namespace ZicoresTradingPostNotifier.Helper
         {
             this._gridViewColumns = gridViewColumns;
             this.key = key;
-            Config.Loading += Config_Loading;
-            Config.Saving += Config_Saving;
+            Config.LoadingConfig += Config_Loading;
+            Config.SavingConfig += Config_Saving;
         }
 
         void Config_Saving(object sender, EventArgs e)

@@ -116,7 +116,7 @@
         </Style>
 
     </UserControl.Resources>
-    <Grid>
+    <Grid Visibility="{Binding SearchVisibility}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"></ColumnDefinition>
             <ColumnDefinition Width="Auto"></ColumnDefinition>
@@ -203,7 +203,7 @@
                                     </GridViewColumn.CellTemplate>
                                 </c:GridViewColumnEx>
 
-                                <c:GridViewColumnEx Header="Name" Identifier="2">
+                            <c:GridViewColumnEx Header="Name" Identifier="2" c:GridViewSort.PropertyName="Name">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock FontSize="12" FontWeight="Bold" >
@@ -213,7 +213,7 @@
                                     </GridViewColumn.CellTemplate>
                                 </c:GridViewColumnEx>
 
-                                <c:GridViewColumnEx Header="Level" Identifier="2_1">
+                            <c:GridViewColumnEx Header="Level" Identifier="2_1" c:GridViewSort.PropertyName="Level">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding Level}" FontSize="12" FontWeight="Bold" ></TextBlock>
@@ -221,7 +221,7 @@
                                     </GridViewColumn.CellTemplate>
                                 </c:GridViewColumnEx>
 
-                                <c:GridViewColumnEx Header="Rarity" Identifier="3">
+                            <c:GridViewColumnEx Header="Rarity" Identifier="3" c:GridViewSort.PropertyName="RarityWord">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock FontSize="12" Text="{Binding RarityWord}">
@@ -230,7 +230,7 @@
                                     </GridViewColumn.CellTemplate>
                                 </c:GridViewColumnEx>
 
-                                <c:GridViewColumnEx Header="Sell" Identifier="4">
+                            <c:GridViewColumnEx Header="Sell" Identifier="4" c:GridViewSort.PropertyName="SellContext.Money.TotalCopper">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <my:MoneyView MinWidth="140" DataContext="{Binding Path=SellContext.Money}">
@@ -239,7 +239,7 @@
                                     </GridViewColumn.CellTemplate>
                                 </c:GridViewColumnEx>
 
-                                <c:GridViewColumnEx Header="Supply" Identifier="5">
+                            <c:GridViewColumnEx Header="Supply" Identifier="5" c:GridViewSort.PropertyName="SellContext.Volume">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock FontSize="12" FontWeight="Bold" Text="{Binding Path=SellContext.Volume}"></TextBlock>
@@ -327,7 +327,7 @@
                                 <c:GridViewColumnEx Header="Recipe" Identifier="13">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
-                                            <Button Visibility="{Binding IsRecipeItemVisiblity}" Background="WhiteSmoke" Height="20" Margin="3" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ItemsControl}}, Path=DataContext.ViewRecipeCommand}" CommandParameter="{Binding}">View</Button>
+                                            <Button Visibility="{Binding IsRecipeItemVisiblity}" Background="WhiteSmoke" Height="20" Margin="3" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ItemsControl}}, Path=DataContext.ViewRecipeCommand}" CommandParameter="{Binding}">view</Button>
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </c:GridViewColumnEx>

@@ -30,15 +30,15 @@ namespace ZicoresTradingPostNotifier.View
 
         private void SortClick(object sender, RoutedEventArgs e)
         {
-            ListView listView = sender as ListView;
-            GridViewColumnHeader header = e.OriginalSource as GridViewColumnHeader;
+            //ListView listView = sender as ListView;
+            //GridViewColumnHeader header = e.OriginalSource as GridViewColumnHeader;
 
 
-            SearchViewModel vm = DataContext as SearchViewModel;
-            if (vm != null)
-            {
-                vm.SortClickRedirect(header);
-            }
+            ////SearchViewModel vm = DataContext as SearchViewModel;
+            ////if (vm != null)
+            ////{
+            ////    vm.SortClickRedirect(header);
+            ////}
         }
     }
 }

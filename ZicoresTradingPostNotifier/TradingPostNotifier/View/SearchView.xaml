@@ -9,6 +9,7 @@
              xmlns:b="clr-namespace:LibraryBase.Wpf.Behaviour;assembly=LibraryBaseWpf"
              xmlns:my="clr-namespace:ZicoresTradingPostNotifier.View"
              xmlns:local="clr-namespace:LibraryBase.Wpf.Converter;assembly=LibraryBaseWpf"
+             xmlns:controls="clr-namespace:LibraryBase.Wpf.Controls;assembly=LibraryBaseWpf"
              BorderThickness="0"
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
@@ -150,32 +151,44 @@
                         <RowDefinition></RowDefinition>
                         <RowDefinition></RowDefinition>
                         <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"></ColumnDefinition>
                         <ColumnDefinition></ColumnDefinition>
                     </Grid.ColumnDefinitions>
 
-                    <TextBlock Text="Category:" Grid.Row="0" Grid.Column="0"></TextBlock>
-                    <ComboBox Margin="2" Grid.Row="0" Grid.Column="1" SelectedValue="{Binding SelectedCategory}" ItemsSource="{Binding Categories}" DisplayMemberPath="Value.Value"></ComboBox>
+                    <TextBlock Text="Search Type:" Grid.Row="0" Grid.Column="0"></TextBlock>
+                    <Grid Grid.Row="0"  Grid.Column="1" Grid.ColumnSpan="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"></ColumnDefinition>
+                            <ColumnDefinition Width="Auto"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <RadioButton Margin="2" GroupName="1" Grid.Column="0" IsChecked="{Binding Path=IsItemSearch}">Item</RadioButton>
+                        <RadioButton Margin="2" GroupName="1" Grid.Column="1" IsChecked="{Binding Path=IsRecipeSearch}">Recipe</RadioButton>
+                    </Grid>
 
-                    <TextBlock Text="Sub Category:" Grid.Row="1" Grid.Column="0"></TextBlock>
-                    <ComboBox Margin="2" Grid.Row="1" Grid.Column="1" SelectedValue="{Binding SelectedSubCategory}" ItemsSource="{Binding Path=SelectedCategory.Items}" DisplayMemberPath="Value"></ComboBox>
 
-                    <TextBlock Text="Rarity:" Grid.Row="2" Grid.Column="0"></TextBlock>
-                    <ComboBox Margin="2" Grid.Row="2" Grid.Column="1" SelectedValue="{Binding SelectedRarity}" ItemsSource="{Binding Rarities}" DisplayMemberPath="Value"></ComboBox>
+                    <TextBlock Text="Category:" Grid.Row="1" Grid.Column="0"></TextBlock>
+                    <ComboBox Margin="2" Grid.Row="1" Grid.Column="1" SelectedValue="{Binding SelectedCategory}" ItemsSource="{Binding Categories}" DisplayMemberPath="Value.Value"></ComboBox>
 
-                    <TextBlock Text="MinLevel:" Grid.Row="3" Grid.Column="0"></TextBlock>
-                    <TextBox Margin="2" Grid.Row="3" Grid.Column="1" Text="{Binding MinLevel, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"></TextBox>
+                    <TextBlock Text="Sub Category:" Grid.Row="2" Grid.Column="0"></TextBlock>
+                    <ComboBox Margin="2" Grid.Row="2" Grid.Column="1" SelectedValue="{Binding SelectedSubCategory}" ItemsSource="{Binding Path=SelectedCategory.Items}" DisplayMemberPath="Value"></ComboBox>
 
-                    <TextBlock Text="MaxLevel:" Grid.Row="4" Grid.Column="0"></TextBlock>
-                    <TextBox Margin="2" Grid.Row="4" Grid.Column="1" Text="{Binding MaxLevel, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"></TextBox>
+                    <TextBlock Text="Rarity:" Grid.Row="3" Grid.Column="0"></TextBlock>
+                    <ComboBox Margin="2" Grid.Row="3" Grid.Column="1" SelectedValue="{Binding SelectedRarity}" ItemsSource="{Binding Rarities}" DisplayMemberPath="Value"></ComboBox>
+
+                    <TextBlock Text="MinLevel:" Grid.Row="4" Grid.Column="0"></TextBlock>
+                    <TextBox Margin="2" Grid.Row="4" Grid.Column="1" Text="{Binding MinLevel, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"></TextBox>
+
+                    <TextBlock Text="MaxLevel:" Grid.Row="5" Grid.Column="0"></TextBlock>
+                    <TextBox Margin="2" Grid.Row="5" Grid.Column="1" Text="{Binding MaxLevel, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"></TextBox>
 
                 </Grid>
             </Expander>
         </Grid>
 
-        <Expander IsExpanded="{Binding HasResults}" Margin="2" Header="Results" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Stretch">
+        <Expander IsExpanded="{Binding HasResults}" Margin="2" Header="{Binding ResultsText}" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Stretch">
             
                 <DockPanel VerticalAlignment="Top">
                     <my:PagerView DataContext="{Binding Pager}" DockPanel.Dock="Top"></my:PagerView>

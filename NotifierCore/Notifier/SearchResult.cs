@@ -65,7 +65,10 @@ namespace NotifierCore.Notifier
             foreach (var itemDetail in items)
             {
                 var item = HotItemController.FromDataId(itemDetail.Id);
-                hotItems.Add(item);
+                if (item != null)
+                {
+                    hotItems.Add(item);
+                }
             }
             HotItemController.UpdatePricesMultiple(hotItems);
             result.Items = hotItems;
@@ -168,7 +171,7 @@ namespace NotifierCore.Notifier
 
         public int Page
         {
-            get { return (int)(Offset / TradingPostApiOfficial.ItemsPerPage); }
+            get { return (int)(Offset / Filters.ItemsPerPage); }
         }
 
         public List<HotItem> Items

@@ -53,6 +53,7 @@
     <Compile Include="Behaviour\BindableSelectedItemBehavior.cs" />
     <Compile Include="Behaviour\IgnoreMouseWheelBehavior.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
+    <Compile Include="Controls\DataBoundRadioButton.cs" />
     <Compile Include="Converter\IsNegativeValueConverter.cs" />
     <Compile Include="Event\EventArgs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

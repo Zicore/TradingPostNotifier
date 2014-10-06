@@ -751,10 +751,6 @@ namespace NotifierCore.Notifier
                 {
                     int itemId = HotItemController.Self.DataIdToItemId[DataId];
                     IsRecipeItem = HotItemController.Self.CreatedIdToRecipe.ContainsKey(itemId);
-                    if (IsRecipeItem)
-                    {
-
-                    }
                 }
 
                 OnPropertyChanged("DataId");

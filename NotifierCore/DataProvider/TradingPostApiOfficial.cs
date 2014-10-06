@@ -26,6 +26,8 @@ namespace NotifierCore.DataProvider
 
         public static Dictionary<int, Item> ItemDB = new Dictionary<int, Item>();
         public static Dictionary<int, Item> ItemTradingPostDB = new Dictionary<int, Item>();
+        public static Dictionary<int, Item> ItemRecipesDB = new Dictionary<int, Item>();
+
         public static List<String> CategoriesDB = new List<String>();
         private static int _itemsPerPage = 1000;
 
@@ -50,6 +52,15 @@ namespace NotifierCore.DataProvider
                 {
                     item.TradingPostItem = true;
                     ItemTradingPostDB[item.Id] = item;
+                }
+
+                if (HotItemController.Self != null && HotItemController.Self.DataIdToItemId.ContainsKey(item.Id))
+                {
+                    int itemId = HotItemController.Self.DataIdToItemId[item.Id];
+                    if (HotItemController.Self.CreatedIdToRecipe.ContainsKey(itemId))
+                    {
+                        ItemRecipesDB[item.Id] = item;
+                    }
                 }
             }
 

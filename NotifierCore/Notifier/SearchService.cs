@@ -16,7 +16,7 @@ namespace NotifierCore.Notifier
 
         private bool _isSearchInProgress = false;
         private SearchFilters _filter = new SearchFilters();
-        private SearchResult _searchResult = null;
+        private SearchResult _searchResult = new SearchResult();
 
         public bool IsSearchInProgress
         {
@@ -34,11 +34,21 @@ namespace NotifierCore.Notifier
             set { _filter = value; }
         }
 
-        public static SearchResult Search(SearchFilters filter)
+        public static SearchResult SearchItems(SearchFilters filter)
+        {
+            return Search(filter, TradingPostApiOfficial.ItemTradingPostDB.Values);
+        }
+
+        public static SearchResult SearchRecipes(SearchFilters filter)
+        {
+            return Search(filter, TradingPostApiOfficial.ItemRecipesDB.Values);
+        }
+
+        public static SearchResult Search(SearchFilters filter, IEnumerable<Item> dataSource)
         {
             IEnumerable<Item> result;
 
-            result = TradingPostApiOfficial.ItemTradingPostDB.Values.Where(x => x.Level >= filter.LevelMin && x.Level <= filter.LevelMax);
+            result = dataSource.Where(x => x.Level >= filter.LevelMin && x.Level <= filter.LevelMax);
 
             if (!String.IsNullOrEmpty(filter.QueryString))
             {
@@ -78,14 +88,21 @@ namespace NotifierCore.Notifier
             return searchResult;
         }
 
-        public void Search(int page, SearchFilters filters)
+        public void Search(int page, SearchFilters filter)
         {
             if (SearchFinished != null)
             {
                 IsSearchInProgress = true;
-                Filter = filters;
-                Filter.Offset = page * filters.ItemsPerPage;
-                SearchResult = Search(Filter);
+                Filter = filter;
+                Filter.Offset = page * filter.ItemsPerPage;
+                if (filter.SearchType == SearchType.Items)
+                {
+                    SearchResult = SearchItems(Filter);
+                }
+                else
+                {
+                    SearchResult = SearchRecipes(Filter);
+                }
 
                 IsSearchInProgress = false;
 

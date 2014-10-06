@@ -23,6 +23,12 @@ namespace NotifierCore.Notifier
         Descending
     }
 
+    public enum SearchType
+    {
+        Items,
+        Recpipes
+    }
+
     public class SearchFilters
     {
         private int _total;
@@ -36,6 +42,14 @@ namespace NotifierCore.Notifier
         private int levelMax = 0;
         private String rarity = "";
         private int _itemsPerPage = 200;
+
+        private SearchType _searchType = SearchType.Items;
+
+        public SearchType SearchType
+        {
+            get { return _searchType; }
+            set { _searchType = value; }
+        }
 
         public bool DescendingSorting
         {

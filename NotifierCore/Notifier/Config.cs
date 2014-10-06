@@ -44,7 +44,7 @@ namespace NotifierCore.Notifier
 
         private List<HotItem> _items = new List<HotItem>();
         private String _sessionKey = "";
-        string _languageKey = "en-us";
+        string _languageKey = "en";
 
         public Config()
         {

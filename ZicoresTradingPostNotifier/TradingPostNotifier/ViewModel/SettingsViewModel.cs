@@ -94,7 +94,7 @@ namespace ZicoresTradingPostNotifier.ViewModel
             }
             catch
             {
-
+                this.SelectedLanguage = Languages.FirstOrDefault();
             }
         }
 

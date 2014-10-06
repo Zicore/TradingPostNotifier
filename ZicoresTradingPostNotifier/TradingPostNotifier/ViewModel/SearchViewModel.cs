@@ -239,7 +239,8 @@ namespace ZicoresTradingPostNotifier.ViewModel
             for (int i = 0; i < json["results"].Count(); i++)
             {
                 JToken t = json["results"][i];
-                rarities.Add(new KeyValueString(t["id"].ToObject<String>(), t["name"].ToObject<String>()));
+                var name = t["name"].ToObject<String>();
+                rarities.Add(new KeyValueString(name, name));
             }
             Rarities = new ObservableCollection<KeyValueString>(rarities);
         }

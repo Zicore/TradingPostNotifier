@@ -18,6 +18,8 @@ namespace NotifierCore.DataProvider
 {
     public class TradingPostApiOfficial
     {
+        public static String DefaultLanguage = "en";
+        public static HashSet<String> SupportedLanguages = new HashSet<string>() { "en", "de", "es", "fr" };
         public static ServiceManager ServiceManager = new ServiceManager();
         public static IRepository<int, AggregateListing> PriceService = ServiceFactory.Default().GetPriceService();
         public static ICollection<int> TradingPostItems;
@@ -67,17 +69,25 @@ namespace NotifierCore.DataProvider
         {
             lock (ItemTradingPostDB)
             {
+                if (!SupportedLanguages.Contains(language))
+                {
+                    language = DefaultLanguage;
+                }
+
                 var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "DB",
                                         String.Format("items_{0}.json", language));
-                using (var sr = new StreamReader(path))
+
+                if (File.Exists(path))
                 {
-                    String json = sr.ReadToEnd();
-                    var items = JsonConvert.DeserializeObject<List<Item>>(json);
-                    return items;
+                    using (var sr = new StreamReader(path))
+                    {
+                        String json = sr.ReadToEnd();
+                        var items = JsonConvert.DeserializeObject<List<Item>>(json);
+                        return items;
+                    }
                 }
             }
+            return new List<Item>(0);
         }
-
-
     }
 }

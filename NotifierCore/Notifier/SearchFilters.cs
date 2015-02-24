@@ -65,7 +65,7 @@ namespace NotifierCore.Notifier
             get { return typeId; }
             set
             {
-                typeId = value;
+                typeId = string.IsNullOrEmpty(value) ? value : value.Replace(" ", "");
             }
         }
 

@@ -612,16 +612,12 @@ namespace NotifierCore.Notifier
 
                     try
                     {
-
                         var items = new List<HotItem>(RecipeItemPool.Values);
-
-
                         foreach (var item in RecipeItemPool)
                         {
                             UpdateItemDetails(item.Value);
                             item.Value.BuildItem(false);
                         }
-
                         UpdatePricesMultiple(items);
                     }
                     catch
@@ -744,11 +740,15 @@ namespace NotifierCore.Notifier
 
             for (int i = 1; i <= items.Count && i <= maxEntries; i++)
             {
-                ids.Add(items[i - 1].DataId);
-                if (i % endPointLimit == 0 || i == items.Count)
+                var item = items[i - 1];
+                if (item != null)
                 {
-                    idGroups.Add(ids);
-                    ids = new List<int>();
+                    ids.Add(items[i - 1].DataId);
+                    if (i % endPointLimit == 0 || i == items.Count)
+                    {
+                        idGroups.Add(ids);
+                        ids = new List<int>();
+                    }
                 }
             }
 

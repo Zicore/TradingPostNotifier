@@ -27,6 +27,17 @@ namespace ZicoresTradingPostNotifier.ViewModel
 
         }
 
+        public string ResultsText
+        {
+            get
+            {
+                int offset = _searchService.SearchResult.Items.Count > 0 ? 1 : 0;
+                return String.Format("Results ({0}-{1}/{2})",
+                    _searchService.SearchResult.Offset + offset, _searchService.SearchResult.Offset + _searchService.SearchResult.Items.Count, _searchService.SearchResult.Total);
+            }
+        }
+
+        private bool _isItemSearch = true;
         readonly SearchService _searchService = new SearchService();
 
 
@@ -51,6 +62,28 @@ namespace ZicoresTradingPostNotifier.ViewModel
             Pager.RequestNext += Pager_RequestNext;
             Pager.RequestPrevious += Pager_RequestPrevious;
             Pager.RequestSelectPage += Pager_RequestSelectPage;
+        }
+
+        public bool IsItemSearch
+        {
+            get { return _isItemSearch; }
+            set
+            {
+                _isItemSearch = value;
+                OnPropertyChanged("IsItemSearch");
+                OnPropertyChanged("IsRecipeSearch");
+            }
+        }
+
+        public bool IsRecipeSearch
+        {
+            get { return !_isItemSearch; }
+            set
+            {
+                _isItemSearch = !value;
+                OnPropertyChanged("IsItemSearch");
+                OnPropertyChanged("IsRecipeSearch");
+            }
         }
 
         public Visibility SearchVisibility
@@ -218,7 +251,6 @@ namespace ZicoresTradingPostNotifier.ViewModel
         {
             var categories = new List<Category> { new Category("*", "All") };
             JObject json = JObject.Parse(jsonCategories);
-            categories.Add(new Category("*", "All"));
             for (int i = 0; i < json["results"].Count(); i++)
             {
                 JToken t = json["results"][i];
@@ -358,6 +390,7 @@ namespace ZicoresTradingPostNotifier.ViewModel
                 Rarity = rarity,
                 LevelMin = MinLevel,
                 LevelMax = MaxLevel,
+                SearchType = IsItemSearch ? SearchType.Items : SearchType.Recpipes
             };
 
             _searchService.Search(0, f);
@@ -383,7 +416,9 @@ namespace ZicoresTradingPostNotifier.ViewModel
                         SearchedItems.Add(item);
                     }
                     _resultsVisible = true;
+
                     OnPropertyChanged("HasResults");
+                    OnPropertyChanged("ResultsText");
                 });
             }
         }

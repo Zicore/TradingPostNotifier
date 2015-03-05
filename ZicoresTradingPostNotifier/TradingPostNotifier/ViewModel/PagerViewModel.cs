@@ -12,6 +12,7 @@ namespace ZicoresTradingPostNotifier.ViewModel
     public class PagerViewModel : BindableBase
     {
         int _currentPage = 0;
+        private int _pageControls = 11;
 
         public event EventHandler<EventArgs<int>> RequestSelectPage;
         public event EventHandler<EventArgs> RequestNext;
@@ -79,7 +80,7 @@ namespace ZicoresTradingPostNotifier.ViewModel
 
         public PagerViewModel()
         {
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < _pageControls; i++)
             {
                 Pages.Add(new Page());
             }
@@ -106,36 +107,26 @@ namespace ZicoresTradingPostNotifier.ViewModel
 
         public void Setup(int total, int offset, int itemsPerPage)
         {
-            int remain = total - offset;
+            //int remain = total - offset;
             int pagesMax = (int)Math.Ceiling((float)total / (float)itemsPerPage);
-            int pagesRemain = (int)Math.Ceiling((float)remain / (float)itemsPerPage);
+            //int pagesRemain = (int)Math.Ceiling((float)remain / (float)itemsPerPage);
             int currentPage = (int)((float)offset / (float)itemsPerPage) + 1;
 
-            for (int i = 0; i < 5; i++)
+            for (int i = 1; i <= _pageControls; i++)
             {
-                Page p = Pages[4 - i];
+                Page p = Pages[i-1];
 
-                int tempIndex = 4 - i;
+                int pagesMin1 = _pageControls - 1;
+                int pagesByTwo = _pageControls / 2;
 
-                if (pagesMax >= 5)
-                {
-                    tempIndex = i - 2;
-                    if (currentPage == 1)
-                        tempIndex -= 2;
-                    if (currentPage == 2)
-                        tempIndex -= 1;
+                int boundsLeft = Math.Max(pagesByTwo - currentPage, 0);
 
-                    if (currentPage == pagesMax - 1)
-                        tempIndex += 1;
-                    if (currentPage == pagesMax)
-                        tempIndex += 2;
+                int index = (currentPage + i) - pagesByTwo + boundsLeft;
 
-                    p.Value = (currentPage - tempIndex);
-                }
-                else
-                {
-                    p.Value = tempIndex + 1;
-                }
+
+
+
+                p.Value = index;
 
                 if (p.Value > pagesMax)
                 {

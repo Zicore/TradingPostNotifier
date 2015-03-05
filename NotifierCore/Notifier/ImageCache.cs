@@ -108,11 +108,15 @@ namespace NotifierCore.Notifier
                     {
                         try
                         {
-                            using (var w = new WebClient())
+                            String filePath = Path.Combine(_cachePath, item.Item2);
+                            if (!File.Exists(filePath))
                             {
-                                w.Proxy = null;
-                                w.DownloadFile(item.Item1, Path.Combine(_cachePath, item.Item2));
-                                Thread.Sleep(5);
+                                using (var w = new WebClient())
+                                {
+                                    w.Proxy = null;
+                                    w.DownloadFile(item.Item1, filePath);
+                                    Thread.Sleep(1);
+                                }
                             }
                         }
                         catch

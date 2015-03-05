@@ -33,12 +33,15 @@ namespace ZicoresTradingPostNotifier.ViewModel
         private static string ReadJsonFileToString(string filePath)
         {
             String fullFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, filePath);
-            var file = new StreamReader(fullFilePath);
-            return file.ReadToEnd();
+            using (var file = new StreamReader(fullFilePath))
+            {
+                return file.ReadToEnd();
+            }
         }
 
         public SearchViewModel(HotItemController hotItemController, MainWindowViewModel mainViewModel)
         {
+            LoadJsonFiles();
 
             this._mainViewModel = mainViewModel;
             this._hotItemController = hotItemController;
@@ -119,7 +122,7 @@ namespace ZicoresTradingPostNotifier.ViewModel
             }
         }
 
-        private String jsonCategories = ReadJsonFileToString("DB\\categories.json");
+        private String jsonCategories;
         String jsonRarities = "{\"results\":[{\"id\":0,\"name\":\"Junk\"},{\"id\":1,\"name\":\"Common\"},{\"id\":2,\"name\":\"Fine\"},{\"id\":3,\"name\":\"Masterwork\"},{\"id\":4,\"name\":\"Rare\"},{\"id\":5,\"name\":\"Exotic\"},{\"id\":6,\"name\":\"Ascended\"},{\"id\":7,\"name\":\"Legendary\"}]}";
 
         ObservableCollection<KeyValueString> _rarities = new ObservableCollection<KeyValueString>();
@@ -204,6 +207,11 @@ namespace ZicoresTradingPostNotifier.ViewModel
         {
             get { return _selectedRarity; }
             set { _selectedRarity = value; OnPropertyChanged("SelectedRarity"); }
+        }
+
+        private void LoadJsonFiles()
+        {
+            jsonCategories = ReadJsonFileToString("DB\\categories.json");
         }
 
         private void ParseCategories()

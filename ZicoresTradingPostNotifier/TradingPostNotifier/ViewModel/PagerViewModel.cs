@@ -114,13 +114,17 @@ namespace ZicoresTradingPostNotifier.ViewModel
 
             for (int i = 0; i < _pageControls; i++)
             {
+                Page p = Pages[i];
+
                 int pagesMin1 = _pageControls - 1;
                 int pagesByTwo = _pageControls / 2;
 
-                Page p = Pages[i];
+                int index = (i - pagesByTwo) + _pageControls;
 
 
-                p.Value = currentPage + i;
+
+
+                p.Value = currentPage + index;
 
                 if (p.Value > pagesMax)
                 {

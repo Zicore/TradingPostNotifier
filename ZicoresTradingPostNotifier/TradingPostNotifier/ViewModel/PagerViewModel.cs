@@ -12,7 +12,7 @@ namespace ZicoresTradingPostNotifier.ViewModel
     public class PagerViewModel : BindableBase
     {
         int _currentPage = 0;
-        private int _pageControls = 10;
+        private int _pageControls = 11;
 
         public event EventHandler<EventArgs<int>> RequestSelectPage;
         public event EventHandler<EventArgs> RequestNext;
@@ -112,19 +112,21 @@ namespace ZicoresTradingPostNotifier.ViewModel
             //int pagesRemain = (int)Math.Ceiling((float)remain / (float)itemsPerPage);
             int currentPage = (int)((float)offset / (float)itemsPerPage) + 1;
 
-            for (int i = 0; i < _pageControls; i++)
+            for (int i = 1; i <= _pageControls; i++)
             {
-                Page p = Pages[i];
+                Page p = Pages[i-1];
 
                 int pagesMin1 = _pageControls - 1;
                 int pagesByTwo = _pageControls / 2;
 
-                int index = (i - pagesByTwo) + _pageControls;
+                int boundsLeft = Math.Max(pagesByTwo - currentPage, 0);
+
+                int index = (currentPage + i) - pagesByTwo + boundsLeft;
 
 
 
 
-                p.Value = currentPage + index;
+                p.Value = index;
 
                 if (p.Value > pagesMax)
                 {

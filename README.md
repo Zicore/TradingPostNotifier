@@ -5,9 +5,11 @@ Current release **R16**: http://notifier.zicore.de/dl/r16/ZicoresTradingPostNoti
 
 For the changelog and the latest releases visit the trading post notifiers website: [notifier.zicore.de](http://notifier.zicore.de).
 
-Test Release
+New DB Files
 =========
-All I can say is, I expect bugs in this release.
+From time to time Guild Wars 2 gets new Items.
+Download them here to be up to date:  [http://upppor.it/aofgltdw.zip](http://upppor.it/aofgltdw.zip).
+Extract the json files to the notifiers DB Folder and replace the existing ones.
 
 Search Service
 =========

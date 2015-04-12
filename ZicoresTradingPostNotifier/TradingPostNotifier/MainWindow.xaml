@@ -5,12 +5,26 @@
         Closing="Window_Closing"
         xmlns:mdl="clr-namespace:ZicoresTradingPostNotifier.Model"
         UseLayoutRounding="True"
+        xmlns:tb="http://www.hardcodet.net/taskbar"
         Title="{Binding Title}" Height="600" Width="1000" Icon="/ZicoresTradingPostNotifier;component/icon.ico">
+
+    
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
+
+        <tb:TaskbarIcon x:Name="myNotifyIcon"
+                    Visibility="Visible"
+                    ToolTipText="Zicores Trading Post Notifier"
+                    IconSource="/ZicoresTradingPostNotifier;component/icon.ico"
+                    
+                    MenuActivation="LeftOrRightClick"
+                    
+                    PopupActivation="DoubleClick"
+      />
 
         <Border Grid.Row="0" Background="Salmon" BorderBrush="Black" Visibility="{Binding ProcessBorderVisibility}">
             <Grid>

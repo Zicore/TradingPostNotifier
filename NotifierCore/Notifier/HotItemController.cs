@@ -864,7 +864,9 @@ namespace NotifierCore.Notifier
                     for (int i = 0; i < rows.Length; i++)
                     {
                         int dataId = int.Parse(rows[i][dataIdColumn]);
-                        Add(new HotItem(dataId));
+                        var item = new HotItem(dataId);
+                        UpdateItemDetails(item);
+                        Add(item);
                     }
                 }
             }

@@ -114,7 +114,7 @@ namespace ZicoresTradingPostNotifier.ViewModel
 
             for (int i = 1; i <= _pageControls; i++)
             {
-                Page p = Pages[i-1];
+                Page p = Pages[i - 1];
 
                 int pagesMin1 = _pageControls - 1;
                 int pagesByTwo = _pageControls / 2;

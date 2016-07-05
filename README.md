@@ -1,9 +1,14 @@
 Zicores Trading Post Notifier R16
 =============================
 
-Current release **R16**: http://notifier.zicore.de/dl/r16/ZicoresTradingPostNotifier.zip
+Current release **R17**: http://notifier.zicore.de/dl/r17/ZicoresTradingPostNotifier.zip
 
 For the changelog and the latest releases visit the trading post notifiers website: [notifier.zicore.de](http://notifier.zicore.de).
+
+New GW2 DB Files (2016-07-05)
+=========
+[http://upppor.it/lv0wpudd](http://upppor.it/lv0wpudd.zip) Updated recipes.
+Extract the json files to the notifiers DB Folder and replace the existing ones.
 
 New DB Files
 =========

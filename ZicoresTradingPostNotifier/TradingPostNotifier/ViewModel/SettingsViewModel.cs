@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.IO;
+using System.Threading.Tasks;
 using ZicoresTradingPostNotifier.Model;
 using NotifierCore.Notifier;
 using LibraryBase.Wpf.ViewModel;
@@ -12,7 +15,9 @@ namespace ZicoresTradingPostNotifier.ViewModel
 {
     public class SettingsViewModel : BindableBase
     {
-        RelayCommand _resetColumnsCommand;
+        private RelayCommand _resetColumnsCommand;
+        private RelayCommand _updateDatabaseCommand;
+        private RelayCommand _openDatabaseFolderCommand;
 
         public RelayCommand ResetColumnsCommand
         {
@@ -22,6 +27,46 @@ namespace ZicoresTradingPostNotifier.ViewModel
                     _resetColumnsCommand = new RelayCommand(x => ResetColumns(x.ToString()));
                 return _resetColumnsCommand;
             }
+        }
+
+        public RelayCommand UpdateDatabaseCommand
+        {
+            get
+            {
+                if (_updateDatabaseCommand == null)
+                    _updateDatabaseCommand = new RelayCommand(x => UpdateDatabase());
+                return _updateDatabaseCommand;
+            }
+        }
+
+        public RelayCommand OpenDatabaseFolderCommand
+        {
+            get
+            {
+                if (_openDatabaseFolderCommand == null)
+                    _openDatabaseFolderCommand = new RelayCommand(x => OpenDatabaseFolder());
+                return _openDatabaseFolderCommand;
+            }
+        }
+
+        private void OpenDatabaseFolder()
+        {
+            var filePath = AppDomain.CurrentDomain.BaseDirectory;
+            Task.Factory.StartNew(() =>
+            {
+                filePath = Path.Combine(filePath, "DB");
+                Process.Start(filePath);
+            });
+        }
+
+        private void UpdateDatabase()
+        {
+            var filePath = AppDomain.CurrentDomain.BaseDirectory;
+            Task.Factory.StartNew(() =>
+            {
+                filePath = Path.Combine(filePath, "DatabaseGenerator.exe");
+                Process.Start(filePath);
+            });
         }
 
         public void ResetColumns(String key)

@@ -104,7 +104,22 @@
             </TabItem>-->
             <TabItem Header="Settings" FontWeight="DemiBold" Background="WhiteSmoke">
                 <!-- ### Settings ### -->
-                <my:SettingsView DataContext="{Binding SettingsViewModel}"></my:SettingsView>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"></ColumnDefinition>
+                        <ColumnDefinition Width="5*"></ColumnDefinition>
+                        <ColumnDefinition Width="1*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="3*"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                    </Grid.RowDefinitions>
+
+                    <my:SettingsView Grid.Column="1" Grid.Row="1" DataContext="{Binding SettingsViewModel}"></my:SettingsView>
+
+                </Grid>
             </TabItem>
             <TabItem Header="About" FontWeight="Normal" Background="{StaticResource DarkBrush}">
                 <!-- ### About ### -->
@@ -125,10 +140,10 @@
                         <Border BorderBrush="{StaticResource AboutBorderBrush}" BorderThickness="2" Background="{StaticResource AboutBrush}" CornerRadius="16" Grid.Column="1" Grid.Row="1">
                             <StackPanel Orientation="Vertical" Margin="8">
                                 <StackPanel Orientation="Vertical">
-                                    <TextBlock FontWeight="Bold" FontSize="16" Text="Zicore's Trading Post Notifier - R16"></TextBlock>
+                                    <TextBlock FontWeight="Bold" FontSize="16" Text="Zicore's Trading Post Notifier - R17"></TextBlock>
                                     <TextBlock></TextBlock>
-                                    <TextBlock FontWeight="SemiBold" Text="Developed 2012-2014 by Zicore / TehGear"></TextBlock>
-                                    <TextBlock Text="© 2011-2014 ArenaNet, Inc. All rights reserved."></TextBlock>
+                                    <TextBlock FontWeight="SemiBold" Text="Developed 2012-2016 by Zicore / TehGear"></TextBlock>
+                                    <TextBlock Text="© 2011-2016 ArenaNet, Inc. All rights reserved."></TextBlock>
                                     <TextBlock>
                                     <Run Text="Items are linking to"></Run>
                                     <Hyperlink FontWeight="SemiBold" Foreground="DarkBlue" NavigateUri="http://gw2spidy.com">gw2spidy.com</Hyperlink>
@@ -142,7 +157,7 @@
                                     </TextBlock>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="Last Build: 2014-10-03"></TextBlock>
+                                    <TextBlock Text="Last Build: 2016-02-11"></TextBlock>
                                 </StackPanel>
                                 <StackPanel Margin="2">
                                     <Image Stretch="None" Source="Images/powered_gw2db_onLight.png" PreviewMouseUp="Image_PreviewMouseUp"></Image>

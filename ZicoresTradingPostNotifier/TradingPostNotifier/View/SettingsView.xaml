@@ -4,7 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       mc:Ignorable="d" 
-      d:DesignHeight="600" d:DesignWidth="300">
+      d:DesignHeight="300" d:DesignWidth="300">
 
     <Grid Margin="2">
         <Grid.RowDefinitions>
@@ -21,22 +21,23 @@
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        
+
         <TextBlock Grid.Column="0" Grid.Row="0" Margin="3">Item Language:</TextBlock>
         <ComboBox HorizontalAlignment="Stretch" Grid.Column="1" Grid.Row="0" SelectedItem="{Binding SelectedLanguage}" ItemsSource="{Binding Path=Languages}"></ComboBox>
 
-        <Button HorizontalAlignment="Left" Margin="2" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" Command="{Binding ResetColumnsCommand}" CommandParameter="Search">Reset Search Columns</Button>
-        <Button HorizontalAlignment="Left" Margin="2" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2" Command="{Binding ResetColumnsCommand}" CommandParameter="TransactionView">Reset Transaction Columns</Button>
-        <Button HorizontalAlignment="Left" Margin="2" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="3" Command="{Binding ResetColumnsCommand}" CommandParameter="Watchlist">Reset Watchlist Columns</Button>
-
-        <Button HorizontalAlignment="Left" Margin="2" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="4" Command="{Binding ResetColumnsCommand}" CommandParameter="NotificationView">Reset Notification Columns</Button>
-
-        <Button HorizontalAlignment="Left" Margin="2" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="5" Command="{Binding ResetColumnsCommand}" CommandParameter="RecipeView">Reset Recipe Columns</Button>
+        <Button HorizontalContentAlignment="Left" Margin="2" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" Command="{Binding ResetColumnsCommand}" CommandParameter="Search" Content="Reset Search Columns"></Button>
+        <Button HorizontalContentAlignment="Left" Margin="2" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2" Command="{Binding ResetColumnsCommand}" CommandParameter="TransactionView">Reset Transaction Columns</Button>
+        <Button HorizontalContentAlignment="Left" Margin="2" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="3" Command="{Binding ResetColumnsCommand}" CommandParameter="Watchlist">Reset Watchlist Columns</Button>
+        <Button HorizontalContentAlignment="Left" Margin="2" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="4" Command="{Binding ResetColumnsCommand}" CommandParameter="NotificationView">Reset Notification Columns</Button>
+        <Button HorizontalContentAlignment="Left" Margin="2" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="5" Command="{Binding ResetColumnsCommand}" CommandParameter="RecipeView">Reset Recipe Columns</Button>
 
         <!--<TextBlock Margin="2" Grid.Column="0" Grid.ColumnSpan="1" Grid.Row="6" Text="Transaction Request Limit"></TextBlock>
         <TextBox Margin="2" Grid.Column="1" Grid.ColumnSpan="1" Grid.Row="6" Text="{Binding TransactionLimit}"></TextBox>-->
@@ -47,6 +48,21 @@
         <!--<CheckBox Margin="2" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="8" IsChecked="{Binding IsTransactionNotificationEnabled}">Transaction Notifications Enabled</CheckBox>-->
         <CheckBox Margin="2" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="9" IsChecked="{Binding IsTopMostNotification}">Notification Popup Enabled</CheckBox>
 
+        <Button Height="40" HorizontalContentAlignment="Left" FontFamily="Calibri" FontSize="16" FontWeight="Bold" Margin="2" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="10" Command="{Binding UpdateDatabaseCommand}">Update Database Files</Button>
+        <TextBlock Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="11" >
+            <Run>This Update can take up to 30 minutes depending on bandwidth.</Run>
+            <LineBreak></LineBreak>
+             <Run>This will open a command line program that makes requests to the official ArenaNet API to update the Database files.</Run>
+            <LineBreak></LineBreak>
+            <Run>
+                 This program will backup the old files and you have to restart the Notifier for the changes to take effect.
+            </Run>
+        </TextBlock>
+        <Button HorizontalContentAlignment="Left" Margin="2" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="12" Command="{Binding OpenDatabaseFolderCommand}">Open Database Folder</Button>
+        
+        
+        
+        
         <!--<TextBlock Margin="2" Grid.Column="0" Grid.Row="10" Text="Session Key"></TextBlock>
         <TextBox IsReadOnly="True" Margin="2" Grid.Column="1" Grid.Row="10" Text="{Binding SessionKey,Mode=OneWay}"></TextBox>
         

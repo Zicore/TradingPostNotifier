@@ -11,7 +11,7 @@ namespace DatabaseGenerator
     {
         public static Dictionary<int, Item> ItemSearch = new Dictionary<int, Item>();
 
-        static WebClientEx client = new WebClientEx();
+        static readonly WebClientEx Client = new WebClientEx();
 
         public static String DownloadString(WebClientEx client, String uri)
         {
@@ -23,12 +23,13 @@ namespace DatabaseGenerator
         {
             Console.WriteLine("This can take up to 30 minutes!");
 
-            String jsonString = DownloadString(client, "https://api.guildwars2.com/v2/items");
+            var path = AppDomain.CurrentDomain.BaseDirectory;
+
+            String jsonString = DownloadString(Client, "https://api.guildwars2.com/v2/items");
             var itemsIds = JsonConvert.DeserializeObject<List<int>>(jsonString);
 
             var idRequests = new List<string>();
             var sb = new StringBuilder();
-            int count = 0;
             int maxCount = 200;
             for (int i = 1; i < itemsIds.Count + 1; i++)
             {
@@ -47,14 +48,22 @@ namespace DatabaseGenerator
 
             foreach (var language in languages)
             {
+                var filePath = Path.Combine(path, "DB", $"items_{language}.json");
+
+                if (File.Exists(filePath))
+                {
+                    var backupFile = filePath + ".backup";
+                    File.Move(filePath, backupFile);
+                }
+
                 var result = new List<Item>();
                 Console.WriteLine("Language: {0}", language);
                 int itemsFound = 0;
                 foreach (var idRequest in idRequests)
                 {
-                    String uri = String.Format("https://api.guildwars2.com/v2/items?ids={0}&lang={1}", idRequest, language);
+                    String uri = $"https://api.guildwars2.com/v2/items?ids={idRequest}&lang={language}";
 
-                    var items = JsonConvert.DeserializeObject<List<Item>>(DownloadString(client, uri));
+                    var items = JsonConvert.DeserializeObject<List<Item>>(DownloadString(Client, uri));
                     foreach (var item in items)
                     {
                         Console.WriteLine("{0:0.00}% {1} {2}", (float)itemsFound / itemsIds.Count * 100, item.Id, item.Name);
@@ -65,12 +74,14 @@ namespace DatabaseGenerator
                 }
 
                 var jsonItems = JsonConvert.SerializeObject(result);
-                using (var sw = new StreamWriter(String.Format("items_{0}.json", language)))
+
+
+                using (var sw = new StreamWriter(filePath))
                 {
                     sw.Write(jsonItems);
                 }
             }
-            Console.WriteLine("DONE!!!");
+            Console.WriteLine("Files created successfully! Press any key to exit.");
             Console.ReadLine();
         }
     }

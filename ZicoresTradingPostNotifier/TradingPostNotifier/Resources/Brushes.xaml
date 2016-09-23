@@ -64,7 +64,7 @@
             <GradientStopCollection>
                 <GradientStop Color="Lime" Offset="0.0"/>
                 <GradientStop Color="Black" Offset="0.3"/>
-                <GradientStop Color="Black" Offset="0.7"/>
+                <GradientStop Color="OrangeRed" Offset="0.7"/>
                 <GradientStop Color="DodgerBlue" Offset="1.0"/>
             </GradientStopCollection>
         </LinearGradientBrush.GradientStops>

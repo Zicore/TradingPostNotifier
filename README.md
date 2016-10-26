@@ -1,4 +1,4 @@
-Zicores Trading Post Notifier R16
+Zicores Trading Post Notifier R17
 =============================
 
 Current release **R17**: http://notifier.zicore.de/dl/r17/ZicoresTradingPostNotifier.zip
